@@ -104,6 +104,34 @@ async def init_db():
             )
         """)
         
+        # Привычки
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS habits (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                title TEXT NOT NULL,
+                schedule_type TEXT NOT NULL,  -- interval, times, morning, evening, daily
+                interval_hours INTEGER,       -- для interval
+                times TEXT,                   -- JSON список времён ["08:00","14:00","20:00"]
+                streak INTEGER DEFAULT 0,
+                last_done TEXT,
+                is_active INTEGER DEFAULT 1,
+                created_at TEXT,
+                FOREIGN KEY (user_id) REFERENCES users(user_id)
+            )
+        """)
+        
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS habit_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                habit_id INTEGER,
+                user_id INTEGER,
+                done_at TEXT,
+                status TEXT DEFAULT 'done',  -- done, skipped
+                FOREIGN KEY (habit_id) REFERENCES habits(id)
+            )
+        """)
+        
         await db.commit()
 
 
@@ -329,3 +357,148 @@ async def get_stats(user_id: int) -> Dict[str, Any]:
             "goal_progress": round(goal_progress, 1),
             "goal": goal
         }
+
+
+# ================== ПРИВЫЧКИ ==================
+
+async def create_habit(user_id: int, title: str, schedule_type: str, 
+                       interval_hours: int = None, times: list = None) -> int:
+    async with aiosqlite.connect(DB_PATH) as db:
+        times_json = json.dumps(times) if times else None
+        cursor = await db.execute(
+            """INSERT INTO habits (user_id, title, schedule_type, interval_hours, times, created_at)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (user_id, title, schedule_type, interval_hours, times_json, datetime.now().isoformat())
+        )
+        await db.commit()
+        return cursor.lastrowid
+
+
+async def get_habits(user_id: int, only_active: bool = True) -> List[Dict]:
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        query = "SELECT * FROM habits WHERE user_id = ?"
+        if only_active:
+            query += " AND is_active = 1"
+        query += " ORDER BY id"
+        async with db.execute(query, (user_id,)) as cursor:
+            rows = await cursor.fetchall()
+            result = []
+            for r in rows:
+                d = dict(r)
+                if d.get("times"):
+                    d["times"] = json.loads(d["times"])
+                result.append(d)
+            return result
+
+
+async def get_habit(habit_id: int) -> Optional[Dict]:
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM habits WHERE id = ?", (habit_id,)) as cursor:
+            row = await cursor.fetchone()
+            if not row:
+                return None
+            d = dict(row)
+            if d.get("times"):
+                d["times"] = json.loads(d["times"])
+            return d
+
+
+async def mark_habit_done(habit_id: int, user_id: int, status: str = "done"):
+    async with aiosqlite.connect(DB_PATH) as db:
+        now = datetime.now().isoformat()
+        await db.execute(
+            "INSERT INTO habit_logs (habit_id, user_id, done_at, status) VALUES (?, ?, ?, ?)",
+            (habit_id, user_id, now, status)
+        )
+        if status == "done":
+            # Обновляем streak и last_done
+            await db.execute(
+                "UPDATE habits SET last_done = ?, streak = streak + 1 WHERE id = ?",
+                (now, habit_id)
+            )
+        await db.commit()
+
+
+async def get_all_active_habits() -> List[Dict]:
+    """Для планировщика — все активные привычки всех пользователей"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM habits WHERE is_active = 1") as cursor:
+            rows = await cursor.fetchall()
+            result = []
+            for r in rows:
+                d = dict(r)
+                if d.get("times"):
+                    d["times"] = json.loads(d["times"])
+                result.append(d)
+            return result
+
+
+# ================== ШТРАФЫ И РЕЙТИНГ ==================
+
+async def add_penalty(user_id: int, amount: int = 500, reason: str = "Пропуск отчёта"):
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS penalties (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                amount INTEGER,
+                reason TEXT,
+                created_at TEXT,
+                paid INTEGER DEFAULT 0
+            )
+        """)
+        await db.execute(
+            "INSERT INTO penalties (user_id, amount, reason, created_at) VALUES (?, ?, ?, ?)",
+            (user_id, amount, reason, datetime.now().isoformat())
+        )
+        await db.commit()
+
+
+async def get_user_debt(user_id: int) -> int:
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS penalties (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                amount INTEGER,
+                reason TEXT,
+                created_at TEXT,
+                paid INTEGER DEFAULT 0
+            )
+        """)
+        async with db.execute(
+            "SELECT COALESCE(SUM(amount), 0) as debt FROM penalties WHERE user_id = ? AND paid = 0",
+            (user_id,)
+        ) as cursor:
+            row = await cursor.fetchone()
+            return row[0] if row else 0
+
+
+async def get_leaderboard(limit: int = 5) -> list:
+    """Топ пользователей по проценту выполнения задач"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("""
+            SELECT 
+                u.user_id,
+                u.full_name,
+                u.username,
+                COUNT(t.id) as total,
+                SUM(CASE WHEN t.status = 'completed' THEN 1 ELSE 0 END) as completed
+            FROM users u
+            LEFT JOIN tasks t ON t.user_id = u.user_id
+            GROUP BY u.user_id
+            HAVING total > 0
+            ORDER BY (completed * 1.0 / total) DESC, completed DESC
+            LIMIT ?
+        """, (limit,)) as cursor:
+            rows = await cursor.fetchall()
+            result = []
+            for r in rows:
+                d = dict(r)
+                d["rate"] = round((d["completed"] / d["total"] * 100) if d["total"] else 0, 1)
+                result.append(d)
+            return result

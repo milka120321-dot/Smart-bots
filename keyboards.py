@@ -9,14 +9,40 @@ def main_menu():
         KeyboardButton(text="📋 Задачи")
     )
     builder.row(
-        KeyboardButton(text="✅ Отметить прогресс"),
-        KeyboardButton(text="📊 Отчёт")
+        KeyboardButton(text="🔄 Привычки"),
+        KeyboardButton(text="✅ Отметить прогресс")
     )
     builder.row(
-        KeyboardButton(text="➕ Добавить задачу"),
+        KeyboardButton(text="📊 Отчёт"),
+        KeyboardButton(text="➕ Добавить задачу")
+    )
+    builder.row(
         KeyboardButton(text="⚙️ Настройки")
     )
     return builder.as_markup(resize_keyboard=True)
+
+
+def habit_done_kb(habit_id: int):
+    builder = InlineKeyboardBuilder()
+    builder.row(
+        InlineKeyboardButton(text="✅ Сделал", callback_data=f"habit_done:{habit_id}"),
+        InlineKeyboardButton(text="⏭ Пропустил", callback_data=f"habit_skip:{habit_id}")
+    )
+    return builder.as_markup()
+
+
+def habits_list_kb(habits: list):
+    builder = InlineKeyboardBuilder()
+    for h in habits:
+        streak = h.get("streak", 0)
+        builder.row(
+            InlineKeyboardButton(
+                text=f"{'🔥' if streak > 0 else '▫️'} {h['title']} ({streak} дн.)",
+                callback_data=f"habit_info:{h['id']}"
+            )
+        )
+    builder.row(InlineKeyboardButton(text="➕ Новая привычка", callback_data="add_habit"))
+    return builder.as_markup()
 
 
 def goal_actions():

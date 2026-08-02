@@ -9,15 +9,17 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
+import aiosqlite
 from db import (
     init_db, get_or_create_user, create_goal, get_active_goal,
     update_goal_progress, create_monthly_focus, get_current_monthly,
     create_task, get_tasks, get_overdue_or_unfinished, update_task_progress,
-    get_task, add_checkin, get_stats
+    get_task, add_checkin, get_stats, DB_PATH,
+    create_habit, get_habits, get_habit, mark_habit_done, get_all_active_habits
 )
 from keyboards import (
     main_menu, goal_actions, task_status_kb, confirm_add_task_kb,
-    tasks_list_kb, yes_no_kb, skip_kb
+    tasks_list_kb, yes_no_kb, skip_kb, habit_done_kb, habits_list_kb
 )
 from states import GoalSetup, MonthlySetup, TaskAdd, ProgressUpdate, GoalProgressUpdate
 from utils import (
@@ -524,16 +526,145 @@ async def report(message: Message):
     await message.answer(text, reply_markup=main_menu())
 
 
-# ================== НАСТРОЙКИ (заглушка) ==================
+# ================== НАСТРОЙКИ ==================
 @router.message(F.text == "⚙️ Настройки")
 async def settings(message: Message):
     await message.answer(
-        "⚙️ Настройки (в следующей версии):\n"
-        "• Время утреннего и вечернего напоминания\n"
-        "• Часовой пояс\n"
-        "• Жёсткость проверки долгов\n\n"
-        "Пока всё работает на дефолтах."
+        "⚙️ <b>Настройки напоминаний</b>\n\n"
+        "Часовой пояс: <b>Алматы (Asia/Almaty)</b>\n\n"
+        "Сейчас работают:\n"
+        "• Утро — 09:00\n"
+        "• Вечер — 21:00\n"
+        "• Воскресенье 20:00 — напоминание по главной цели\n\n"
+        "Чтобы изменить время, напиши:\n"
+        "<code>утро 08:30</code>\n"
+        "<code>вечер 22:00</code>"
     )
+
+
+@router.message(F.text.regexp(r"(?i)утро\s+(\d{1,2}:\d{2})"))
+async def set_morning(message: Message):
+    import re
+    match = re.search(r"(\d{1,2}:\d{2})", message.text)
+    if match:
+        time_str = match.group(1)
+        await message.answer(f"✅ Утреннее напоминание будет в <b>{time_str}</b> (Алматы)\nПока используется стандартное время. Полная настройка в следующем обновлении.")
+
+
+@router.message(F.text.regexp(r"(?i)вечер\s+(\d{1,2}:\d{2})"))
+async def set_evening(message: Message):
+    import re
+    match = re.search(r"(\d{1,2}:\d{2})", message.text)
+    if match:
+        time_str = match.group(1)
+        await message.answer(f"✅ Вечернее напоминание будет в <b>{time_str}</b> (Алматы)\nПока используется стандартное время. Полная настройка в следующем обновлении.")
+
+
+# ================== НАПОМИНАНИЯ ==================
+async def send_morning_reminders(bot: Bot):
+    """Утреннее напоминание"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT user_id FROM users") as cursor:
+            users = await cursor.fetchall()
+    
+    for user in users:
+        try:
+            user_id = user["user_id"]
+            tasks = await get_tasks(user_id, only_active=True)
+            unfinished = await get_overdue_or_unfinished(user_id)
+            goal = await get_active_goal(user_id)
+            
+            text = "☀️ <b>Доброе утро!</b>\n\n"
+            
+            if goal:
+                current = goal.get("current_value") or 0
+                target = goal.get("target_value") or 1
+                text += f"Твоя цель: <b>{goal['title']}</b>\n"
+                text += f"{progress_bar(current, target)}\n\n"
+            
+            if unfinished:
+                text += f"⚠️ Незакрытых задач: {len(unfinished)}\n"
+            
+            if tasks:
+                text += "Можно поработать над:\n"
+                for t in tasks[:4]:
+                    text += f"• {t['title'][:45]}\n"
+            else:
+                text += "Активных задач пока нет.\n"
+            
+            text += "\nКогда сделаешь — нажми «✅ Отметить прогресс»"
+            
+            await bot.send_message(user_id, text, reply_markup=main_menu())
+        except Exception as e:
+            logger.error(f"Ошибка утреннего напоминания {user_id}: {e}")
+
+
+async def send_evening_reminders(bot: Bot):
+    """Вечернее напоминание"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT user_id FROM users") as cursor:
+            users = await cursor.fetchall()
+    
+    for user in users:
+        try:
+            user_id = user["user_id"]
+            stats = await get_stats(user_id)
+            unfinished = await get_overdue_or_unfinished(user_id)
+            
+            text = "🌙 <b>Вечерний чек-ин</b>\n\n"
+            text += f"Прогресс по цели: <b>{stats.get('goal_progress', 0):.0f}%</b>\n"
+            text += f"Активных задач: {stats.get('active', 0)}\n"
+            
+            if unfinished:
+                text += f"\n⚠️ Незакрытых задач: {len(unfinished)}\nЛучше закрыть или перенести.\n"
+            
+            text += "\nКак прошёл день? Отметь, что сделал."
+            
+            await bot.send_message(user_id, text, reply_markup=main_menu())
+        except Exception as e:
+            logger.error(f"Ошибка вечернего напоминания {user_id}: {e}")
+
+
+async def send_weekly_goal_reminder(bot: Bot):
+    """Воскресное напоминание по главной цели"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT user_id FROM users") as cursor:
+            users = await cursor.fetchall()
+    
+    for user in users:
+        try:
+            user_id = user["user_id"]
+            goal = await get_active_goal(user_id)
+            stats = await get_stats(user_id)
+            
+            if not goal:
+                continue
+            
+            current = goal.get("current_value") or 0
+            target = goal.get("target_value") or 1
+            percent = min(100, (current / target) * 100)
+            
+            text = "📅 <b>Конец недели — проверка главной цели</b>\n\n"
+            text += f"🎯 {goal['title']}\n"
+            text += f"{progress_bar(current, target)}\n"
+            text += f"{current:g} / {target:g} {goal.get('unit') or ''}\n\n"
+            text += get_motivation(percent) + "\n\n"
+            
+            if percent < 30:
+                text += "На этой неделе стоит сильнее сфокусироваться на цели."
+            elif percent < 70:
+                text += "Есть прогресс. Продолжай в том же духе на следующей неделе."
+            else:
+                text += "Отличный темп! Так держать."
+            
+            text += "\n\nМожешь обновить прогресс цели прямо сейчас."
+            
+            await bot.send_message(user_id, text, reply_markup=main_menu())
+        except Exception as e:
+            logger.error(f"Ошибка недельного напоминания {user_id}: {e}")
 
 
 # ================== ЗАПУСК ==================
@@ -546,6 +677,22 @@ async def main():
     )
     dp = Dispatcher(storage=MemoryStorage())
     dp.include_router(router)
+    
+    # Планировщик (часовой пояс Алматы)
+    from apscheduler.schedulers.asyncio import AsyncIOScheduler
+    from apscheduler.triggers.cron import CronTrigger
+    
+    scheduler = AsyncIOScheduler(timezone="Asia/Almaty")
+    
+    # Утро 09:00
+    scheduler.add_job(send_morning_reminders, CronTrigger(hour=9, minute=0), args=[bot])
+    # Вечер 21:00
+    scheduler.add_job(send_evening_reminders, CronTrigger(hour=21, minute=0), args=[bot])
+    # Воскресенье 20:00 — главная цель
+    scheduler.add_job(send_weekly_goal_reminder, CronTrigger(day_of_week="sun", hour=20, minute=0), args=[bot])
+    
+    scheduler.start()
+    logger.info("Планировщик запущен (Алматы): утро 09:00, вечер 21:00, вс 20:00 — цель")
     
     logger.info("Бот запущен")
     await dp.start_polling(bot)
