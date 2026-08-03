@@ -695,15 +695,22 @@ async def main():
     logger.info("Планировщик запущен (Алматы): утро 09:00, вечер 21:00, вс 20:00 — цель")
     
     # Режим работы: webhook (для Render Web Service) или polling
-    WEBHOOK_HOST = os.getenv("WEBHOOK_HOST")  # например https://smart-bots.onrender.com
-    WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
-    WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}" if WEBHOOK_HOST else None
+    WEBHOOK_HOST = os.getenv("WEBHOOK_HOST", "").rstrip("/")
+    PORT = int(os.getenv("PORT", 10000))
+    
+    logger.info(f"WEBHOOK_HOST = '{WEBHOOK_HOST}'")
+    logger.info(f"PORT = {PORT}")
     
     if WEBHOOK_HOST:
         # --- WEBHOOK режим (для Render Free Web Service) ---
         from aiohttp import web
         
+        WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
+        WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
+        
         async def on_startup(app):
+            # Сначала удаляем старый webhook/polling
+            await bot.delete_webhook(drop_pending_updates=True)
             await bot.set_webhook(WEBHOOK_URL)
             logger.info(f"Webhook установлен: {WEBHOOK_URL}")
         
@@ -722,7 +729,6 @@ async def main():
                 logger.error(f"Webhook error: {e}")
                 return web.Response(status=500)
         
-        # Health check чтобы Render не считал сервис мёртвым
         async def health(request):
             return web.Response(text="Bot is alive")
         
@@ -733,11 +739,14 @@ async def main():
         app.on_startup.append(on_startup)
         app.on_shutdown.append(on_shutdown)
         
-        logger.info("Бот запущен в режиме WEBHOOK")
-        web.run_app(app, host="0.0.0.0", port=int(os.getenv("PORT", 10000)))
+        logger.info("=== БОТ ЗАПУЩЕН В РЕЖИМЕ WEBHOOK ===")
+        web.run_app(app, host="0.0.0.0", port=PORT)
     else:
-        # --- POLLING режим (локально или Background Worker) ---
-        logger.info("Бот запущен в режиме POLLING")
+        # --- POLLING режим ---
+        logger.warning("WEBHOOK_HOST не задан! Запускаю polling.")
+        logger.warning("На Render Free это приведёт к конфликтам. Обязательно добавь WEBHOOK_HOST.")
+        await bot.delete_webhook(drop_pending_updates=True)
+        logger.info("=== БОТ ЗАПУЩЕН В РЕЖИМЕ POLLING ===")
         await dp.start_polling(bot)
 
 
