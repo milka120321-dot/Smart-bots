@@ -710,11 +710,13 @@ async def main():
         
         async def handle_webhook(request):
             try:
-                update = await request.json()
-                await dp.feed_raw_update(bot, update)
+                from aiogram.types import Update
+                data = await request.json()
+                update = Update.model_validate(data)
+                await dp.feed_update(bot, update)
                 return web.Response(text="ok")
             except Exception as e:
-                logger.error(f"Webhook error: {e}")
+                logger.error(f"Webhook error: {e}", exc_info=True)
                 return web.Response(status=500)
         
         async def health(request):
