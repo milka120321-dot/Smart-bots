@@ -708,18 +708,6 @@ async def main():
         WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
         WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
         
-        async def on_startup(app):
-            # Сначала удаляем старый webhook/polling
-            await bot.delete_webhook(drop_pending_updates=True)
-            await bot.set_webhook(WEBHOOK_URL)
-            logger.info(f"Webhook установлен: {WEBHOOK_URL}")
-        
-        async def on_shutdown(app):
-            await bot.delete_webhook()
-            logger.info("Webhook удалён")
-        
-        app = web.Application()
-        
         async def handle_webhook(request):
             try:
                 update = await request.json()
@@ -732,15 +720,25 @@ async def main():
         async def health(request):
             return web.Response(text="Bot is alive")
         
+        app = web.Application()
         app.router.add_post(WEBHOOK_PATH, handle_webhook)
         app.router.add_get("/", health)
         app.router.add_get("/health", health)
         
-        app.on_startup.append(on_startup)
-        app.on_shutdown.append(on_shutdown)
-        
+        # Устанавливаем webhook
+        await bot.delete_webhook(drop_pending_updates=True)
+        await bot.set_webhook(WEBHOOK_URL)
+        logger.info(f"Webhook установлен: {WEBHOOK_URL}")
         logger.info("=== БОТ ЗАПУЩЕН В РЕЖИМЕ WEBHOOK ===")
-        web.run_app(app, host="0.0.0.0", port=PORT)
+        
+        # Правильный запуск внутри существующего event loop
+        runner = web.AppRunner(app)
+        await runner.setup()
+        site = web.TCPSite(runner, "0.0.0.0", PORT)
+        await site.start()
+        
+        # Держим процесс живым
+        await asyncio.Event().wait()
     else:
         # --- POLLING режим ---
         logger.warning("WEBHOOK_HOST не задан! Запускаю polling.")
