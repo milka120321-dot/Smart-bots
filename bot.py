@@ -694,28 +694,52 @@ async def main():
     scheduler.start()
     logger.info("Планировщик запущен (Алматы): утро 09:00, вечер 21:00, вс 20:00 — цель")
     
-    logger.info("Бот запущен")
-    await dp.start_polling(bot)
+    # Режим работы: webhook (для Render Web Service) или polling
+    WEBHOOK_HOST = os.getenv("WEBHOOK_HOST")  # например https://smart-bots.onrender.com
+    WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
+    WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}" if WEBHOOK_HOST else None
+    
+    if WEBHOOK_HOST:
+        # --- WEBHOOK режим (для Render Free Web Service) ---
+        from aiohttp import web
+        
+        async def on_startup(app):
+            await bot.set_webhook(WEBHOOK_URL)
+            logger.info(f"Webhook установлен: {WEBHOOK_URL}")
+        
+        async def on_shutdown(app):
+            await bot.delete_webhook()
+            logger.info("Webhook удалён")
+        
+        app = web.Application()
+        
+        async def handle_webhook(request):
+            try:
+                update = await request.json()
+                await dp.feed_raw_update(bot, update)
+                return web.Response(text="ok")
+            except Exception as e:
+                logger.error(f"Webhook error: {e}")
+                return web.Response(status=500)
+        
+        # Health check чтобы Render не считал сервис мёртвым
+        async def health(request):
+            return web.Response(text="Bot is alive")
+        
+        app.router.add_post(WEBHOOK_PATH, handle_webhook)
+        app.router.add_get("/", health)
+        app.router.add_get("/health", health)
+        
+        app.on_startup.append(on_startup)
+        app.on_shutdown.append(on_shutdown)
+        
+        logger.info("Бот запущен в режиме WEBHOOK")
+        web.run_app(app, host="0.0.0.0", port=int(os.getenv("PORT", 10000)))
+    else:
+        # --- POLLING режим (локально или Background Worker) ---
+        logger.info("Бот запущен в режиме POLLING")
+        await dp.start_polling(bot)
 
-
-
-from aiohttp import web
-import os
-
-async def health(request):
-    return web.Response(text="OK")
-
-async def start_web():
-    app = web.Application()
-    app.router.add_get("/", health)
-    port = int(os.environ.get("PORT", 10000))
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", port)
-    await site.start()
-
-async def run():
-    await asyncio.gather(start_web(), main())
 
 if __name__ == "__main__":
-    asyncio.run(run())
+    asyncio.run(main())
