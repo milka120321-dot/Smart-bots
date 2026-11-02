@@ -2,177 +2,491 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
 <title>Закупщик</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--tg-theme-bg-color,#f5f5f5);color:var(--tg-theme-text-color,#111);padding:12px 12px 110px;font-size:15px}
-.header{text-align:center;margin-bottom:10px;position:relative}
-.header h1{font-size:22px}.header p{font-size:13px;opacity:.6;margin-top:2px}
-.mode-pill{position:absolute;right:0;top:2px;font-size:12px;padding:4px 8px;border-radius:14px;border:none;background:var(--tg-theme-secondary-bg-color,#fff);cursor:pointer}
-.role-tabs,.seg{display:flex;gap:6px;margin-bottom:12px}
-.role-tab,.seg button{flex:1;padding:10px 4px;text-align:center;border-radius:12px;border:none;background:var(--tg-theme-secondary-bg-color,#fff);color:inherit;font-size:13px;font-weight:600;cursor:pointer}
-.role-tab.active,.seg button.active{background:var(--tg-theme-button-color,#2481cc);color:var(--tg-theme-button-text-color,#fff)}
-.card{background:var(--tg-theme-secondary-bg-color,#fff);border-radius:14px;padding:14px;margin-bottom:12px}
-.card h3{font-size:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:6px}
-textarea,input,select{width:100%;padding:11px;border:1px solid rgba(0,0,0,.12);border-radius:12px;font-size:15px;background:var(--tg-theme-bg-color,#fff);color:inherit;margin-bottom:10px}
-textarea{min-height:110px;resize:vertical}
-input.inl{width:78px;padding:6px;margin:0;font-size:14px}
-.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:600;background:var(--tg-theme-button-color,#2481cc);color:var(--tg-theme-button-text-color,#fff);cursor:pointer}
-.btn:disabled{opacity:.5}
-.btn.secondary{background:#eee;color:#333;margin-top:8px}
-.btn.small{padding:7px 11px;width:auto;font-size:13px;margin:0}
-.btn.danger{background:#ff3b30;color:#fff}.btn.ok{background:#34c759;color:#fff}
-.item-row,.order-row,.product-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.06);gap:10px}
-.item-row:last-child,.order-row:last-child,.product-row:last-child{border-bottom:none}
-.meta{font-size:12px;opacity:.6;margin-top:2px}
-.price{font-weight:600;white-space:nowrap;text-align:right}
-.status{font-size:12px;padding:3px 8px;border-radius:20px;background:#e8f0fe;color:#1a73e8;white-space:nowrap}
-.status.done{background:#e6f7ea;color:#1f8a3b}.status.bad{background:#fde8e7;color:#c62828}.status.warn{background:#fff4e0;color:#a15c00}
-.badge-regular{background:#34c759;color:#fff;font-size:11px;padding:2px 6px;border-radius:10px;margin-left:6px;white-space:nowrap}
-.badge-pin{background:#ff9500;color:#fff;font-size:11px;padding:2px 6px;border-radius:10px;margin-left:4px}
-.offer-block{margin-bottom:12px;padding:12px;border-radius:12px;border:2px solid rgba(0,0,0,.07);cursor:pointer}
-.offer-block.sel{border-color:var(--tg-theme-button-color,#2481cc)}
-.offer-title{font-weight:700;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+:root{
+  --bg:var(--tg-theme-bg-color,#ffffff);
+  --card:var(--tg-theme-secondary-bg-color,#f2f2f7);
+  --sheet:var(--tg-theme-bg-color,#ffffff);
+  --text:var(--tg-theme-text-color,#000000);
+  --hint:var(--tg-theme-hint-color,#8e8e93);
+  --accent:var(--tg-theme-button-color,#007aff);
+  --accent-text:var(--tg-theme-button-text-color,#ffffff);
+  --red:var(--tg-theme-destructive-text-color,#ff3b30);
+  --green:#1f9d45;--green-solid:#34c759;--orange:#c46a00;
+  --sep:rgba(60,60,67,.14);--fill:rgba(118,118,128,.12);--fill2:rgba(118,118,128,.22);
+  --tint:rgba(0,122,255,.12);--tint-green:rgba(52,199,89,.15);--tint-red:rgba(255,59,48,.12);--tint-orange:rgba(255,149,0,.15);
+  --tile-s:88%;--tile-l:92%;--tile-l2:86%;
+  --tabbar-bg:rgba(249,249,249,.86);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --tab-h:52px;
+}
+html.dark{
+  --bg:var(--tg-theme-bg-color,#000000);
+  --card:var(--tg-theme-secondary-bg-color,#1c1c1e);
+  --sheet:var(--tg-theme-secondary-bg-color,#1c1c1e);
+  --text:var(--tg-theme-text-color,#ffffff);
+  --hint:var(--tg-theme-hint-color,#98989e);
+  --accent:var(--tg-theme-button-color,#0a84ff);
+  --green:#30d158;--green-solid:#30d158;--orange:#ff9f0a;
+  --sep:rgba(84,84,88,.45);--fill:rgba(118,118,128,.24);--fill2:rgba(118,118,128,.34);
+  --tint-green:rgba(48,209,88,.16);--tint-red:rgba(255,69,58,.16);--tint-orange:rgba(255,159,10,.16);
+  --tile-s:26%;--tile-l:17%;--tile-l2:22%;
+  --tabbar-bg:rgba(22,22,23,.88);
+}
+@supports (color:color-mix(in srgb,red 10%,transparent)){
+  :root,html.dark{--tint:color-mix(in srgb,var(--accent) 15%,transparent)}
+  :root{--tabbar-bg:color-mix(in srgb,var(--bg) 88%,transparent)}
+  html.dark{--tabbar-bg:color-mix(in srgb,var(--card) 90%,transparent)}
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,'Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);
+  font-size:15px;line-height:1.35;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+  padding:6px 16px calc(var(--tab-h) + var(--safe-b) + 20px);padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));overflow-x:hidden}
+body.has-main{padding-bottom:calc(var(--tab-h) + var(--safe-b) + 84px)}
+body.has-act{padding-bottom:calc(var(--safe-b) + 96px)}
+body.no-tab:not(.has-act){padding-bottom:calc(var(--safe-b) + 24px)}
+b,strong{font-weight:600}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer;text-align:inherit}
+svg{display:block}
 .hidden{display:none!important}
-.total{font-weight:700;font-size:17px;text-align:right;margin-top:8px}
-.badge{display:inline-block;background:#ff3b30;color:#fff;border-radius:10px;font-size:11px;padding:1px 6px;margin-left:4px}
-.save{color:#1f8a3b;font-weight:600}.warnt{color:#c62828}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.chip{padding:6px 10px;border-radius:16px;background:#eef2f6;border:none;font-size:13px;cursor:pointer;color:#222}
-.chip.active{background:var(--tg-theme-button-color,#2481cc);color:#fff}
-.qty{display:flex;align-items:center;gap:6px}.qty button{width:32px;height:32px;border-radius:50%;border:none;background:#eef2f6;font-size:18px;cursor:pointer}
-.tl{border-left:2px solid #cfd8e3;margin:8px 0 4px 6px;padding-left:10px;font-size:13px}
-.tl div{margin-bottom:4px}.tl div.cur{font-weight:700}
-.point{font-weight:700;margin:10px 0 4px;font-size:14px}
-.sticky{position:fixed;left:12px;right:12px;bottom:12px;z-index:5}
-.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 14px;border-radius:12px;font-size:14px;z-index:9;max-width:90%}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:8}
-.modal .card{width:100%;margin:0;border-radius:18px 18px 0 0;max-height:88vh;overflow:auto}
-.unk{background:#fff4e0;border-radius:10px;padding:8px;margin-bottom:6px;font-size:14px}
-.row2{display:flex;gap:8px}.row2>*{flex:1}
-label.l{font-size:13px;opacity:.7;display:block;margin-bottom:4px}
-.photo{width:44px;height:44px;border-radius:8px;background:#eef2f6;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.info{font-size:13px;background:#eef6ff;border-radius:10px;padding:8px 10px;margin-bottom:10px}
+
+/* заголовки */
+.ttl{font-size:28px;font-weight:700;letter-spacing:-.5px;margin:8px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ttl .link{font-size:15px;font-weight:400}
+.sec{font-size:20px;font-weight:700;letter-spacing:-.3px;margin:20px 0 10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sec .link{font-size:15px;font-weight:400;letter-spacing:0}
+.link{color:var(--accent);font-size:15px}
+.meta{font-size:13px;color:var(--hint);margin-top:2px}
+.fine{font-size:12px;color:var(--hint);margin-top:8px;display:flex;align-items:center;gap:6px}
+.q{width:20px;height:20px;border-radius:50%;background:var(--fill);color:var(--hint);font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;text-align:center}
+.warnt{color:var(--orange)}
+
+/* шапка главной */
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 12px}
+.addr{min-width:0;display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.addr-l{display:flex;align-items:center;gap:4px;font-size:17px;font-weight:600;max-width:100%;white-space:nowrap}
+.addr-l span{overflow:hidden;text-overflow:ellipsis}
+.addr-l svg{flex-shrink:0;color:var(--hint)}
+.addr-s{font-size:13px;color:var(--hint);margin-top:1px;white-space:nowrap}
+.pill-biz{flex-shrink:0;height:26px;padding:0 10px;border-radius:13px;background:var(--tint);color:var(--accent);font-size:12px;font-weight:600;display:inline-flex;align-items:center}
+.search{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:12px;background:var(--card);margin-bottom:12px}
+.search svg{color:var(--hint);flex-shrink:0}
+.search input{flex:1;min-width:0;border:none;background:none;outline:none;font:inherit;font-size:16px;color:var(--text);height:100%;-webkit-appearance:none}
+.search input::placeholder{color:var(--hint)}
+.search input::-webkit-search-cancel-button{display:none}
+
+/* баннер и плашки */
+.banner{position:relative;display:flex;align-items:center;justify-content:space-between;width:100%;min-height:84px;padding:14px 16px;border-radius:16px;overflow:hidden;
+  background:linear-gradient(120deg,hsl(140 60% 40%),hsl(165 60% 38%));color:#fff;text-align:left;margin-bottom:10px}
+html.dark .banner{background:linear-gradient(120deg,hsl(140 45% 24%),hsl(165 45% 22%))}
+.banner b{display:block;font-size:19px;font-weight:700;letter-spacing:-.3px;line-height:1.2}
+.banner span{display:block;font-size:13px;opacity:.85;margin-top:3px}
+.banner .be{font-size:52px;line-height:1;margin:-6px -4px -10px 8px;transform:rotate(-8deg);opacity:.95}
+.rowbtn{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:14px;background:var(--card);margin-bottom:8px;text-align:left}
+.rowbtn .ri{width:36px;height:36px;border-radius:10px;background:var(--tint);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.rowbtn .rt{flex:1;min-width:0}
+.rowbtn .rt b{display:block;font-size:15px}
+.rowbtn .rt span{display:block;font-size:13px;color:var(--hint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chev{color:var(--hint);flex-shrink:0}
+
+/* плитки категорий */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{position:relative;height:96px;border-radius:16px;overflow:hidden;padding:12px 14px;text-align:left;
+  background:hsl(var(--h) var(--tile-s) var(--tile-l))}
+.tile b{position:relative;z-index:1;font-size:16px;font-weight:600;letter-spacing:-.2px}
+.tile .te{position:absolute;right:-4px;bottom:-10px;font-size:58px;line-height:1;transform:rotate(-10deg)}
+.tile:active,.pc:active .pc-img{filter:brightness(.95)}
+
+/* карточки товаров */
+.hs{display:flex;gap:10px;overflow-x:auto;margin:0 -16px;padding:0 16px 4px;scrollbar-width:none;scroll-snap-type:x proximity}
+.hs::-webkit-scrollbar{display:none}
+.hs .pc{flex:0 0 140px;scroll-snap-align:start}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px 10px}
+.pc{display:flex;flex-direction:column;min-width:0}
+.pc-img{position:relative;aspect-ratio:1/0.82;border-radius:14px;background:hsl(var(--h) var(--tile-s) var(--tile-l));display:flex;align-items:center;justify-content:center;font-size:54px;line-height:1}
+.hs .pc-img{font-size:46px}
+.pc-off{position:absolute;left:6px;top:6px;height:20px;padding:0 6px;border-radius:6px;background:#ff3b30;color:#fff;font-size:11px;font-weight:700;font-style:normal;display:flex;align-items:center}
+.pc-b{padding:8px 2px 8px;flex:1}
+.pc-p{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.pc-p b{font-size:16px;font-weight:700;white-space:nowrap}
+.pc-p s{font-size:12px;color:var(--hint);white-space:nowrap}
+.pc-p .na{font-size:14px;font-weight:500;color:var(--hint)}
+.pc-n{font-size:14px;line-height:1.25;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pc-u{font-size:12px;color:var(--hint);margin-top:1px}
+.pc-add{height:34px;border-radius:10px;background:var(--card);color:var(--accent);font-size:22px;font-weight:400;display:flex;align-items:center;justify-content:center;width:100%;line-height:1}
+.step{display:flex;align-items:center;justify-content:space-between;height:34px;border-radius:10px;background:var(--accent);color:var(--accent-text);width:100%}
+.step button{width:38px;height:100%;font-size:20px;line-height:1;color:inherit;display:flex;align-items:center;justify-content:center;text-align:center}
+.step button:disabled{opacity:.4}
+.step span{font-size:14px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.step.sm{width:112px;height:30px;border-radius:9px;background:var(--fill);color:var(--text);flex-shrink:0}
+.step.sm button{width:32px;font-size:18px}
+.step.sm span{font-size:13px}
+
+/* экран категории */
+.topbar{display:flex;align-items:center;gap:8px;height:44px;margin:0 0 8px}
+.topbar h1{flex:1;font-size:20px;font-weight:700;letter-spacing:-.3px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{width:36px;height:36px;border-radius:18px;background:var(--card);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text)}
+.chips{display:flex;gap:6px;margin-bottom:12px}
+.chip{flex-shrink:0;height:34px;padding:0 14px;border-radius:17px;background:var(--card);font-size:14px;font-weight:500;white-space:nowrap;display:inline-flex;align-items:center}
+.chip.active{background:var(--text);color:var(--bg)}
+
+/* карточки и списки */
+.card{background:var(--card);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.glist{background:var(--card);border-radius:14px;overflow:hidden;margin-bottom:10px}
+.grow{display:flex;align-items:center;gap:10px;min-height:48px;padding:6px 14px;width:100%;position:relative;text-align:left}
+.grow+.grow::before{content:'';position:absolute;top:0;left:14px;right:0;border-top:.5px solid var(--sep)}
+.grow .gi{font-size:20px;width:28px;text-align:center;flex-shrink:0}
+.grow .gl{flex:1;min-width:0;font-size:15px}
+.grow .gl small{display:block;font-size:12px;color:var(--hint)}
+.grow .gv{color:var(--hint);font-size:15px;max-width:58%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.grow .gv.ph{color:var(--accent)}
+.gsel{border:none;background:transparent;color:var(--hint);font:inherit;font-size:15px;text-align:right;text-align-last:right;max-width:60%;-webkit-appearance:none;appearance:none;outline:none;padding:0 18px 0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='12' viewBox='0 0 8 12'%3E%3Cpath d='M1.5 1l5 5-5 5' fill='none' stroke='%238e8e93' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 2px center;text-overflow:ellipsis}
+select option{color:#000}
+html.dark select option{background:#2c2c2e;color:#fff}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;background:var(--red);color:#fff;border-radius:10px;font-size:12px;font-weight:600;line-height:1}
+
+/* корзина */
+.ci{display:flex;align-items:center;gap:12px;padding:8px 0;position:relative}
+.ci+.ci::before{content:'';position:absolute;top:0;left:56px;right:0;border-top:.5px solid var(--sep)}
+.ci-img{width:44px;height:44px;border-radius:12px;background:hsl(var(--h) var(--tile-s) var(--tile-l2));display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.ci-b{flex:1;min-width:0}
+.ci-n{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-p{display:flex;gap:6px;align-items:baseline;margin-top:1px}
+.ci-p b{font-size:14px;font-variant-numeric:tabular-nums}
+.ci-p s{font-size:12px;color:var(--hint)}
+.ci-p .warnt{font-size:13px}
+.var2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.var{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px;border-radius:14px;background:var(--card);border:2px solid transparent;text-align:left;position:relative}
+.var.sel{border-color:var(--accent)}
+.var .vt{font-size:13px;color:var(--hint);font-weight:500}
+.var b{font-size:18px;font-weight:700;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.var .vs{font-size:12px;color:var(--hint)}
+.var .vtag{position:absolute;right:10px;top:10px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--fill2)}
+.var.sel .vtag{border:none;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10' viewBox='0 0 12 10'%3E%3Cpath d='M1.5 5l3 3 6-6.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center no-repeat}
+.slots{margin-bottom:10px}
+.slots .chip.active{background:var(--accent);color:var(--accent-text)}
+.srow{display:flex;justify-content:space-between;gap:8px;font-size:15px;padding:3px 0;font-variant-numeric:tabular-nums}
+.srow span:first-child{color:var(--hint)}
+.srow.tot{font-size:20px;font-weight:700;padding-top:8px;margin-top:4px;border-top:.5px solid var(--sep)}
+.srow.tot span:first-child{color:var(--text)}
+.pillmsg{display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;border-radius:10px;font-size:13px;font-weight:600}
+.pillmsg.g{background:var(--tint-green);color:var(--green)}
+.pillmsg.o{background:var(--tint-orange);color:var(--orange)}
+
+/* заказы */
+.oc{display:block;width:100%;background:var(--card);border-radius:14px;padding:14px;margin-bottom:10px;text-align:left}
+.oc-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.oc-h b{font-size:16px}
+.oc-st{font-size:15px;font-weight:600;margin-top:8px}
+.oc-sub{font-size:13px;color:var(--hint);margin-top:1px}
+.prog{display:flex;gap:3px;margin:10px 0 10px}
+.prog i{flex:1;height:4px;border-radius:2px;background:var(--fill2)}
+.prog i.on{background:var(--accent)}
+.prog.done i.on{background:var(--green-solid)}
+.prog.bad i.on{background:var(--red)}
+.prog.warn i.on{background:var(--orange)}
+.oc-f{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.oc-e{font-size:18px;letter-spacing:2px;white-space:nowrap;overflow:hidden}
+.oc-f b{font-size:16px;white-space:nowrap}
+.oc-a{display:flex;gap:8px;margin-top:12px}
+.oc-a .btn{flex:1}
+.status{display:inline-flex;align-items:center;height:24px;font-size:12px;font-weight:600;padding:0 9px;border-radius:12px;background:var(--tint);color:var(--accent);white-space:nowrap}
+.status.done{background:var(--tint-green);color:var(--green)}.status.bad{background:var(--tint-red);color:var(--red)}.status.warn{background:var(--tint-orange);color:var(--orange)}
+.tl{margin:4px 0 4px 6px;padding-left:16px;border-left:2px solid var(--fill2);font-size:14px}
+.tl div{position:relative;padding:3px 0;color:var(--hint)}
+.tl div::before{content:'';position:absolute;left:-23px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--sheet);border:2px solid var(--fill2);box-sizing:border-box}
+.tl div.on{color:var(--text)}
+.tl div.on::before{background:var(--accent);border-color:var(--accent)}
+.tl div.cur{font-weight:600}
+.tl div small{color:var(--hint);font-weight:400;margin-left:6px}
+.li{display:flex;justify-content:space-between;gap:10px;padding:7px 0;font-size:14px;border-bottom:.5px solid var(--sep)}
+.li:last-child{border-bottom:none}
+.li span:last-child{color:var(--hint);text-align:right;white-space:nowrap}
+
+/* кнопки */
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:48px;padding:10px 16px;border-radius:12px;font-size:16px;font-weight:600;
+  background:var(--accent);color:var(--accent-text);text-align:center;line-height:1.2;transition:opacity .15s,transform .1s}
+.btn:active{opacity:.8;transform:scale(.99)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn+.btn{margin-top:8px}
+.oc-a .btn+.btn,.ri-a .btn+.btn{margin-top:0}
+.btn.secondary{background:var(--tint);color:var(--accent)}
+.btn.gray{background:var(--fill);color:var(--text)}
+.btn.danger{background:var(--tint-red);color:var(--red)}
+.btn.ok{background:var(--green-solid);color:#fff}
+.btn.sm{min-height:38px;font-size:14px;border-radius:10px;padding:6px 12px}
+a.btn{text-decoration:none}
+
+/* поля */
+.inp,textarea{width:100%;padding:12px;border:none;border-radius:12px;font:inherit;font-size:16px;background:var(--fill);color:var(--text);outline:none;-webkit-appearance:none;appearance:none;margin-bottom:10px}
+textarea{min-height:140px;resize:none;line-height:1.45}
+.inp::placeholder,textarea::placeholder{color:var(--hint);opacity:1}
+.inp:focus,textarea:focus{box-shadow:0 0 0 2px var(--accent) inset}
+select.inp{padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238e8e93' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+input[type=number]{-moz-appearance:textfield}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.fl{display:block;font-size:13px;color:var(--hint);margin:0 0 4px 2px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.f2 label,.f3 label{display:block;min-width:0}
+.f2 label span,.f3 label span{display:block;font-size:12px;color:var(--hint);margin:0 0 4px 2px;white-space:nowrap}
+.f2 .inp,.f3 .inp{margin:0;height:44px;padding:0 10px;font-size:16px;font-variant-numeric:tabular-nums}
+.f3 select.inp{padding:0 26px 0 10px;background-position:right 9px center;font-size:15px}
+.sw{-webkit-appearance:none;appearance:none;width:51px;height:31px;border-radius:16px;background:var(--fill2);position:relative;flex-shrink:0;cursor:pointer;transition:background .2s;margin:0;border:none}
+.sw::after{content:'';position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s}
+.sw:checked{background:var(--green-solid)}
+.sw:checked::after{transform:translateX(20px)}
+.seg2{display:flex;gap:2px;padding:2px;border-radius:10px;background:var(--fill)}
+.seg2 button{flex:1;height:34px;border-radius:8px;font-size:14px;font-weight:500;text-align:center;display:flex;align-items:center;justify-content:center;gap:4px}
+.seg2 button.on{background:var(--bg);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+html.dark .seg2 button.on{background:#636366;box-shadow:none}
+
+/* пустые состояния */
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:48px 16px 16px}
+.empty .ee{font-size:56px;line-height:1;margin-bottom:12px}
+.empty b{font-size:18px}
+.empty span{font-size:14px;color:var(--hint);margin:4px 0 20px;max-width:280px}
+.empty .btn{max-width:300px}
+
+/* таб-бар */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;padding:0 4px var(--safe-b);background:var(--tabbar-bg);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--sep)}
+.tb{flex:1;height:var(--tab-h);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--hint);text-align:center;min-width:0}
+.tb.on{color:var(--accent)}
+.tb-i{position:relative}
+.tb-i svg{width:26px;height:26px}
+.tb-b{position:absolute;top:-4px;left:16px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--red);color:#fff;font-size:11px;font-weight:600;font-style:normal;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);box-sizing:content-box;line-height:1}
+.tb-l{font-size:10.5px;font-weight:500;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.tb.on .tb-l{font-weight:600}
+.sticky{position:fixed;left:16px;right:16px;bottom:calc(var(--tab-h) + var(--safe-b) + 10px);z-index:5}
+.sticky .btn{box-shadow:0 6px 20px rgba(0,0,0,.22)}
+.actbar{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:10px 16px calc(10px + var(--safe-b));background:var(--tabbar-bg);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:.5px solid var(--sep)}
+
+/* партнёрские экраны */
+.ptop{display:flex;align-items:center;justify-content:space-between;gap:8px;height:44px;margin-bottom:6px}
+.ptop .bs{display:flex;align-items:center;gap:2px;color:var(--accent);font-size:16px;white-space:nowrap;min-width:90px}
+.ptop b{font-size:17px;font-weight:600;text-align:center;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptop .pr{min-width:90px;display:flex;justify-content:flex-end}
+.ptop select{max-width:120px}
+.kv{font-size:14px;color:var(--hint);margin-top:4px;display:flex;gap:6px}
+.kv span:first-child{flex-shrink:0}
+.big{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.ptitle{font-size:13px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.3px;margin:18px 4px 8px}
+.ri{background:var(--card);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.ri-h{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ri-h b{font-size:17px}
+.ri-q{font-size:22px;font-weight:700;margin-top:2px;letter-spacing:-.3px}
+.ri-in{margin-top:10px}
+.ri-a{display:flex;gap:8px;margin-top:10px}
+.ri-a .btn{flex:1}
+.ri-a .btn.gray{flex:0 0 96px}
+.ri.done{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.ri.done .rm{flex:1;min-width:0;font-size:15px}
+.ri.done .rm small{display:block;font-size:13px;color:var(--hint)}
+.phb{height:40px;padding:0 12px;border-radius:10px;background:var(--fill);font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;flex-shrink:0;white-space:nowrap}
+.phb.on{background:var(--tint-green);color:var(--green)}
+.ptag{font-size:12px;color:var(--green);font-weight:600}
+.stage{display:flex;align-items:center;gap:8px;margin:2px 0 10px}
+.stage .prog{flex:1;margin:0}
+.stage span{font-size:13px;color:var(--hint);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ck{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:15px;border-bottom:.5px solid var(--sep)}
+.ck:last-child{border-bottom:none}
+.ck i{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;font-weight:700;background:var(--fill);color:var(--hint);flex-shrink:0}
+.ck i.y{background:var(--green-solid);color:#fff}
+.ck span:last-child{margin-left:auto;color:var(--hint);font-variant-numeric:tabular-nums}
+.hero{display:flex;align-items:center;gap:12px}
+.hero .he{width:52px;height:52px;border-radius:16px;background:var(--tint-green);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.hero .he.no{background:var(--fill)}
+
+/* приветствие */
+.welcome{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;flex-direction:column;padding:max(40px,env(safe-area-inset-top)) 24px calc(24px + var(--safe-b))}
+.welcome .wl{width:84px;height:84px;border-radius:24px;background:hsl(140 var(--tile-s) var(--tile-l));display:flex;align-items:center;justify-content:center;font-size:46px;margin:auto 0 18px}
+.welcome h1{font-size:30px;font-weight:700;letter-spacing:-.6px}
+.welcome p{font-size:16px;color:var(--hint);margin-top:6px}
+.wlist{margin:28px 0 auto}
+.wlist div{display:flex;align-items:center;gap:12px;font-size:16px;padding:9px 0}
+.wlist span{width:40px;height:40px;border-radius:12px;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+
+/* шторки, тосты */
+.toast{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:rgba(44,44,46,.95);color:#fff;padding:10px 16px;border-radius:14px;font-size:14px;z-index:40;
+  max-width:calc(100% - 32px);width:max-content;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.25);animation:tin .2s ease-out}
+@keyframes tin{from{opacity:0;transform:translate(-50%,-6px)}}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;z-index:20;animation:fade .2s ease-out}
+.modal>.sh{width:100%;max-width:560px;background:var(--sheet);border-radius:16px 16px 0 0;padding:22px 16px calc(16px + var(--safe-b));max-height:90vh;overflow:auto;-webkit-overflow-scrolling:touch;position:relative;animation:up .25s cubic-bezier(.2,.8,.2,1)}
+.modal>.sh::before{content:'';position:absolute;top:7px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--fill2)}
+.sh h3{font-size:20px;font-weight:700;letter-spacing:-.3px;margin:2px 0 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sh p.hint{font-size:15px;line-height:1.45;margin-bottom:16px}
+.sh .card,.sh .glist{background:var(--fill)}
+html.dark .sh .card,html.dark .sh .glist{background:rgba(118,118,128,.18)}
+.stars{display:flex;justify-content:center;gap:6px;margin:8px 0 16px}
+.stars button{font-size:36px;line-height:1;color:var(--orange);width:48px;height:48px;text-align:center}
+@keyframes up{from{transform:translateY(100%)}}
+@keyframes fade{from{opacity:0}}
+.unk{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:.5px solid var(--sep)}
+.unk:first-child{border-top:none}
+.unk-q{flex:1;min-width:0;font-size:14px}
+.unk-q b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.unk-q span{color:var(--hint);font-size:13px}
+.unk select{width:150px;margin:0;height:38px;padding:0 28px 0 10px;font-size:14px;background-position:right 9px center}
+.unk .x{width:32px;height:32px;border-radius:16px;background:var(--fill);color:var(--hint);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+.vblock{margin-bottom:12px}
+.vblock h4{font-size:15px;font-weight:600;margin:0 0 6px;display:flex;justify-content:space-between}
+.vs-p{font-size:13px;font-weight:600;margin:8px 0 2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.vs-p small{font-weight:400;color:var(--hint)}
+.tagg{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:9px;font-size:11px;font-weight:600;background:var(--tint-green);color:var(--green)}
+.tago{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:9px;font-size:11px;font-weight:600;background:var(--tint-orange);color:var(--orange)}
+.vl{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:2px 0 2px 2px}
+.vl span:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+.vl small{display:block;font-size:12px;color:var(--orange)}
+.ginp{width:96px;text-align:right;border:0;background:transparent;color:var(--text);font:inherit;font-size:16px;font-weight:600;padding:4px 0;outline:none}
+.ginp::placeholder{color:var(--hint);font-weight:400}
+.gu{color:var(--hint);margin-left:4px;font-size:15px}
+.src{color:var(--hint);font-size:10.5px;white-space:nowrap}
+.vl small{display:block;font-size:11px;color:var(--hint)}
+.capnote{font-size:11px;line-height:1.3;color:var(--hint);align-self:end;padding-bottom:10px}
+.paycard{background:var(--card);border-radius:16px;padding:14px;margin:0 0 10px;border:1px solid transparent}
+.paycard.fail{border-color:var(--red)}.paycard.ok{opacity:.85}.paycard.off{opacity:.6;padding:12px 14px}
+.pk-h{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.pk-h b{display:block;font-size:16px}.pk-h small{display:block;color:var(--hint);font-size:12px;margin-top:2px}
+.pk-it{color:var(--hint);font-size:13px;margin-top:8px;line-height:1.35}.pk-sum{font-size:26px;font-weight:800;margin:6px 0 10px;letter-spacing:-.5px}
+.kaspi{display:flex;justify-content:space-between;align-items:center;background:var(--fill);border-radius:12px;padding:10px 12px;margin:0 0 10px}
+.kaspi span{font-size:12px;color:var(--hint)}.kaspi b{display:block;font-size:16px;color:var(--text);margin-top:1px}
+.paycard .btn{margin-top:8px}.paycard .f2 .btn{font-size:14px;padding-left:6px;padding-right:6px}
+.sh .paycard{background:var(--fill)}html.dark .sh .paycard{background:rgba(118,118,128,.18)}.paycard .kaspi{background:rgba(127,127,127,.14)}
+.ci-s{font-size:12px;color:var(--accent);margin-top:2px}.ci-b{cursor:pointer}
 </style>
 </head>
 <body>
-<div class="header"><h1>Закупщик</h1><p id="sub">Рынок · Сбор · Доставка</p><button class="mode-pill" id="modePill" onclick="openModePicker()"></button></div>
-<div class="role-tabs" id="roleTabs">
-  <button class="role-tab active" data-r="client" onclick="switchRole('client')">Клиент</button>
-  <button class="role-tab" data-r="collector" onclick="switchRole('collector')">Сборщик<span id="colBadge"></span></button>
-  <button class="role-tab" data-r="seller" onclick="switchRole('seller')">Продавец<span id="selBadge"></span></button>
-</div>
-
-<div id="clientView">
-  <div class="seg" id="inputSeg"><button class="active" data-m="list" onclick="setInput('list')">✍️ Списком</button><button data-m="catalog" onclick="setInput('catalog')">🧺 Каталог</button></div>
-  <div class="card" id="listCard">
-    <h3>Напишите список</h3>
-    <textarea id="clientList" placeholder="Говядина лопатка 5 кг&#10;Лук 10 кг&#10;Помидоры 2 кг"></textarea>
-    <div class="chips" id="tplChips"></div>
-    <button class="btn" id="parseBtn" onclick="parseToCart()">Добавить в корзину</button>
-    <div id="unknown"></div>
-  </div>
-  <div class="card hidden" id="catalogCard">
-    <h3>Каталог</h3>
-    <div class="chips" id="catChips"></div>
-    <div id="catalogList"></div>
-  </div>
-  <div class="card" id="cartCard">
-    <h3>Корзина <button class="btn small secondary" style="margin:0" onclick="clearCart()">Очистить</button></h3>
-    <div id="cartList"></div>
-  </div>
-  <div class="card hidden" id="offersCard">
-    <h3>Варианты</h3>
-    <div id="offersList"></div>
-    <div id="orderOpts"></div>
-    <button class="btn" id="orderBtn" onclick="placeOrder()">Заказать</button>
-  </div>
-  <div class="card"><h3>Мои заказы</h3><div id="clientOrders"></div></div>
-  <div class="card"><h3>Мои продавцы</h3><div id="pins"></div></div>
-</div>
-
-<div id="collectorView" class="hidden">
-  <div class="card"><h3>Заказы к сбору</h3><div id="colOrders"></div></div>
-  <div class="card hidden" id="routeCard"><h3 id="routeTitle">Маршрут</h3><div id="route"></div></div>
-</div>
-
-<div id="sellerView" class="hidden">
-  <div class="card"><label class="l">Я продавец</label><select id="sellerSel" onchange="state.me=this.value;save();renderSeller()"></select><div id="sellerStatus"></div></div>
-  <div class="card"><h3>К выдаче сборщику</h3><div id="sellerIncoming"></div></div>
-  <div class="card"><h3>Мои товары и цены</h3><div id="sellerProducts"></div>
-    <details><summary style="cursor:pointer;margin-top:8px">+ Добавить товар</summary><div style="margin-top:8px">
-      <select id="newProd"></select><div class="row2"><input id="newPrice" type="number" placeholder="Цена ₸"><input id="newStock" type="number" placeholder="Остаток"></div>
-      <button class="btn" onclick="addProduct()">Добавить</button></div></details></div>
-  <div class="card"><h3>Статистика</h3><div id="sellerStats"></div></div>
-  <div class="card"><h3>Как стать «постоянным»</h3><div class="meta" style="opacity:.85">≥ 20 выполненных заказов · рейтинг ≥ 4.6 · брак/споры ≤ 3% · выдача вовремя ≥ 90% · на рынке ≥ 3 мес. Статус пересчитывается автоматически; постоянный получает приоритет при разнице в цене до 5%.</div></div>
-</div>
-
-<div class="sticky" id="fallbackMain"><button class="btn" id="fbBtn"></button></div>
-
+<div id="view"></div>
+<nav class="tabbar" id="tabbar"></nav>
+<div class="sticky hidden" id="fallbackMain"><button class="btn" id="fbBtn"></button></div>
 <script>
 const tg = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData !== undefined ? window.Telegram.WebApp : null;
 const inTG = !!(tg && tg.platform && tg.platform !== 'unknown');
 const hap = t => { try { inTG && tg.HapticFeedback && (t==='ok'||t==='err' ? tg.HapticFeedback.notificationOccurred(t==='ok'?'success':'error') : tg.HapticFeedback.impactOccurred('light')); } catch(e){} };
-const fmt = n => Math.round(n).toLocaleString('ru-RU') + ' ₸';
-const fq = (q,u) => (u==='kg' ? (+q.toFixed(2)).toString().replace('.',',')+' кг' : q+' шт');
+const fmt = n => Math.round(n).toLocaleString('ru-RU') + '\u00a0₸';
+const fq = (q,u) => (u==='kg' ? (+q.toFixed(2)).toString().replace('.',',')+'\u00a0кг' : q+'\u00a0шт');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = id => document.getElementById(id);
+const pl = (n,f) => f[(n%10===1&&n%100!==11)?0:(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?1:2];
 
 /* ---------- Справочники ---------- */
-const CATS = {meat:'🥩 Мясо',veg:'🥕 Овощи',fruit:'🍎 Фрукты',dairy:'🥛 Молочка',grocery:'🌾 Бакалея'};
-// store = примерная цена в магазине у дома (демо), step = шаг для +/-
-const PRODUCTS = {
- beef_sh:{n:'Говядина лопатка',cat:'meat',u:'kg',store:4600,step:.5,syn:['говядина лопатка','лопатка','говядина','говяд','мясо говядина']},
- beef_mince:{n:'Фарш говяжий',cat:'meat',u:'kg',store:4200,step:.5,syn:['фарш','фарш говяжий']},
- lamb:{n:'Баранина',cat:'meat',u:'kg',store:5200,step:.5,syn:['баранина','баран','кой']},
- chicken:{n:'Курица (тушка)',cat:'meat',u:'kg',store:1900,step:1,syn:['курица','кура','куриц','бройлер','тауык']},
- onion:{n:'Лук репчатый',cat:'veg',u:'kg',store:260,step:.5,syn:['лук','лук репчатый','пияз']},
- potato:{n:'Картофель',cat:'veg',u:'kg',store:280,step:1,syn:['картофель','картошка','картоха','картошку']},
- carrot:{n:'Морковь',cat:'veg',u:'kg',store:300,step:.5,syn:['морковь','морковка','марковь']},
- tomato:{n:'Помидоры',cat:'veg',u:'kg',store:1300,step:.5,syn:['помидоры','помидор','томаты','томат']},
- cucumber:{n:'Огурцы',cat:'veg',u:'kg',store:1100,step:.5,syn:['огурцы','огурец','огурци']},
- greens:{n:'Зелень (пучок)',cat:'veg',u:'pcs',store:250,step:1,syn:['зелень','укроп','петрушка','кинза']},
- apple:{n:'Яблоки',cat:'fruit',u:'kg',store:900,step:.5,syn:['яблоки','яблоко','алма']},
- banana:{n:'Бананы',cat:'fruit',u:'kg',store:1000,step:.5,syn:['бананы','банан']},
- eggs:{n:'Яйца С1 (10 шт)',cat:'dairy',u:'pcs',store:750,step:1,syn:['яйца','яйцо','десяток яиц']},
- milk:{n:'Молоко 1 л',cat:'dairy',u:'pcs',store:520,step:1,syn:['молоко','сут']},
- kurt:{n:'Курт',cat:'dairy',u:'kg',store:4500,step:.5,syn:['курт','құрт']},
- rice:{n:'Рис',cat:'grocery',u:'kg',store:700,step:1,syn:['рис','рис девзира','девзира']},
- flour:{n:'Мука 1 с.',cat:'grocery',u:'kg',store:330,step:1,syn:['мука']}
+// h — оттенок пастельного фона плитки
+const CATS = {
+ veg:{t:'Овощи',e:'🥕',h:28}, fruit:{t:'Фрукты',e:'🍎',h:350}, meat:{t:'Мясо',e:'🥩',h:8}, fish:{t:'Рыба',e:'🐟',h:200},
+ dairy:{t:'Молочка',e:'🥛',h:215}, herbs:{t:'Зелень',e:'🌿',h:110}, grocery:{t:'Крупы',e:'🌾',h:42}, spice:{t:'Специи',e:'🌶️',h:275}
 };
-const SIMILAR = {beef_sh:'beef_mince',beef_mince:'beef_sh',tomato:'cucumber',apple:'banana',lamb:'beef_sh'};
+// store/src заполняются из реальных цен (PRICES), step = шаг для +/-
+const PRODUCTS = {
+ beef_sh:{n:'Говядина на кости',e:'🥩',cat:'meat',u:'kg',store:4600,step:.5,syn:['говядина на кости','говядина лопатка','лопатка','говядина','говяд','мясо говядина']},
+ beef_mince:{n:'Фарш говяжий',e:'🥩',cat:'meat',u:'kg',store:4200,step:.5,syn:['фарш','фарш говяжий']},
+ lamb_leg:{n:'Баранья нога',e:'🍖',cat:'meat',u:'kg',approx:2.5,store:0,step:1,syn:['баранья нога','нога баранья','окорок бараний']},
+ lamb:{n:'Баранина',e:'🍖',cat:'meat',u:'kg',store:5200,step:.5,syn:['баранина','баран','кой']},
+ chicken:{n:'Курица (тушка)',e:'🍗',cat:'meat',u:'kg',approx:1.6,store:1900,step:1,syn:['курица','кура','куриц','бройлер','тауык']},
+ carp:{n:'Сазан свежий',e:'🐟',cat:'fish',u:'kg',store:2600,step:1,syn:['сазан','карп','рыба','рыбу']},
+ pikeperch:{n:'Судак',e:'🐟',cat:'fish',u:'kg',store:3400,step:1,syn:['судак']},
+ trout:{n:'Форель',e:'🐠',cat:'fish',u:'kg',store:6500,step:.5,syn:['форель','красная рыба']},
+ onion:{n:'Лук репчатый',e:'🧅',cat:'veg',u:'kg',store:260,step:.5,syn:['лук','лук репчатый','пияз']},
+ potato:{n:'Картофель',e:'🥔',cat:'veg',u:'kg',store:280,step:1,syn:['картофель','картошка','картоха','картошку']},
+ carrot:{n:'Морковь',e:'🥕',cat:'veg',u:'kg',store:300,step:.5,syn:['морковь','морковка','марковь']},
+ cabbage:{n:'Капуста',e:'🥬',cat:'veg',u:'kg',store:0,step:1,syn:['капуста','капусту','капуста белокочанная']},
+ beet:{n:'Свёкла',e:'🟣',cat:'veg',u:'kg',store:0,step:.5,syn:['свекла','свёкла','буряк']},
+ garlic:{n:'Чеснок',e:'🧄',cat:'veg',u:'kg',store:0,step:.1,syn:['чеснок','сарымсак']},
+ tomato:{n:'Помидоры',e:'🍅',cat:'veg',u:'kg',store:1300,step:.5,syn:['помидоры','помидор','томаты','томат']},
+ cucumber:{n:'Огурцы',e:'🥒',cat:'veg',u:'kg',store:1100,step:.5,syn:['огурцы','огурец','огурци']},
+ greens:{n:'Зелень (пучок)',e:'🌿',cat:'herbs',u:'pcs',store:250,step:1,syn:['зелень','укроп','петрушка','кинза']},
+ green_onion:{n:'Лук зелёный (пучок)',e:'🌱',cat:'herbs',u:'pcs',store:200,step:1,syn:['лук зеленый','зеленый лук','перо']},
+ lettuce:{n:'Салат листовой',e:'🥬',cat:'herbs',u:'pcs',store:450,step:1,syn:['салат','салат листовой','айсберг']},
+ apple:{n:'Яблоки',e:'🍎',cat:'fruit',u:'kg',store:900,step:.5,syn:['яблоки','яблоко','алма']},
+ banana:{n:'Бананы',e:'🍌',cat:'fruit',u:'kg',store:1000,step:.5,syn:['бананы','банан']},
+ watermelon:{n:'Арбуз',e:'🍉',cat:'fruit',u:'kg',approx:7,store:0,step:1,syn:['арбуз','карбыз','кавун']},
+ grape:{n:'Виноград',e:'🍇',cat:'fruit',u:'kg',store:1600,step:.5,syn:['виноград','жузим']},
+ eggs:{n:'Яйца С1 (10 шт)',e:'🥚',cat:'dairy',u:'pcs',store:750,step:1,syn:['яйца','яйцо','десяток яиц']},
+ milk:{n:'Молоко 1 л',e:'🥛',cat:'dairy',u:'pcs',store:520,step:1,syn:['молоко','сут']},
+ kefir:{n:'Кефир 1 л',e:'🥛',cat:'dairy',u:'pcs',store:0,step:1,syn:['кефир']},
+ tvorog:{n:'Творог',e:'🧀',cat:'dairy',u:'kg',store:0,step:.5,syn:['творог','сузбе']},
+ kurt:{n:'Курт',e:'🧀',cat:'dairy',u:'kg',store:4500,step:.5,syn:['курт','құрт']},
+ rice:{n:'Рис девзира',e:'🍚',cat:'grocery',u:'kg',store:700,step:1,syn:['рис','рис девзира','девзира']},
+ buckwheat:{n:'Гречка',e:'🌾',cat:'grocery',u:'kg',store:620,step:1,syn:['гречка','гречку','греча']},
+ flour:{n:'Мука в/с',e:'🌾',cat:'grocery',u:'kg',store:330,step:1,syn:['мука']},
+ pepper:{n:'Перец чёрный (100 г)',e:'🌶️',cat:'spice',u:'pcs',store:600,step:1,syn:['перец','перец черный','черный перец']},
+ zira:{n:'Зира (100 г)',e:'🫚',cat:'spice',u:'pcs',store:700,step:1,syn:['зира','кумин']},
+ paprika:{n:'Паприка (100 г)',e:'🫑',cat:'spice',u:'pcs',store:550,step:1,syn:['паприка']}
+};
+const SIMILAR = {beef_sh:'beef_mince',beef_mince:'beef_sh',tomato:'cucumber',apple:'banana',lamb:'beef_sh',carp:'pikeperch',pikeperch:'carp',greens:'green_onion'};
 const SELLERS0 = {
  s1:{n:'Ерлан',m:'Шапагат',pt:'Мясной павильон, ряд 2, место 14',cats:['meat'],rating:4.9,done:340,disputes:4,ontime:96,months:40,online:true,emoji:'🥩'},
- s2:{n:'Гульнара',m:'Шапагат',pt:'Овощной ряд 5, место 3',cats:['veg','fruit'],rating:4.8,done:210,disputes:3,ontime:94,months:26,online:true,emoji:'🥕'},
+ s2:{n:'Гульнара',m:'Шапагат',pt:'Овощной ряд 5, место 3',cats:['veg','fruit','herbs'],rating:4.8,done:210,disputes:3,ontime:94,months:26,online:true,emoji:'🥕'},
  s3:{n:'Дамир',m:'Артём',pt:'Ряд 1, павильон 7',cats:['meat'],rating:4.5,done:12,disputes:1,ontime:85,months:2,online:true,emoji:'🍖'},
  s4:{n:'Айгерим',m:'Артём',pt:'Ряд 3, место 21',cats:['veg','fruit','grocery'],rating:4.7,done:95,disputes:2,ontime:92,months:14,online:true,emoji:'🍎'},
  s5:{n:'Сауле апа',m:'Шапагат',pt:'Молочный ряд, место 8',cats:['dairy'],rating:4.9,done:180,disputes:1,ontime:97,months:60,online:true,emoji:'🥛'},
- s6:{n:'Нурлан (новый)',m:'Артём',pt:'Ряд 4, место 2',cats:['veg','grocery','dairy'],rating:0,done:0,disputes:0,ontime:0,months:0,online:true,emoji:'🧺'}
+ s6:{n:'Нурлан (новый)',m:'Артём',pt:'Ряд 4, место 2',cats:['veg','grocery','dairy','herbs'],rating:0,done:0,disputes:0,ontime:0,months:0,online:true,emoji:'🧺'},
+ s7:{n:'Марат',m:'Шапагат',pt:'Рыбный павильон, место 5',cats:['fish'],rating:4.8,done:150,disputes:3,ontime:93,months:30,online:true,emoji:'🐟'},
+ s8:{n:'Бахыт',m:'Шапагат',pt:'Ряд специй, место 11',cats:['spice','grocery'],rating:4.7,done:60,disputes:1,ontime:91,months:18,online:true,emoji:'🌶️'},
+ s9:{n:'Ахмет',m:'Артём',pt:'Ряд 6, место 1',cats:['fish'],rating:4.4,done:8,disputes:0,ontime:88,months:1,online:true,emoji:'🎣'}
 };
 const OFFERS0 = [ // [seller, product, price, stock, freshness]
  ['s1','beef_sh',3600,40,'сегодня'],['s1','beef_mince',3300,25,'сегодня'],['s1','lamb',4300,15,'вчера'],
  ['s3','beef_sh',3450,30,'сегодня'],['s3','beef_mince',3200,10,'сегодня'],['s3','chicken',1450,50,'сегодня'],['s1','chicken',1550,30,'сегодня'],
- ['s2','onion',170,300,'сегодня'],['s2','potato',190,400,'сегодня'],['s2','carrot',200,200,'сегодня'],['s2','tomato',950,60,'сегодня'],['s2','cucumber',750,50,'сегодня'],['s2','greens',150,80,'сегодня'],['s2','apple',650,100,'вчера'],
+ ['s2','onion',170,300,'сегодня'],['s2','cabbage',120,150,'сегодня'],['s2','beet',160,100,'сегодня'],['s2','garlic',450,20,'сегодня'],['s4','cabbage',110,100,'вчера'],['s4','beet',150,80,'сегодня'],['s4','garlic',420,15,'сегодня'],['s2','potato',190,400,'сегодня'],['s2','carrot',200,200,'сегодня'],['s2','tomato',950,60,'сегодня'],['s2','cucumber',750,50,'сегодня'],['s2','greens',150,80,'сегодня'],['s2','apple',650,100,'вчера'],
+ ['s2','green_onion',120,60,'сегодня'],['s2','watermelon',140,20,'сегодня'],['s4','watermelon',130,15,'сегодня'],['s1','lamb_leg',4300,6,'сегодня'],['s3','lamb_leg',4200,4,'сегодня'],['s2','lettuce',350,30,'сегодня'],['s2','grape',1150,40,'сегодня'],
  ['s4','onion',160,200,'сегодня'],['s4','potato',185,300,'вчера'],['s4','tomato',900,40,'сегодня'],['s4','apple',620,120,'сегодня'],['s4','banana',780,60,'сегодня'],['s4','rice',560,200,'—'],['s4','flour',260,150,'—'],
- ['s5','eggs',600,100,'сегодня'],['s5','milk',420,60,'сегодня'],['s5','kurt',3800,10,'—'],
- ['s6','onion',120,500,'сегодня'],['s6','rice',540,100,'—'],['s6','eggs',590,40,'сегодня']
+ ['s4','grape',1100,50,'сегодня'],['s4','buckwheat',540,100,'—'],
+ ['s5','eggs',600,100,'сегодня'],['s5','kefir',430,40,'сегодня'],['s5','tvorog',1500,20,'сегодня'],['s6','kefir',460,20,'сегодня'],['s6','tvorog',1450,10,'сегодня'],['s5','milk',420,60,'сегодня'],['s5','kurt',3800,10,'—'],
+ ['s6','onion',120,500,'сегодня'],['s6','rice',540,100,'—'],['s6','eggs',590,40,'сегодня'],['s6','green_onion',100,40,'сегодня'],
+ ['s7','carp',2100,60,'сегодня'],['s7','pikeperch',2900,30,'сегодня'],['s7','trout',5600,15,'вчера'],
+ ['s9','carp',1950,40,'сегодня'],['s9','pikeperch',2800,20,'вчера'],
+ ['s8','pepper',450,80,'—'],['s8','zira',500,60,'—'],['s8','paprika',420,60,'—'],['s8','rice',580,150,'—'],['s8','buckwheat',520,120,'—']
 ];
+/* ---------- Реальные цены Астаны (prices-astana.json, встроено) ---------- */
+const PRICES = [{"name":"Картофель","unit":"кг","store_price":194,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":130,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: картофель 1 сорт. Ярмарка 130–150 ₸. Arbuz Астана «Дисконт» 129 ₸."},{"name":"Лук репчатый","unit":"кг","store_price":101,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":120,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: 1 сорт. Ярмарка 120 ₸ (дороже магазина). Arbuz «Дисконт» 85 ₸."},{"name":"Морковь","unit":"кг","store_price":193,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":150,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Ярмарка 150 ₸ (морковь/свёкла).","sauran_bazar_wolt_price":519},{"name":"Капуста белокочанная","unit":"кг","store_price":166,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: «Капуста», 166 ₸/кг. Рыночной цены по Астане не нашли."},{"name":"Помидоры","unit":"кг","store_price":962,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":600,"bazaar_source":"Ярмарка «Дала дәмі» в Астане, 13.10.2026 (vechastana.kz/news/ceny-nize-cem-na-rynke)","bazaar_date":"2026-10-13","date":"2026-11-03","note":"Small: тепличные, Казахстан. На ярмарке ~600 ₸ со слов покупательницы. Arbuz «Дисконт» 525 ₸.","sauran_bazar_wolt_price":2223},{"name":"Огурцы","unit":"кг","store_price":506,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":600,"bazaar_source":"Ярмарка «Дала дәмі» в Астане, 13.10.2026 (vechastana.kz/news/ceny-nize-cem-na-rynke)","bazaar_date":"2026-10-13","date":"2026-11-03","note":"Small: сорт Рава. Ярмарка ~600 ₸ со слов покупательницы. Arbuz «Дисконт» 225 ₸.","sauran_bazar_wolt_price":2223},{"name":"Яблоки","unit":"кг","store_price":386,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Гала 1 сорт. Свежей рыночной цены по Астане нет.","sauran_bazar_wolt_price":2223},{"name":"Бананы","unit":"кг","store_price":825,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Рыночной цены по Астане нет."},{"name":"Говядина (на кости)","unit":"кг","store_price":3990,"store_name":"Супермаркет Астаны (сеть не названа), inbusiness","store_source_url":"https://inbusiness.kz/ru/news/chto-tvoritsya-s-cenami-na-edu-v-stolice-kazahstana","bazaar_price":3900,"bazaar_source":"Рынок «Шапагат», брифинг Минсельхоза 29.09.2026 (ulysmedia.kz/news/81795-chego-kazakhstantsam-zhdat-ot-tsen-na-miaso/)","bazaar_date":"2026-09-29","date":"2026-10-18","note":"Магазин: супермаркет Астаны, сеть не названа, мониторинг inbusiness 18.10.2026; мякоть там 5900 ₸. В Small на Wolt свежей говядины нет. Рынок «Артём» ~4400 ₸; ярмарка 24–25.10 — 3300–3500 ₸."},{"name":"Баранина","unit":"кг","store_price":6890,"store_name":"Супермаркет Астаны (сеть не названа), inbusiness","store_source_url":"https://inbusiness.kz/ru","bazaar_price":4500,"bazaar_source":"Рынок «Шапагат», 23.07.2026 (digitalbusiness.kz/2026-07-23/tseni-deystvitelno-rastut-...-astani-i-almati/)","bazaar_date":"2026-07-23","date":"2026-09-04","note":"Магазин: супермаркет Астаны, сеть не названа, inbusiness 04.09.2026; 18.10 её не было в продаже. На Шапагате рёбра 4650–4700 ₸. На ярмарке 24–25.10 — 3500–3800 ₸. Обе цены устарели.","sauran_bazar_wolt_price":8892},{"name":"Курица (тушка)","unit":"кг","store_price":1746,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":1300,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: цыплёнок-бройлер замороженный. Тушка охлаждённая у inbusiness 18.10 — 1799 ₸. Ярмарка: «птица» 1300–1500 ₸."},{"name":"Окорочка куриные","unit":"кг","store_price":1459,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Курочка Ряба, замороженные. Охлаждённые у inbusiness 18.10 — 1749 ₸."},{"name":"Рыба (минтай с/м)","unit":"кг","store_price":4325,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":1000,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: минтай «Ас» свежемороженый весовой — единственная свежемороженая рыба в выдаче. Ярмарка: «рыба» 1000–2000 ₸/кг, вид не указан, так что сравнение условное."},{"name":"Яйца С1","unit":"10 шт","store_price":673,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":700,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: Акколь Кус С1. Упаковка 30 шт — 1949 ₸ (650 ₸ за 10). Ярмарка 700–800 ₸.","sauran_bazar_wolt_price":1260},{"name":"Молоко 2,5%","unit":"л","store_price":399,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Гормолзавод 2,5% или Новый День 3,2%. У inbusiness 18.10 — 385 ₸."},{"name":"Кефир 2,5%","unit":"л","store_price":428,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":450,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Ярмарка 450–500 ₸; объём в источнике не указан, считаем за литр."},{"name":"Творог 5%","unit":"кг","store_price":1936,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Молочный Бидончик 5%, 500 г за 968 ₸. На ярмарке 470–500 ₸, но единица не указана, поэтому не использовано."},{"name":"Сметана 15%","unit":"кг","store_price":1576,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: 380 г за 599 ₸. President 10% — 380 г за 505 ₸ (1329 ₸/кг)."},{"name":"Масло сливочное 72,5%","unit":"кг","store_price":4902,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Гормолзавод Крестьянское, весовое. На ярмарках 1500–1800 ₸ (24–25.10) и ~5000 ₸ (13.10), но единица не указана, поэтому не использовано."},{"name":"Сыр","unit":"кг","store_price":6575,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":3900,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: Чечил весовой (самый дешёвый весовой). Ярмарка 3900–5500 ₸, вид сыра не указан."},{"name":"Укроп","unit":"кг","store_price":3390,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Рыночной цены нет."},{"name":"Петрушка","unit":"кг","store_price":3590,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Рыночной цены нет."},{"name":"Рис","unit":"кг","store_price":325,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Лидер, весовой."},{"name":"Гречка","unit":"кг","store_price":410,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: весовая. Средняя по Астане (статистика, 28.10.2026) — 552 ₸.","sauran_bazar_wolt_price":445},{"name":"Мука в/с","unit":"кг","store_price":307.5,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Снежинка, 10 кг за 3075 ₸. Пакет 2 кг — 695 ₸ (347,5 ₸/кг)."},{"name":"Сахар","unit":"кг","store_price":405,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: весовой.","sauran_bazar_wolt_price":741},{"name":"Масло подсолнечное","unit":"л","store_price":874,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Маслодел Дельное. У inbusiness 18.10 — 841 ₸."},{"name":"Макароны","unit":"кг","store_price":288,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: весовые."},{"name":"Хлеб","unit":"450 г","store_price":275,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Домашний. Inbusiness 18.10: социальный хлеб 99 ₸."},{"name":"Соль","unit":"кг","store_price":83,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Аралтуз Славяночка."},{"name":"Свёкла","unit":"кг","store_price":289,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":150,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Ярмарка 150 ₸."},{"name":"Чеснок","unit":"кг","store_price":499,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: молодой."},{"name":"Фарш говяжий","unit":"кг","store_price":3172,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Максимальный Размах, 900 г за 2855 ₸. Средняя по Астане (статистика) — 5042 ₸."}];
+// товар приложения → позиция в данных. Рыба и баранина в сравнении не участвуют (условно/не проверено), рис девзира и зелень пучком — другой товар/единица.
+const PRICE_MAP = {potato:'Картофель',onion:'Лук репчатый',carrot:'Морковь',cabbage:'Капуста белокочанная',beet:'Свёкла',garlic:'Чеснок',tomato:'Помидоры',cucumber:'Огурцы',
+ apple:'Яблоки',banana:'Бананы',beef_sh:'Говядина (на кости)',beef_mince:'Фарш говяжий',chicken:'Курица (тушка)',eggs:'Яйца С1',milk:'Молоко 2,5%',kefir:'Кефир 2,5%',tvorog:'Творог 5%',
+ buckwheat:'Гречка',flour:'Мука в/с'};
+const NO_COMPARE = new Set(['lamb','lamb_leg','carp','pikeperch','trout']);
+(function applyPrices(){
+  const by=Object.fromEntries(PRICES.map(x=>[x.name,x]));
+  for(const [k,Pr] of Object.entries(PRODUCTS)){
+    Pr.store=null; Pr.src=null; const d=!NO_COMPARE.has(k)&&by[PRICE_MAP[k]]; if(!d) continue;
+    if(d.store_price>0){ const dt=(d.date||'').split('-'); Pr.store=Math.round(d.store_price); Pr.src={name:/^Small/.test(d.store_name)?'Small':d.store_name.split(/[ ,(]/)[0], full:d.store_name, date:dt.length===3?`${dt[2]}.${dt[1]}`:'', url:d.store_source_url||'', note:d.note||''}; }
+    if(d.bazaar_price>0){ // подгоняем медиану демо-продавцов под реальную базарную цену
+      const offs=OFFERS0.filter(o=>o[1]===k); if(!offs.length) continue; const ps=offs.map(o=>o[2]).sort((a,b)=>a-b);
+      const md=ps.length%2?ps[(ps.length-1)/2]:(ps[ps.length/2-1]+ps[ps.length/2])/2; const f=d.bazaar_price/md;
+      offs.forEach(o=>{ o[2]=Math.max(10,Math.round(o[2]*f/10)*10); }); Pr.bazaarRef={price:d.bazaar_price,src:d.bazaar_source,date:d.bazaar_date};
+    }
+  }
+})();
+// Тушки, куски мяса, арбузы — поштучно с примерным весом: цена за 1 шт = цена за кг × ≈вес
+(function pieces(){ for(const [k,P] of Object.entries(PRODUCTS)){ if(!P.approx) continue; P.u='pcs'; P.step=1; P.kgPrice=true;
+  if(P.store) P.store=Math.round(P.store*P.approx); OFFERS0.filter(o=>o[1]===k).forEach(o=>{ o[2]=Math.round(o[2]*P.approx/10)*10; o[3]=Math.max(1,Math.floor(o[3]/P.approx)); }); } })();
+
 const MODES = {
- home:{t:'Для дома',delivery:1000,minOrder:4000,service:0,tol:10,slots:['Сегодня 15:00–17:00','Сегодня 18:00–20:00','Завтра 09:00–11:00','Завтра 12:00–14:00']},
- biz:{t:'Для бизнеса',delivery:2500,freeFrom:100000,minOrder:30000,service:.03,tol:5,slots:['Завтра 06:00–08:00','Завтра 08:00–10:00','Послезавтра 06:00–08:00']}
+ home:{t:'Для дома',delivery:null,minOrder:4000,service:0},
+ biz:{t:'Для бизнеса',delivery:2500,freeFrom:100000,minOrder:30000,service:.03}
 };
-const STATUSES = ['new','accepted','collecting','collected','delivering','delivered'];
-const ST = {new:'Новый',accepted:'Принят',collecting:'Собирается',collected:'Собран',delivering:'В пути',delivered:'Доставлен',cancelled:'Отменён',dispute:'Спор'};
+const STATUSES = ['deliv_agree','unpaid','pay_check','new','accepted','collecting','collected','delivering','delivered'];
+const ST = {deliv_agree:'Согласуем доставку',deliv_counter:'Встречная цена',deliv_fail:'Не согласовано',unpaid:'Ждёт оплаты',pay_check:'Проверка оплаты',pay_expired:'Проблема с оплатой',new:'Оплачен',accepted:'Принят',collecting:'Собирается',collected:'Собран',delivering:'В пути',delivered:'Доставлен',cancelled:'Отменён',dispute:'Спор'};
+const ST_SUB = {deliv_agree:'Ждём подтверждения цены доставки',deliv_counter:'Сборщик предложил свою цену',deliv_fail:'Сборщик не ответил вовремя',unpaid:'Оплатите каждому продавцу на Kaspi',pay_check:'Ждём подтверждения оплаты',pay_expired:'Продавец не подтвердил оплату',new:'Оплата получена · ищем сборщика',accepted:'Сборщик принял заказ',collecting:'Собираем на базаре',collected:'Собран, скоро выезжаем',delivering:'Курьер едет к вам',delivered:'Приятного аппетита!',cancelled:'Заказ отменён',dispute:'Разбираемся с претензией'};
 const ANTI = {floor:.85, warn:.9, prio:.05}; // пол = 85% медианы, предупреждение < 90%, приоритет постоянным в пределах 5%
 
 /* ---------- Состояние ---------- */
-const KEY='zakupshik_v2';
+const KEY='zakupshik_v5';
 let state;
 function fresh(){ return {mode:null, sellers:JSON.parse(JSON.stringify(SELLERS0)), offers:OFFERS0.map(o=>({s:o[0],p:o[1],price:o[2],stock:o[3],fresh:o[4],on:true})), cart:{}, orders:[], pins:{}, templates:[], me:'s1', seq:100}; }
 try { state = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch(e){ state = fresh(); }
+if(!state.opts) state.opts={sub:'call',pay:'kaspi',slot:0,addr:''};
+if(state.opts.pay==='cash') state.opts.pay='kaspi'; if(state.opts.phone==null) state.opts.phone=''; if(state.opts.deliv==null) state.opts.deliv=''; if(!state.sel) state.sel={}; delete state.confirmer;
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 const M = () => MODES[state.mode||'home'];
+let opts = state.opts;
+// UI-состояние
+let app='shop', tab='home', catOpen=null, query='', sellerTab='issue', chosen='best', offers=null, openOrder=null, unknownLines=[], busy=false, mainAction=null;
 
 /* ---------- Рейтинг / постоянный ---------- */
 function isRegular(id){ const s=state.sellers[id]; return s.done>=20 && s.rating>=4.6 && s.disputes/Math.max(1,s.done)<=.03 && s.ontime>=90 && s.months>=3; }
@@ -186,8 +500,9 @@ function available(o, qty){ const s=state.sellers[o.s]; return o.on && s.online 
 /* ---------- Парсер свободного списка ---------- */
 function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; const d=Array.from({length:m+1},(_,i)=>[i]); for(let j=1;j<=n;j++) d[0][j]=j;
   for(let i=1;i<=m;i++) for(let j=1;j<=n;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[m][n]; }
+function normName(name){ return name.toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-яәіңғүұқөһ\s]/gi,' ').replace(/\s+/g,' ').trim(); }
 function matchProduct(name){
-  name=name.toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-яәіңғүұқөһ\s]/gi,' ').replace(/\s+/g,' ').trim();
+  name=normName(name);
   if(!name) return null; let best=null,bs=99;
   for(const [k,p] of Object.entries(PRODUCTS)) for(const s of p.syn){
     if(name===s) return k;
@@ -196,328 +511,740 @@ function matchProduct(name){
   }
   return best;
 }
-function parseLine(line){
-  let l=line.trim().toLowerCase().replace(',', '.'); if(!l) return null;
-  l=l.replace(/^[-•*\d]+[.)]\s+/, m=>/^\d+[.)]\s/.test(m)?'':'');
-  let qty=null,unit=null;
-  const re=/(\d+(?:\.\d+)?|пол|половин[ау])\s*(кг|килограмм\w*|кило|г|гр|грамм\w*|шт|штук\w*|десят\w*|пуч\w*|л|литр\w*)?\.?/i;
-  const m=l.match(re);
-  if(m){ qty = /пол/.test(m[1])?0.5:parseFloat(m[1]); unit=(m[2]||'').toLowerCase(); l=(l.slice(0,m.index)+' '+l.slice(m.index+m[0].length)).trim(); }
-  else if(/полкило|пол кило/.test(l)){ qty=.5; unit='кг'; l=l.replace(/пол ?кило/,''); }
-  const key=matchProduct(l);
-  if(!key) return {raw:line.trim(), key:null};
-  const p=PRODUCTS[key];
-  if(qty==null) qty = p.u==='kg'?1:1;
-  if(/^г(р|рамм)?/.test(unit||'') && unit!=='') qty=qty/1000;
-  if(/десят/.test(unit||'') && key==='eggs') qty=qty; // десяток = упаковка
-  if(p.u==='pcs' && /кг/.test(unit||'')) qty=Math.max(1,Math.round(qty));
-  return {raw:line.trim(), key, qty:+qty.toFixed(2)};
-}
-let unknownLines=[];
 function parseToCart(){
-  const txt=document.getElementById('clientList').value;
-  const lines=txt.split(/\n|;/).map(s=>s.trim()).filter(Boolean);
-  if(!lines.length){ toast('Список пустой — напишите хотя бы одну позицию'); hap('err'); return; }
+  const ta=$('clientList'); if(!ta) return;
+  const lines=ta.value.split(/\n|;/).map(s=>s.trim()).filter(Boolean);
+  if(!lines.length){ toast('Напишите хотя бы одну позицию'); hap('err'); return; }
   let added=0; unknownLines=[];
-  for(const ln of lines){ const r=parseLine(ln); if(!r) continue; if(!r.key){unknownLines.push(r.raw);continue;} if(!(r.qty>0)){unknownLines.push(r.raw);continue;}
+  for(const ln of lines){ const r=parseLine(ln); if(!r) continue; if(!r.key||!(r.qty>0)){unknownLines.push(r.raw);continue;}
     state.cart[r.key]=+((state.cart[r.key]||0)+r.qty).toFixed(2); added++; }
-  document.getElementById('clientList').value = unknownLines.join('\n');
-  save(); renderUnknown(); renderCart(); hap(added?'ok':'err');
-  toast(added?`Добавлено позиций: ${added}${unknownLines.length?`, не распознано: ${unknownLines.length}`:''}`:'Ничего не распознал — уточните названия');
+  ta.value = unknownLines.join('\n');
+  save(); render(); hap(added?'ok':'err');
+  if(added && !unknownLines.length){ closeModal(); toast(`В корзине +${added} ${pl(added,['товар','товара','товаров'])}`); return; }
+  renderUnknown();
+  toast(added?`Добавлено: ${added}. Уточните ${unknownLines.length}`:'Не узнали — выберите товар');
 }
 function renderUnknown(){
-  const el=document.getElementById('unknown');
-  el.innerHTML = unknownLines.map((u,i)=>`<div class="unk">❓ «${esc(u)}» — не нашёл. Это:
-   <select onchange="fixUnknown(${i},this.value)"><option value="">выберите товар…</option>${Object.entries(PRODUCTS).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join('')}</select>
-   <button class="btn small secondary" onclick="dropUnknown(${i})">Убрать</button></div>`).join('');
+  const el=$('unknown'); if(!el) return;
+  el.innerHTML = unknownLines.length?`<div class="card" style="margin:0 0 12px">${unknownLines.map((u,i)=>`<div class="unk"><div class="unk-q"><b>${esc(u)}</b><span>Что это?</span></div>
+   <select class="inp" onchange="fixUnknown(${i},this.value)"><option value="">Выбрать</option>${Object.entries(CATS).map(([c,x])=>`<optgroup label="${x.t}">${Object.entries(PRODUCTS).filter(([,p])=>p.cat===c).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join('')}</optgroup>`).join('')}</select>
+   <button class="x" onclick="dropUnknown(${i})" aria-label="Убрать">✕</button></div>`).join('')}</div>`:'';
 }
 function fixUnknown(i,k){ if(!k) return; const r=parseLine(unknownLines[i]); const q=(r&&r.qty)||1; state.cart[k]=+((state.cart[k]||0)+(q||1)).toFixed(2);
   // запоминаем как синоним для следующих раз
   const word=unknownLines[i].toLowerCase().replace(/[\d.,]+|кг|шт|г\b/g,'').trim(); if(word && !PRODUCTS[k].syn.includes(word)) PRODUCTS[k].syn.push(word);
-  unknownLines.splice(i,1); document.getElementById('clientList').value=unknownLines.join('\n'); save(); renderUnknown(); renderCart(); }
-function dropUnknown(i){ unknownLines.splice(i,1); document.getElementById('clientList').value=unknownLines.join('\n'); renderUnknown(); }
+  unknownLines.splice(i,1); const ta=$('clientList'); if(ta) ta.value=unknownLines.join('\n'); save(); renderUnknown(); render(); hap('ok');
+  if(!unknownLines.length){ closeModal(); toast('Готово, всё в корзине'); } }
+function dropUnknown(i){ unknownLines.splice(i,1); const ta=$('clientList'); if(ta) ta.value=unknownLines.join('\n'); renderUnknown(); if(!unknownLines.length) closeModal(); }
 
 /* ---------- Каталог ---------- */
-let curCat='veg', inputMode='list';
-function setInput(m){ inputMode=m; document.querySelectorAll('#inputSeg button').forEach(b=>b.classList.toggle('active',b.dataset.m===m));
-  document.getElementById('listCard').classList.toggle('hidden',m!=='list'); document.getElementById('catalogCard').classList.toggle('hidden',m!=='catalog'); renderCatalog(); }
-function bestMarketPrice(k){ const os=state.offers.filter(o=>o.p===k&&o.on&&state.sellers[o.s].online); return os.length?Math.min(...os.map(rankPrice)):0; }
-function renderCatalog(){
-  document.getElementById('catChips').innerHTML=Object.entries(CATS).map(([k,t])=>`<button class="chip ${k===curCat?'active':''}" onclick="curCat='${k}';renderCatalog()">${t}</button>`).join('');
-  document.getElementById('catalogList').innerHTML=Object.entries(PRODUCTS).filter(([,p])=>p.cat===curCat).map(([k,p])=>{
-    const mp=bestMarketPrice(k), q=state.cart[k]||0;
-    return `<div class="product-row"><div><b>${p.n}</b><div class="meta">${mp?`базар от ${fmt(mp)}/${p.u==='kg'?'кг':'шт'} · магазин ~${fmt(p.store)}`:'сейчас нет на рынке'}</div></div>
-     <div class="qty">${q?`<button onclick="chg('${k}',-1)">−</button><span style="min-width:46px;text-align:center">${fq(q,p.u)}</span>`:''}<button onclick="chg('${k}',1)" ${mp?'':'disabled'}>+</button></div></div>`;}).join('');
-}
-function chg(k,d){ const p=PRODUCTS[k]; const step=state.mode==='biz'&&p.u==='kg'?Math.max(p.step,1):p.step; let q=+((state.cart[k]||0)+d*step).toFixed(2); if(q<=0) delete state.cart[k]; else state.cart[k]=q; hap(); save(); renderCatalog(); renderCart(); }
-function clearCart(){ state.cart={}; save(); renderCart(); renderCatalog(); }
+function chg(k,d){ const p=PRODUCTS[k]; const step=state.mode==='biz'&&p.u==='kg'?Math.max(p.step,1):p.step; let q=+((state.cart[k]||0)+d*step).toFixed(2); if(q<=0){ delete state.cart[k]; if(state.sel) delete state.sel[k]; } else state.cart[k]=q; hap(); save();
+  if(app==='shop'&&tab==='cart') render(); else { refreshPC(k); chrome(); } }
+function clearCart(){ confirmBox('Очистить корзину?',()=>{ state.cart={}; state.sel={}; save(); render(); }); }
+// цена, которую клиент реально заплатит в варианте «Выгодный»
+function priceFor(k){ const P=PRODUCTS[k]; const r=pickFor(k,state.cart[k]||P.step,'best',true); return r.none?0:r.o.price; }
+function savingPct(){ const r=savingStat(); return r.n?Math.round(r.avg*100):0; }
+// честно: среднее по позициям, где есть и базарная, и магазинная цена (вкл. позиции, где базар дороже)
+function savingStat(){ let s=0,n=0; for(const [k,P] of Object.entries(PRODUCTS)){ if(!P.store) continue; const p=priceFor(k); if(p){ s+=1-p/P.store; n++; } } return {avg:n?s/n:0,n}; }
+// экономия по одной позиции: только если магазинная цена есть и базар дешевле
+function itemSave(k,price,q=1){ const P=PRODUCTS[k]; return P.store&&P.store>price?(P.store-price)*q:0; }
 
 /* ---------- Корзина и варианты ---------- */
-function renderCart(){
-  const keys=Object.keys(state.cart), el=document.getElementById('cartList');
-  if(!keys.length){ el.innerHTML='<div class="meta">Пусто. Напишите список или добавьте из каталога — всё попадёт сюда.</div>'; document.getElementById('offersCard').classList.add('hidden'); updateMain(); return; }
-  el.innerHTML=keys.map(k=>{const p=PRODUCTS[k];return `<div class="item-row"><div>${p.n}<div class="meta">${CATS[p.cat]}</div></div><div class="qty"><button onclick="chg('${k}',-1)">−</button><span style="min-width:52px;text-align:center">${fq(state.cart[k],p.u)}</span><button onclick="chg('${k}',1)">+</button></div></div>`}).join('');
-  buildOffers();
+
+/* ---------- Заказы клиента ---------- */
+function rateOrder(id){ modal(`<h3>Как вам заказ №${id}?</h3><div class="stars">${[1,2,3,4,5].map(n=>`<button onclick="doRate(${id},${n})" aria-label="${n}">★</button>`).join('')}</div><div class="fine" style="justify-content:center">Оценка влияет на рейтинг продавцов</div>`); }
+function doRate(id,n){ const o=state.orders.find(x=>x.id===id); o.rated=n; new Set(o.items.map(i=>i.s)).forEach(s=>{const S=state.sellers[s]; S.rating=+(S.done?((S.rating*S.done+n)/(S.done+1)):n).toFixed(2); S.done++;}); save(); closeModal(); toast('Спасибо!'); renderAll(); }
+function openDispute(id){ const o=state.orders.find(x=>x.id===id);
+  modal(`<h3>Проблема с заказом</h3><label class="fl">Товар</label><select class="inp" id="dItem">${o.items.map((i,n)=>`<option value="${n}">${PRODUCTS[i.k].n}</option>`).join('')}</select>
+  <label class="fl">Что не так</label><select class="inp" id="dReason"><option>Несвежий / брак</option><option>Недовес</option><option>Не тот товар</option><option>Не привезли</option></select>
+  <textarea id="dText" placeholder="Комментарий (необязательно)" style="min-height:80px"></textarea>
+  <div class="fine" style="margin:-2px 0 14px">📷 Фото сравним с фото сборщика · возврат за 24 ч</div>
+  <button class="btn" onclick="submitDispute(${id})">Отправить</button><button class="btn gray" onclick="closeModal()">Отмена</button>`); }
+function submitDispute(id){ const o=state.orders.find(x=>x.id===id); const i=o.items[+$('dItem').value]; const r=$('dReason').value;
+  o.dispute=`${PRODUCTS[i.k].n}: ${r}. ${$('dText').value}`; state.sellers[i.s].disputes++; closeModal(); setStatus(o,'dispute',o.dispute); toast('Претензия отправлена'); }
+function repeatOrder(id){ const o=state.orders.find(x=>x.id===id); state.cart={...o.cart}; save(); closeModal(); app='shop'; tab='cart'; catOpen=null; window.scrollTo(0,0); render(); toast('Корзина собрана по текущим ценам'); }
+function saveTpl(id){ const o=state.orders.find(x=>x.id===id); const name=`Заказ №${id}`; state.templates.push({name,cart:{...o.cart}}); save(); toast('Сохранено в шаблоны'); render(); }
+function useTpl(i){ state.cart={...state.templates[i].cart}; save(); closeModal(); app='shop'; tab='cart'; render(); toast('Шаблон в корзине'); }
+function pin(c,v){ if(v) state.pins[c]=v; else delete state.pins[c]; save(); hap(); render(); }
+
+/* ---------- Сборщик ---------- */
+function accept(id){ const o=state.orders.find(x=>x.id===id); if(o.status!=='new') return; setStatus(o,'accepted'); openRoute(id); }
+function openRoute(id){ app='collector'; openOrder=id; render(); window.scrollTo(0,0); }
+function photo(n){ const o=state.orders.find(x=>x.id===openOrder); o.items[n].photo=!o.items[n].photo; save(); hap(); render(); }
+/* ---------- Продавец ---------- */
+function setPrice(i,v){ const o=state.offers[i]; const p=Math.round(+v); if(!(p>0)){toast('Цена должна быть больше 0');render();return;}
+  const fl=floorPrice(o.p,o.s); if(fl&&p<fl*.8){ toast(`Слишком низко: минимум ${fmt(Math.round(fl*.8))}. Демпинг вредит всем.`); hap('err'); render(); return; }
+  o.price=p; save(); hap(); renderAll(); }
+function addProduct(){ const k=$('newProd').value, p=+$('newPrice').value, s=+$('newStock').value;
+  if(!k){toast('Все товары уже добавлены');return;} if(!(p>0)||!(s>=0)||$('newStock').value===''){toast('Укажите цену и остаток');hap('err');return;}
+  const fl=floorPrice(k,state.me); if(fl&&p<fl*.8){toast(`Минимум ${fmt(Math.round(fl*.8))}`);hap('err');return;}
+  state.offers.push({s:state.me,p:k,price:Math.round(p),stock:s,fresh:'сегодня',on:true}); const S=state.sellers[state.me]; if(!S.cats.includes(PRODUCTS[k].cat)) S.cats.push(PRODUCTS[k].cat);
+  save(); hap('ok'); closeModal(); toast('Товар добавлен'); renderAll(); }
+function issue(id,n){ const o=state.orders.find(x=>x.id===id); o.items[n].issued=true; save(); hap('ok'); renderAll(); }
+
+/* ================= v4.1: доставка по договорённости, предоплата, подтверждение оплаты ================= */
+const CONFIG = {
+  paymentConfirmMinutes: 20,
+  deliveryAgreeMinutes: 10,
+  deliveryHint: {min:1000, max:1500},       // подсказка «обычно X–Y ₸»; позже — по районам
+  codes: {collector:'1111', seller:'2222'}, // демо-коды входа для партнёров
+  support: 'https://t.me/Zakaz_k111_bot'
+};
+let timeShift = 0;                 // для тестов: сдвиг «текущего» времени
+const now = () => Date.now() + timeShift;
+const unlocked = {};               // вход партнёров — только на эту сессию
+const MON = ['янв.','февр.','марта','апр.','мая','июня','июля','авг.','сент.','окт.','нояб.','дек.'];
+const isHome = () => state.mode!=='biz';
+
+/* ---------- Слоты от текущего времени Астаны (UTC+5) ---------- */
+const SLOT_H = {home:[[10,12],[12,14],[15,17],[18,20],[20,22]], biz:[[6,8],[8,10],[10,12]]};
+function almaty(t){ const d=new Date(t+5*3600e3); return {y:d.getUTCFullYear(),m:d.getUTCMonth(),d:d.getUTCDate(),h:d.getUTCHours()}; }
+function slotList(){ const mode=state.mode||'home', lead=(mode==='biz'?8:2)*3600e3, n=mode==='biz'?3:4, a=almaty(now()), out=[];
+  for(let day=0; day<3 && out.length<n; day++) for(const [s,e] of SLOT_H[mode]){ const ts=Date.UTC(a.y,a.m,a.d+day,s-5); if(ts-now()<lead) continue; out.push({key:ts,e}); if(out.length>=n) break; }
+  return out; }
+function slotText(ts,e){ const a=almaty(now()), b=almaty(ts); const dd=Math.round((Date.UTC(b.y,b.m,b.d)-Date.UTC(a.y,a.m,a.d))/864e5);
+  const day=dd===0?'Сегодня':dd===1?'Завтра':dd===-1?'Вчера':`${b.d} ${MON[b.m]}`; const hh=x=>String(x).padStart(2,'0')+':00'; return `${day} ${hh(b.h)}–${hh(e)}`; }
+function curSlot(){ const L=slotList(); return L.find(s=>s.key===opts.slot)||L[0]; }
+const oSlot = o => o.slotTs?slotText(o.slotTs,o.slotEnd):(o.slot||'');
+
+/* ---------- Телефон ---------- */
+function phoneDigits(v){ let d=String(v||'').replace(/\D/g,''); if(d[0]==='8') d='7'+d.slice(1); if(d&&d[0]!=='7') d='7'+d; return d.slice(0,11); }
+function fmtPhone(v){ const d=phoneDigits(v); if(!d) return ''; const p=d.slice(1); let s='+7'; if(p.length) s+=' ('+p.slice(0,3); if(p.length>=3) s+=')'; if(p.length>3) s+=' '+p.slice(3,6); if(p.length>6) s+='-'+p.slice(6,8); if(p.length>8) s+='-'+p.slice(8,10); return s; }
+const phoneOk = v => phoneDigits(v).length===11;
+function editPhone(){ const tgC=inTG&&tg.requestContact&&(!tg.isVersionAtLeast||tg.isVersionAtLeast('6.9'));
+  modal(`<h3>Телефон</h3><input class="inp" id="phoneIn" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (7__) ___-__-__" value="${esc(fmtPhone(opts.phone))}" oninput="this.value=fmtPhone(this.value)">
+   ${tgC?`<button class="btn secondary" onclick="shareContact()">📱 Взять из Telegram</button>`:''}<button class="btn" onclick="savePhone()">Сохранить</button>`);
+  setTimeout(()=>{const i=$('phoneIn'); i&&i.focus();},250); }
+function shareContact(){ try{ tg.requestContact((ok,res)=>{ const p=ok&&res&&res.responseUnsafe&&res.responseUnsafe.contact&&res.responseUnsafe.contact.phone_number; if(p){ opts.phone=fmtPhone(p); save(); closeModal(); render(); toast('Телефон сохранён'); } }); }catch(e){ toast('Введите номер вручную'); } }
+function savePhone(){ const v=$('phoneIn').value; if(!phoneOk(v)){ toast('Номер: +7 и 10 цифр'); hap('err'); return; } opts.phone=fmtPhone(v); save(); closeModal(); hap('ok'); render(); }
+
+/* ---------- Парсер (яйца — штуками или десятками) ---------- */
+function parseLine(line){
+  let l=line.trim().toLowerCase().replace(',', '.'); if(!l) return null;
+  l=l.replace(/^[-•*]\s*/,'').replace(/^\d+[.)]\s+/,'');
+  let qty=null,unit='';
+  const re=/(\d+(?:\.\d+)?|пол|половин[ау])\s*(кг|килограмм\w*|кило|гр|грамм\w*|г|шт|штук\w*|десят\w*|пуч\w*|литр\w*|л)?(?![а-яё])\.?/i;
+  const m=l.match(re);
+  if(m){ qty=/пол/.test(m[1])?0.5:parseFloat(m[1]); unit=(m[2]||'').toLowerCase(); l=(l.slice(0,m.index)+' '+l.slice(m.index+m[0].length)).trim(); }
+  else if(/пол ?кило/.test(l)){ qty=.5; unit='кг'; l=l.replace(/пол ?кило/,''); }
+  else if(/десят/.test(l)){ qty=1; unit='десяток'; }
+  l=l.replace(/\bдесят\w*\b/g,'').trim();
+  const key=matchProduct(l);
+  if(!key) return {raw:line.trim(), key:null};
+  const p=PRODUCTS[key];
+  if(qty==null) qty=1;
+  if(/^г(р|рамм\w*)?$/.test(unit)) qty=qty/1000;
+  if(key==='eggs'){ // упаковка = 10 шт: «10 шт» → 1 уп., «15 шт» → 2 уп., «2 десятка» → 2 уп., «30» без единиц → 3 уп.
+    if(/^шт|^штук/.test(unit) || (!unit && qty>=10)) qty=Math.max(1,Math.ceil(qty/10));
+    else qty=Math.max(1,Math.round(qty));
+  } else if(p.approx && /кг|кило/.test(unit)) qty=Math.max(1,Math.round(qty/p.approx));
+  else if(p.u==='pcs') qty=Math.max(1,Math.round(qty));
+  return {raw:line.trim(), key, qty:+qty.toFixed(2)};
 }
-let offers=null, chosen='best', opts={sub:'call',pay:'kaspi',slot:0,addr:''};
-function pickFor(k,q,kind){
+
+/* ---------- Подбор продавцов: «Выгодно» никогда не дороже ---------- */
+function calc(kind){ const r=calcRaw(kind); if(kind==='best'){ const g=calcRaw('regular'); if(g.total<r.total) return {...g,kind:'best'}; } return r; }
+
+/* ---------- Оформление ---------- */
+function placeOrder(){
+  if(busy) return; offers={best:calc('best'),regular:calc('regular')}; const o=offers[chosen], home=isHome();
+  if(!Object.keys(state.cart).length){ toast('Корзина пуста'); hap('err'); return; }
+  const ok=o.lines.filter(l=>!l.none); if(!ok.length){ toast('Ни одной позиции нет в наличии'); hap('err'); return; }
+  if(o.goods<M().minOrder){ toast(`Минимальный заказ ${fmt(M().minOrder)}`); hap('err'); return; }
+  if(home && !(+opts.deliv>=100)){ toast('Укажите, сколько готовы заплатить за доставку'); hap('err'); const i=$('delivIn'); i&&i.focus(); return; }
+  if(!opts.addr.trim()||opts.addr.trim().length<5){ toast('Укажите адрес доставки'); hap('err'); editAddr(); return; }
+  if(!phoneOk(opts.phone)){ toast('Укажите телефон'); hap('err'); editPhone(); return; }
+  const sl=curSlot(); if(!sl){ toast('Нет свободных слотов'); return; }
+  busy=true; setTimeout(()=>{busy=false;},800);
+  const id=++state.seq, t=now();
+  const order={id,mode:state.mode,kind:chosen,created:t,status:home?'deliv_agree':'unpaid',sub:opts.sub,method:home?'kaspi':(opts.pay==='invoice'?'invoice':'kaspi'),
+    slotTs:sl.key,slotEnd:sl.e,addr:opts.addr.trim(),phone:opts.phone,
+    delivery:home?null:o.delivery, delivOffer:home?+opts.deliv:null, counter:null, agreeDeadline:home?t+CONFIG.deliveryAgreeMinutes*60e3:null,
+    serviceRate:M().service, storeSaving:o.itemSaving,
+    items:ok.map(l=>({k:l.k,q:l.q,s:l.o.s,price:l.o.price,fact:null,factPrice:null,bill:null,state:'pending',photo:false,issued:false})),
+    missing:o.lines.filter(l=>l.none).map(l=>l.k), log:[{s:home?'deliv_agree':'unpaid',t}], cart:{...state.cart}};
+  ok.forEach(l=>{ l.o.stock=Math.max(0,+(l.o.stock-l.q).toFixed(2)); });
+  if(!home) initPay(order); state.orders.unshift(order); state.cart={}; state.sel={}; save();
+  closeModal(); hap('ok'); tab='orders'; catOpen=null; window.scrollTo(0,0); render();
+  if(home) toast('Цена доставки отправлена сборщику'); else startPay(id);
+}
+const findO = id => state.orders.find(x=>x.id===id);
+function delivOf(o){ return o.delivery!=null?o.delivery:(o.counter||o.delivOffer||0); }
+function stCls(s){ return s==='delivered'?'done':['cancelled','dispute','deliv_fail','pay_expired'].includes(s)?'bad':['deliv_counter','unpaid','collected'].includes(s)?'warn':''; }
+function setStatus(o,s,note){ o.status=s; o.log.push({s,t:now(),note}); save(); hap('ok'); renderAll(); }
+function restock(o){ o.items.forEach(i=>{const of=state.offers.find(x=>x.s===i.s&&x.p===i.k); if(of) of.stock=+(of.stock+i.q).toFixed(2);}); }
+const PRE_COLLECT=['deliv_agree','deliv_counter','deliv_fail','unpaid','pay_check','pay_expired','new','accepted'];
+function support(id){ const url=CONFIG.support; if(inTG&&tg.openTelegramLink){ try{ tg.openTelegramLink(url); return; }catch(e){} } toast('Поддержка: '+url.replace('https://','')); }
+
+/* ---------- Согласование доставки (дом) ---------- */
+function acceptDeliv(id){ const o=findO(id); if(!['deliv_agree'].includes(o.status)) return; o.delivery=o.delivOffer; initPay(o); setStatus(o,'unpaid','доставка '+o.delivery); toast(`Доставка ${fmt(o.delivery)} — клиент оплачивает`); }
+function counterPreset(o){ const h=CONFIG.deliveryHint; return Math.max(h.max, Math.ceil((o.delivOffer+200)/100)*100); }
+function counterDeliv(id,v){ const o=findO(id); if(o.status!=='deliv_agree') return; const n=Math.round(+v);
+  if(!(n>o.delivOffer)){ toast('Встречная цена должна быть выше цены клиента'); hap('err'); return; }
+  o.counter=n; o.agreeDeadline=now()+CONFIG.deliveryAgreeMinutes*60e3; closeModal(); setStatus(o,'deliv_counter','встречная '+n); toast('Встречная цена отправлена клиенту'); }
+function counterSheet(id){ const o=findO(id); modal(`<h3>Своя цена доставки</h3><div class="fine" style="margin:-6px 0 12px">Клиент предлагает ${fmt(o.delivOffer)} · одна встречная</div>
+  <input class="inp" id="cntIn" type="number" inputmode="numeric" value="${counterPreset(o)}"><button class="btn" onclick="counterDeliv(${id},$('cntIn').value)">Предложить</button>`); }
+function agreeCounter(id){ const o=findO(id); if(o.status!=='deliv_counter') return; o.delivery=o.counter; initPay(o); setStatus(o,'unpaid','доставка '+o.delivery); startPay(id); }
+function reofferSheet(id){ const o=findO(id); const h=CONFIG.deliveryHint;
+  modal(`<h3>Другая цена доставки</h3><div class="fine" style="margin:-6px 0 12px">Обычно ${fmt(h.min)}–${fmt(h.max)}</div>
+  <input class="inp" id="reIn" type="number" inputmode="numeric" value="${Math.max(o.counter||0,o.delivOffer||0,h.min)}"><button class="btn" onclick="reoffer(${id},$('reIn').value)">Отправить</button>`); }
+function reoffer(id,v){ const o=findO(id); const n=Math.round(+v); if(!(n>=100)){ toast('Укажите сумму'); return; }
+  o.delivOffer=n; o.counter=null; o.agreeDeadline=now()+CONFIG.deliveryAgreeMinutes*60e3; closeModal(); setStatus(o,'deliv_agree','новая цена '+n); toast('Отправили сборщику'); }
+
+/* ---------- Предоплата и подтверждение ---------- */
+function cd(ts){ const s=Math.max(0,Math.round((ts-now())/1000)); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+setInterval(()=>{ if(!state.mode) return; if(checkTimers()) render(); else document.querySelectorAll('[data-cd]').forEach(el=>el.textContent=cd(+el.dataset.cd)); },1000);
+
+/* ---------- Вес вне допуска ---------- */
+/* ---------- Итог по факту: возврат или доплата ---------- */
+/* ---------- Экраны клиента ---------- */
+function bannerHTML(){ const r=savingStat(), pct=Math.round(r.avg*100); const cnt={}; Object.values(PRODUCTS).forEach(p=>{ if(p.src&&p.store){ const k=p.src.name+'|'+p.src.date; cnt[k]=(cnt[k]||0)+1; } }); const top=Object.entries(cnt).sort((x,y)=>y[1]-x[1])[0]; const src={src:top?{name:top[0].split('|')[0],date:top[0].split('|')[1]}:{name:'магазин',date:''}};
+  if(!r.n||pct<=0) return `<button class="banner" onclick="hint('save')"><div><b>Свежее с базара</b><span>Прямо от продавцов Астаны</span></div><span class="be">🧺</span></button>`;
+  return `<button class="banner" onclick="hint('save')"><div><b>В среднем дешевле<br>на ~${pct}%</b><span>по ${r.n} ${pl(r.n,['позиции','позициям','позициям'])} · vs ${src.src.name}, ${src.src.date}</span></div><span class="be">🧺</span></button>`; }
+function savingHint(){ const rows=Object.entries(PRODUCTS).filter(([,P])=>P.store).map(([k,P])=>{const p=priceFor(k); const d=p?Math.round((1-p/P.store)*100):null;
+   return `<div class="vl"><span>${P.e} ${P.n}<small>${P.src.full}, ${P.src.date}</small></span><span>${p?fmt(p):'—'} / <s style="color:var(--hint)">${fmt(P.store)}</s>${d!=null?` <b style="color:${d>0?'var(--ok)':'var(--hint)'}">${d>0?'−'+d+'%':'не дешевле'}</b>`:''}</span></div>`}).join('');
+  return `<h3>Базар vs магазин</h3><p class="hint">Магазин — реальные цены (в основном Small на Wolt, дата рядом). Цены продавцов — демо, подогнаны под ярмарочные цены Астаны. Средняя экономия считается по всем позициям, где есть обе цены, — в том числе там, где базар дороже. Рыбу и баранину не сравниваем.</p><div class="card">${rows}</div>`; }
+function vHome(){ const home=isHome(), sl=curSlot();
+  return `<div class="hdr"><button class="addr" onclick="editAddr()"><span class="addr-l"><span>${opts.addr?esc(opts.addr):'Укажите адрес'}</span>${IC.down}</span>
+     <span class="addr-s">Доставка · ${sl?slotText(sl.key,sl.e).toLowerCase():'нет слотов'}</span></button>${home?'':'<span class="pill-biz">🏢 Бизнес</span>'}</div>
+   <label class="search">${IC.search}<input id="q" type="search" enterkeyhint="search" placeholder="Найти продукты" value="${esc(query)}" oninput="onSearch(this.value)"></label>
+   <div id="homeBody">${homeBody()}</div>`; }
+function onDeliv(v){ opts.deliv=v.replace(/\D/g,''); save(); updateMain(); chrome(); }
+function vCart(){
+  const keys=Object.keys(state.cart);
+  if(!keys.length) return `<div class="ttl">Корзина</div><div class="empty"><div class="ee">🛒</div><b>Корзина пуста</b><span>Добавьте продукты из каталога или напишите списком</span>
+    <button class="btn" onclick="setTab('home')">В каталог</button><button class="btn secondary" onclick="openList()">📝 Написать списком</button></div>`;
+  offers={best:calc('best'),regular:calc('regular')}; const o=offers[chosen], m=M(), home=isHome(), h=CONFIG.deliveryHint, sl=slotList(), cs=curSlot();
+  const L=new Map(o.lines.map(l=>[l.k,l])); const pinsN=Object.keys(state.pins).length;
+  const items=keys.map(k=>{ const P=PRODUCTS[k], l=L.get(k), q=state.cart[k]; const sv=l.none?0:itemSave(k,l.o.price,q);
+    return `<div class="ci"><div class="ci-img" style="--h:${hue(k)}">${P.e}</div><div class="ci-b" onclick="${l.none?'':`sellerSheet('${k}')`}" data-ci="${k}"><div class="ci-n">${P.n}</div>${l.none?'':`<div class="ci-s">${state.sellers[l.o.s].emoji} ${state.sellers[l.o.s].n}${l.manual?' · выбран вами':''} ›</div>`}
+      <div class="ci-p">${l.none?'<span class="warnt">Нет в наличии</span>':`<b>${fmt(l.o.price*q)}</b>${sv>0?`<s>${fmt(P.store*q)}</s>`:''}`}</div></div>
+      <div class="step sm"><button onclick="chg('${k}',-1)" aria-label="Меньше">−</button><span>${fq(q,P.u)}</span><button onclick="chg('${k}',1)" aria-label="Больше">+</button></div></div>`; }).join('');
+  const v=(k,e,t)=>`<button class="var ${chosen===k?'sel':''}" onclick="setVariant('${k}')"><span class="vtag"></span><span class="vt">${e} ${t}</span><b>${fmt(offers[k].total)}</b><span class="vs">${offers[k].points} ${pl(offers[k].points,['продавец','продавца','продавцов'])}</span></button>`;
+  const sel=(id,val,list,fn)=>`<select class="gsel" id="${id}" onchange="${fn}">${list.map(([v,t])=>`<option value="${v}" ${val==v?'selected':''}>${t}</option>`).join('')}</select>`;
+  return `<div class="ttl">Корзина <button class="link" onclick="clearCart()">Очистить</button></div>
+   <div class="card" style="padding:4px 14px">${items}</div>
+   <h2 class="sec">Как собрать <button class="link" onclick="openVariants()">Подробнее</button></h2>
+   <div class="var2">${v('best','💰','Выгодно')}${v('regular','🤝',pinsN?'Мои продавцы':'Постоянные')}</div>
+   <h2 class="sec">Доставка</h2>
+   <div class="chips hs slots">${sl.map(s=>`<button class="chip ${cs&&cs.key===s.key?'active':''}" onclick="opts.slot=${s.key};save();hap();render()">${slotText(s.key,s.e)}</button>`).join('')}</div>
+   <div class="glist">
+    ${home?`<label class="grow"><span class="gl">Цена доставки<small>обычно ${fmt(h.min)}–${fmt(h.max)}</small></span><input class="ginp" id="delivIn" type="text" inputmode="numeric" placeholder="${h.min}" value="${esc(opts.deliv)}" oninput="onDeliv(this.value)" onchange="render()"><span class="gu">₸</span></label>`:''}
+    <button class="grow" onclick="editAddr()"><span class="gl">Адрес</span><span class="gv ${opts.addr?'':'ph'}">${opts.addr?esc(opts.addr):'Указать'}</span>${IC.chev}</button>
+    <button class="grow" onclick="editPhone()"><span class="gl">Телефон</span><span class="gv ${opts.phone?'':'ph'}">${opts.phone?esc(opts.phone):'Указать'}</span>${IC.chev}</button>
+    <label class="grow"><span class="gl">Если товара нет</span>${sel('subSel',opts.sub,[['call','Позвонить'],['similar','Заменить похожим'],['remove','Убрать']],"opts.sub=this.value;save()")}</label>
+    ${home?'':`<label class="grow"><span class="gl">Оплата</span>${sel('paySel',opts.pay,[['kaspi','Kaspi'],['invoice','Счёт ТОО/ИП']],"opts.pay=this.value;save()")}</label>`}
+   </div>
+   <div class="card" style="margin-top:12px">
+    <div class="srow"><span>Товары</span><span>${fmt(o.goods)}</span></div>
+    <div class="srow"><span>Доставка${home&&!o.delivSet?' (примерно)':''}</span><span>${o.delivery?fmt(o.delivery):'Бесплатно'}</span></div>
+    ${o.service?`<div class="srow"><span>Сервис 3%</span><span>${fmt(o.service)}</span></div>`:''}
+    <div class="srow tot"><span>Итого</span><span>${fmt(o.total)}</span></div>
+    ${home&&o.saving>0?`<div class="pillmsg g">💚 Дешевле магазина на ~${fmt(o.saving)} с учётом доставки</div>`:''}
+    ${o.goods<m.minOrder?`<div class="pillmsg o">Ещё ${fmt(m.minOrder-o.goods)} до минимального заказа</div>`:''}
+    ${o.lines.some(l=>!l.none&&PRODUCTS[l.k].u==='kg')?`<div class="fine">⚖️ Платите за заказанный вес. Больше не положим, недовес больше 5% вернём на Kaspi ${qBtn('tol')}</div>`:''}
+    <div class="fine">${home?'Сначала сборщик подтвердит цену доставки, потом оплата':'Оплата сразу после оформления'} ${qBtn('pay')}</div>
+   </div>`;
+}
+const PHASES=[['Доставка',['deliv_agree','deliv_counter','deliv_fail']],['Оплата',['unpaid']],['Подтверждение',['pay_check','pay_expired']],['Сборка',['new','accepted','collecting']],['Доставка',['collected','delivering']]];
+function phaseOf(o){ if(o.status==='delivered'||o.status==='dispute') return 5; if(o.status==='cancelled'){ const l=[...o.log].reverse().find(x=>x.s!=='cancelled'&&PHASES.some(p=>p[1].includes(x.s))); return l?PHASES.findIndex(p=>p[1].includes(l.s)):0; } return Math.max(0,PHASES.findIndex(p=>p[1].includes(o.status))); }
+function prog(o){ const ph=phaseOf(o), cls=stCls(o.status)==='bad'?'bad':o.status==='delivered'?'done':o.status==='dispute'?'warn':'';
+  const phases=o.mode==='biz'?PHASES.slice(1):PHASES, off=o.mode==='biz'?1:0;
+  return `<div class="prog ${cls}">${phases.map((p,i)=>`<i class="${i+off<ph||(i+off===ph&&o.status!=='cancelled')?'on':''}"></i>`).join('')}</div>`; }
+function vOrders(){
+  if(!state.orders.length) return `<div class="ttl">Заказы</div><div class="empty"><div class="ee">🧾</div><b>Заказов пока нет</b><span>Первый заказ — за пару минут</span><button class="btn" onclick="setTab('home')">За покупками</button></div>`;
+  return `<div class="ttl">Заказы</div>`+state.orders.map(o=>{ const t=orderTotal(o); const em=[...new Set(o.items.map(i=>PRODUCTS[i.k].e))].slice(0,6).join('');
+    return `<div class="oc" onclick="openOrderSheet(${o.id})" role="button"><div class="oc-h"><b>Заказ №${o.id}</b><span class="status ${stCls(o.status)}">${ST[o.status]}</span></div>
+     <div class="oc-st">${subLine(o)}</div><div class="oc-sub">${oSlot(o)}</div>${prog(o)}
+     <div class="oc-f"><span class="oc-e">${em}</span><b>${fmt(t.total)}</b></div>
+     ${refundPill(o)}
+     <div class="oc-a">${clientActions(o)}<button class="btn sm secondary" onclick="event.stopPropagation();repeatOrder(${o.id})">🔁 Повторить</button></div></div>`; }).join(''); }
+function timeline(o){ const ph=phaseOf(o), phases=o.mode==='biz'?PHASES.slice(1):PHASES, off=o.mode==='biz'?1:0;
+  const lastT=st=>{const l=[...o.log].reverse().find(x=>st.includes(x.s)); return l?new Date(l.t).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Almaty'}):'';};
+  const names=['Цена доставки','Оплата','Подтверждение оплаты','Сборка','Доставка'];
+  let h=phases.map((p,i)=>{ const idx=i+off; const cur=idx===ph&&!['delivered','cancelled','dispute'].includes(o.status); return `<div class="${idx<ph||o.status==='delivered'?'on':''} ${cur?'cur':''}">${names[idx]}${cur?` · ${ST[o.status]}`:''}<small>${lastT(p[1])}</small></div>`; }).join('');
+  if(o.status==='delivered'||o.status==='dispute') h+=`<div class="on ${o.status==='delivered'?'cur':''}">Доставлен<small>${lastT(['delivered'])}</small></div>`;
+  if(o.status==='cancelled') h+=`<div class="on cur">Отменён<small>${lastT(['cancelled'])}</small></div>`;
+  if(o.status==='dispute') h+=`<div class="on cur">Спор<small>${lastT(['dispute'])}</small></div>`;
+  return `<div class="tl">${h}</div>`; }
+/* ---------- Профиль ---------- */
+function vProfile(){ const home=isHome(), m=M();
+  const colN=state.orders.filter(o=>['deliv_agree','new'].includes(o.status)).length, selN=sellerTodo()+sellerPayTodo(state.me);
+  return `<div class="ttl">Профиль</div>
+   <div class="card"><div class="seg2"><button class="${home?'on':''}" onclick="setMode('home')">🏠 Для дома</button><button class="${home?'':'on'}" onclick="setMode('biz')">🏢 Для бизнеса</button></div>
+    <div class="fine" style="justify-content:center">${home?`Заказ от ${fmt(m.minOrder)} · цену доставки предлагаете вы`:`Опт · счёт на ТОО/ИП · заказ от ${fmt(m.minOrder)}`}</div></div>
+   <div class="glist"><button class="grow" onclick="editAddr()"><span class="gi">📍</span><span class="gl">Адрес</span><span class="gv ${opts.addr?'':'ph'}">${opts.addr?esc(opts.addr):'Указать'}</span>${IC.chev}</button>
+    <button class="grow" onclick="editPhone()"><span class="gi">📞</span><span class="gl">Телефон</span><span class="gv ${opts.phone?'':'ph'}">${opts.phone?esc(opts.phone):'Указать'}</span>${IC.chev}</button>
+    ${state.templates.length?`<button class="grow" onclick="openTpls()"><span class="gi">⭐</span><span class="gl">Шаблоны заказов</span><span class="gv">${state.templates.length}</span>${IC.chev}</button>`:''}</div>
+   <h2 class="sec">Мои продавцы ${qBtn('pins')}</h2>
+   <div class="glist">${Object.entries(CATS).map(([c,x])=>{ const ss=Object.entries(state.sellers).filter(([,s])=>s.cats.includes(c));
+     return `<label class="grow"><span class="gi">${x.e}</span><span class="gl">${x.t}</span><select class="gsel" onchange="pin('${c}',this.value)"><option value="">Авто</option>${ss.map(([id,s])=>`<option value="${id}" ${state.pins[c]===id?'selected':''}>${s.n} ★${s.rating||'—'}${isRegular(id)?' ✓':''}</option>`).join('')}</select></label>`}).join('')}</div>
+   <h2 class="sec">Для партнёров</h2>
+   <div class="glist"><button class="grow" onclick="openPartner('collector')"><span class="gi">🛵</span><span class="gl">Я сборщик</span>${colN&&unlocked.collector?`<span class="badge">${colN}</span>`:''}${IC.chev}</button>
+    <button class="grow" onclick="openPartner('seller')"><span class="gi">🏪</span><span class="gl">Я продавец</span>${selN&&unlocked.seller?`<span class="badge">${selN}</span>`:''}${IC.chev}</button></div>
+   <div class="fine" style="justify-content:center;margin:8px 0 0">Вход по коду партнёра · демо</div>
+   <div class="fine" style="justify-content:center;margin:16px 0"><button class="link" style="font-size:13px;color:var(--hint)" onclick="confirmBox('Сбросить демо-данные?',()=>resetDemo())">Сбросить демо</button></div>`; }
+const ROLE_T={collector:'Вход для сборщика',seller:'Вход для продавца'};
+function openPartner(a){ if(!unlocked[a]){ modal(`<h3>${ROLE_T[a]}</h3><input class="inp" id="codeIn" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Код партнёра" maxlength="6" onkeydown="if(event.key==='Enter')checkCode('${a}')">
+    <div class="fine" style="margin:-2px 0 14px">Демо-доступ · код выдаёт администратор</div><button class="btn" onclick="checkCode('${a}')">Войти</button>`); setTimeout(()=>{const i=$('codeIn'); i&&i.focus();},250); return; }
+  app=a; openOrder=null; hap(); window.scrollTo(0,0); render(); }
+function checkCode(a){ const v=($('codeIn')||{}).value; if(v!==CONFIG.codes[a]){ toast('Неверный код'); hap('err'); const i=$('codeIn'); if(i){i.value='';i.focus();} return; } unlocked[a]=true; closeModal(); openPartner(a); }
+
+/* ---------- Сборщик ---------- */
+function vCollector(){
+  if(openOrder) return vRoute();
+  const req=state.orders.filter(o=>o.status==='deliv_agree'), cnt=state.orders.filter(o=>o.status==='deliv_counter');
+  const dpay=payQueue('deliv');
+  const act=state.orders.filter(o=>['new','accepted','collecting','collected','delivering'].includes(o.status));
+  const card=o=>{ const pts=new Set(o.items.map(i=>i.s)).size, isNew=o.status==='new';
+    return `<div class="card" style="padding:14px"><div class="oc-h"><b style="font-size:17px">№${o.id} ${o.mode==='biz'?'🏢':'🏠'}</b><span class="status ${stCls(o.status)}">${ST[o.status]}</span></div>
+     <div class="kv" style="margin-top:8px"><span>🕒</span><span>${oSlot(o)}</span></div><div class="kv"><span>📍</span><span>${esc(o.addr)}</span></div>
+     <div class="kv"><span>🧺</span><span>${o.items.length} поз. · ${pts} ${pl(pts,['точка','точки','точек'])} · доставка ${fmt(o.delivery||0)}</span></div>
+     ${o.phone?`<div class="kv"><span>📞</span><a href="tel:+${phoneDigits(o.phone)}" style="color:var(--accent);text-decoration:none">${esc(o.phone)}</a></div>`:''}
+     <button class="btn ${isNew?'':'secondary'}" style="margin-top:12px" onclick="${isNew?`accept(${o.id})`:`openRoute(${o.id})`}">${isNew?'Принять заказ':'Продолжить'}</button></div>`; };
+  const reqCard=o=>{ const g=o.items.reduce((s,i)=>s+i.q*i.price,0), pr=counterPreset(o);
+    return `<div class="card" style="padding:14px" data-req="${o.id}"><div class="oc-h"><b style="font-size:17px">№${o.id} · ${fmt(o.delivOffer)}</b><span class="meta" style="margin:0">⏱ <span data-cd="${o.agreeDeadline}">${cd(o.agreeDeadline)}</span></span></div>
+     <div class="kv" style="margin-top:6px"><span>📍</span><span>${esc(o.addr)}</span></div><div class="kv"><span>🕒</span><span>${oSlot(o)} · ${o.items.length} поз. на ${fmt(g)}</span></div>
+     <div class="f2" style="margin-top:12px"><button class="btn ok" style="margin:0" onclick="acceptDeliv(${o.id})">Принять</button><button class="btn secondary" style="margin:0" onclick="counterDeliv(${o.id},${pr})">Предложить ${fmt(pr)}</button></div>
+     <button class="link" style="margin-top:10px;font-size:14px" onclick="counterSheet(${o.id})">Другая сумма</button></div>`; };
+  let h=ptop('Сборщик','Магазин','toShop()');
+  if(req.length) h+=`<div class="ptitle">Новые заявки на доставку</div>${req.map(reqCard).join('')}`;
+  if(cnt.length) h+=`<div class="ptitle">Ждут ответа клиента</div>${cnt.map(o=>`<div class="card"><div class="oc-h"><b>№${o.id}</b><span class="status warn">Встречная ${fmt(o.counter)}</span></div></div>`).join('')}`;
+  if(dpay.length) h+=`<div class="ptitle">Подтвердите оплату доставки</div>`+payQueueHTML('deliv','').replace('<div class="ttl" style="font-size:24px"></div>','');
+  const crf=sellerRefundList('deliv'); if(crf.length) h+=`<div class="ptitle">Верните клиенту</div>${crf.map(o=>`<div class="card" style="padding:14px"><div class="oc-h"><b>№${o.id} · ${fmt(sellerRefunds(o).deliv)}</b><span class="meta" style="margin:0">Kaspi ${esc(o.phone||'')}</span></div><button class="btn ok" style="margin-top:12px" onclick="markReturned(${o.id},'deliv')">✓ Вернул</button></div>`).join('')}`;
+  const nw=act.filter(o=>o.status==='new'), wk=act.filter(o=>o.status!=='new');
+  if(wk.length) h+=`<div class="ptitle">В работе</div>${wk.map(card).join('')}`;
+  if(nw.length) h+=`<div class="ptitle">Оплаченные заказы</div>${nw.map(card).join('')}`;
+  if(!req.length&&!act.length&&!dpay.length&&!cnt.length&&!crf.length) h+=`<div class="empty"><div class="ee">🎉</div><b>Нет активных заказов</b><span>Заявки появятся здесь</span></div>`;
+  return h; }
+
+/* ---------- Продавец: подтверждение оплаты ---------- */
+/* ---------- Оператор ---------- */
+/* ---------- Приветствие, режим, рендер, таббар ---------- */
+function vWelcome(){ const r=savingStat(), pct=Math.round(r.avg*100); return `<div class="welcome"><div class="wl">🧺</div><h1>Закупщик</h1><p>Продукты с базара Астаны с доставкой</p>
+  <div class="wlist">${pct>0?`<div><span>💰</span>В среднем дешевле магазина на ~${pct}%</div>`:''}<div><span>🚚</span>Цену доставки предлагаете вы</div><div><span>⚖️</span>Не больше заказанного веса — без доплат</div><div><span>⭐</span>Проверенные продавцы</div></div>
+  <button class="btn" onclick="setMode('home')">Начать</button></div>`; }
+function setMode(m){ state.mode=m; opts.slot=0; if(m==='home'&&opts.pay==='invoice') opts.pay='kaspi'; save(); closeModal(); hap('ok'); render(); }
+function render(){
+  const v=$('view'); checkTimers();
+  if(!state.mode){ v.innerHTML=vWelcome(); chrome(); return; }
+  if(app!=='shop'&&!unlocked[app]) app='shop';
+  if(app==='shop') v.innerHTML = tab==='home'?(catOpen?vCat():vHome()) : tab==='cart'?vCart() : tab==='orders'?vOrders() : vProfile();
+  else if(app==='collector') v.innerHTML=vCollector();
+  else v.innerHTML=vSeller();
+  chrome();
+}
+function tabbarHTML(){
+  const b=(on,fn,ic,label,badge)=>`<button class="tb ${on?'on':''}" onclick="${fn}"><span class="tb-i">${ic}${badge?`<i class="tb-b">${badge}</i>`:''}</span><span class="tb-l">${label}</span></button>`;
+  if(app==='shop'){ const n=Object.keys(state.cart).length, tot=n?calc(chosen).total:0;
+    const act=state.orders.filter(o=>!['delivered','cancelled','dispute'].includes(o.status)).length;
+    return b(tab==='home',"setTab('home')",IC.home,'Главная')+b(tab==='orders',"setTab('orders')",IC.orders,'Заказы',act)+b(tab==='cart',"setTab('cart')",IC.cart,n?fmt(tot):'Корзина',n)+b(tab==='profile',"setTab('profile')",IC.profile,'Профиль'); }
+  if(app==='seller') return b(sellerTab==='issue',"sellerSetTab('issue')",IC.bag,'Выдача',sellerTodo()+sellerPayTodo(state.me))+b(sellerTab==='products',"sellerSetTab('products')",IC.tag,'Товары')+b(sellerTab==='rating',"sellerSetTab('rating')",IC.star,'Рейтинг');
+  return '';
+}
+
+/* ================= Весовой товар: «не больше заказанного» ================= */
+const UNDER_FREE = 0.05; // недовес до 5% входит в цену
+function calcRaw(kind){
+  const lines=Object.entries(state.cart).map(([k,q])=>pickFor(k,q,kind)), ok=lines.filter(l=>!l.none);
+  const goods=ok.reduce((s,l)=>s+l.o.price*l.q,0);
+  const m=M(); let delivery, delivSet=true;
+  if(isHome()){ delivery=+opts.deliv||0; if(!(delivery>0)){ delivSet=false; delivery=CONFIG.deliveryHint.min; } }
+  else delivery = m.freeFrom&&goods>=m.freeFrom?0:m.delivery;
+  const service=Math.round(goods*m.service);
+  const itemSaving=ok.reduce((s,l)=>s+itemSave(l.k,l.o.price,l.q),0); // только позиции, где базар дешевле
+  const points=new Set(ok.map(l=>l.o.s));
+  return {kind,lines,goods,delivery,delivSet,service,total:goods+delivery+service,itemSaving,saving:Math.max(0,Math.round(itemSaving-delivery)),points:points.size};
+}
+// к оплате клиент платит заказанное: товары по заказанному весу + доставка (+ сервис для бизнеса). Без запаса.
+// сколько списывается за позицию: недовес до 5% — по заказу, больше — по факту; перевеса не бывает
+function capInput(el,q){ const v=parseFloat(el.value); if(v>q){ el.value=q; toast('Не больше заказанного'); hap('err'); } }
+function itemLine(it,P){ const rf=itemRefund(it);
+  if(it.state==='removed') return `нет у продавца${rf?` · возврат ${fmt(rf)}`:''}`;
+  if(it.fact==null) return fq(it.q,P.u);
+  return `заказ ${fq(it.q,P.u)} · факт ${fq(it.fact,P.u)}${rf?` · <span class="warnt">возврат ${fmt(rf)}</span>`:''}`; }
+function collect(n){ const o=findO(openOrder); if(o.status==='accepted'){o.status='collecting';o.log.push({s:'collecting',t:now()});}
+  const it=o.items[n], P=PRODUCTS[it.k]; let f=parseFloat(String($('f'+n).value).replace(',','.'));
+  if(!(f>0)){ toast('Укажите вес/количество или нажмите «Нет»'); hap('err'); return; }
+  if(f>it.q){ f=it.q; $('f'+n).value=it.q; toast('Не больше заказанного — записали '+fq(it.q,P.u)); }
+  if(P.u!=='kg') f=Math.floor(f);
+  if(P.u==='kg' && f<it.q*(1-UNDER_FREE) && !it.photo){ toast('Недовес больше 5% — сфотографируйте весы'); hap('err'); return; }
+  it.fact=+f.toFixed(3); it.state='ok'; save(); hap('ok'); renderAll();
+  const rf=itemRefund(it); if(rf) toast(`Продавец вернёт клиенту ${fmt(rf)}`); }
+function missing(n){ const o=findO(openOrder); const it=o.items[n]; if(o.status==='accepted'){o.status='collecting';o.log.push({s:'collecting',t:now()});}
+  const simK=SIMILAR[it.k]; // замена — только у того же продавца и не дороже оплаченного (доплат нет)
+  const sim=simK&&state.offers.find(x=>x.p===simK&&x.s===it.s&&available(x,it.q));
+  const rule={call:'позвонить',similar:'заменить похожим',remove:'убрать'}[o.sub];
+  modal(`<h3>Нет: ${PRODUCTS[it.k].n}</h3><div class="fine" style="margin:-6px 0 14px">Клиент просил: <b style="color:var(--text)">${rule}</b></div>
+   ${sim&&o.sub!=='remove'?`<button class="btn secondary" onclick="replace(${n},'${simK}',${Math.min(sim.price,it.price)})">Замена: ${PRODUCTS[simK].n} · ${fmt(Math.min(sim.price,it.price))}</button>`:''}
+   ${o.sub==='call'&&o.phone?`<a class="btn secondary" href="tel:+${phoneDigits(o.phone)}">📞 Позвонить клиенту</a>`:''}
+   <button class="btn danger" onclick="removeItem(${n})">Убрать · продавец вернёт ${fmt(it.q*it.price)}</button><button class="btn gray" onclick="closeModal()">Назад</button>`); }
+function replace(n,k,price){ const o=findO(openOrder); const it=o.items[n]; it.k=k; it.price=price; it.state='pending'; it.replacedFrom=true; o.log.push({s:'replace',t:now()}); save(); closeModal(); toast('Замена — соберите позицию'); renderAll(); }
+function removeItem(n){ const o=findO(openOrder); o.items[n].state='removed'; save(); closeModal(); renderAll(); }
+function finishCollect(id){ /* removed→возврат по позициям */ const o=findO(id); if(o.items.some(i=>i.state==='pending')){toast('Есть несобранные позиции');return;}
+  if(o.items.filter(i=>i.state!=='dropped').every(i=>i.state==='removed')){ const dc=o.pay&&o.pay.cards.find(c=>c.s==='deliv'&&c.st!=='dropped'); if(dc){ dc.refund=dc.amt; dc.st='dropped'; } setStatus(o,'cancelled','нечего везти'); return; }
+  const ri=refundInfo(o); setStatus(o,'collected'); toast(ri.sum?`Итог ${fmt(orderTotal(o).total)} · продавцы вернут ${fmt(ri.sum)}`:`Собрано точно по заказу`); }
+function startDeliver(id){ setStatus(findO(id),'delivering'); }
+function refundPill(o){ const ri=refundInfo(o); if(o.refund) return `<div class="pillmsg g" style="margin:10px 0 0">Возврат ${fmt(o.refund)}</div>`;
+  if(!ri.sum) return ''; return ri.left?`<div class="pillmsg o" style="margin:10px 0 0">Возврат ${fmt(ri.left)} от продавца</div>`:`<div class="pillmsg g" style="margin:10px 0 0">Продавцы вернули ${fmt(ri.sum)}</div>`; }
+function openOrderSheet(id){ const o=findO(id); if(!o) return; const t=orderTotal(o), ri=refundInfo(o);
+  const items=o.items.map(i=>{const P=PRODUCTS[i.k], rf=o.pay?itemRefund(i):0; const st=i.state==='missing'?'не было при заказе':i.state==='dropped'?'убрано при оплате':i.state==='removed'?'не было у продавца':'';
+    return `<div class="li" style="align-items:flex-start"><span>${i.photo?'📷 ':''}${P.n}${i.replacedFrom?' · замена':''}<small style="display:block;color:var(--hint);font-size:12px">${st||`заказ ${fq(i.q,P.u)}${P.approx?` ≈${fq(P.approx*i.q,'kg')}`:''}${i.fact!=null?` · факт ${fq(i.fact,P.u)}`:''}`}</small></span><span style="text-align:right">${fmt(billQ(i)*i.price)}${rf?`<small style="display:block;color:var(--orange);font-size:12px">возврат ${fmt(rf)}</small>`:''}</span></div>`}).join('');
+  const acts=clientActions(o,true);
+  modal(`<h3>Заказ №${o.id}<span class="status ${stCls(o.status)}">${ST[o.status]}</span></h3>
+   <div class="card">${timeline(o)}<div class="fine" style="margin:8px 0 0">${subLine(o)}</div></div>
+   ${acts}
+   <div class="card">${items}<div class="srow"><span>Доставка</span><span>${delivOf(o)?fmt(delivOf(o)):'Бесплатно'}${o.delivery==null?' (не согласовано)':''}</span></div><div class="srow tot" style="font-size:17px"><span>Итого${o.items.some(i=>i.fact!=null)?' по факту':''}</span><span>${fmt(t.total)}</span></div>
+    ${paidSum(o)?`<div class="srow"><span>Оплачено (товары и доставка)</span><span>${fmt(paidSum(o))}</span></div>`:''}
+    ${o.refund?`<div class="pillmsg g">Возврат ${fmt(o.refund)}</div>`:ri.sum?(ri.left?`<div class="pillmsg o">Возврат ${fmt(ri.left)} от продавца</div>`:`<div class="pillmsg g">Продавцы вернули ${fmt(ri.sum)}</div>`):''}</div>
+   <div class="glist"><div class="grow"><span class="gl">Когда</span><span class="gv">${oSlot(o)}</span></div><div class="grow"><span class="gl">Адрес</span><span class="gv">${esc(o.addr)}</span></div>
+    <div class="grow"><span class="gl">Телефон</span><span class="gv">${esc(o.phone||'—')}</span></div></div>
+   ${o.missing.length?`<div class="pillmsg o" style="margin:0 0 10px">Не было: ${o.missing.map(k=>PRODUCTS[k].n).join(', ')}</div>`:''}
+   ${o.dispute?`<div class="pillmsg o" style="margin:0 0 10px">Претензия: ${esc(o.dispute)}</div>`:''}
+   <button class="btn secondary" onclick="repeatOrder(${o.id})">🔁 Повторить заказ</button>
+   ${['delivered','delivering'].includes(o.status)?`<button class="btn gray" onclick="openDispute(${o.id})">Проблема с заказом</button>`:''}
+   <button class="btn gray" onclick="saveTpl(${o.id});closeModal()">⭐ В шаблоны</button>
+   ${PRE_COLLECT.includes(o.status)&&!['deliv_counter','deliv_fail','pay_expired'].includes(o.status)?`<button class="btn danger" onclick="cancelOrder(${o.id})">Отменить заказ${paidSum(o)?' и вернуть деньги':''}</button>`:''}`); }
+
+/* ================= v4.3: оплата напрямую каждому продавцу (без общего счёта) ================= */
+const COLLECTOR = {n:'Сборщик', kaspi:'+7 (705) 555-12-12'};
+function kaspiOf(s){ if(s==='deliv') return COLLECTOR.kaspi; const n=String(s).replace(/\D/g,'').padStart(2,'0'); return `+7 (707) 10${n[0]}-${n}-${n}`.replace('(707) 10'+n[0],'(707) 1'+n.padStart(2,'0')); }
+function pickFor(k,q,kind,auto){
   const cands=state.offers.filter(o=>o.p===k && available(o,q));
   if(!cands.length) return {k,q,none:true};
-  const cheapest=cands.reduce((a,b)=>rankPrice(a)<=rankPrice(b)?a:b);
-  if(kind==='best'){
-    // приоритет постоянному, если разница ≤ 5%
-    const regs=cands.filter(o=>isRegular(o.s)&&rankPrice(o)<=rankPrice(cheapest)*(1+ANTI.prio));
-    const pick=regs.length? regs.reduce((a,b)=>a.price<=b.price?a:b):cheapest;
-    return {k,q,o:pick,prio:pick!==cheapest};
-  }
+  const man=!auto&&state.sel&&state.sel[k]; const mo=man&&cands.find(c=>c.s===man);
+  if(mo) return {k,q,o:mo,manual:true};
+  const rt=o=>state.sellers[o.s].rating||0;
+  const cheapest=[...cands].sort((a,b)=>rankPrice(a)-rankPrice(b)||a.price-b.price||(isRegular(b.s)-isRegular(a.s))||rt(b)-rt(a))[0];
+  if(kind==='best') return {k,q,o:cheapest};
   const cat=PRODUCTS[k].cat, pin=state.pins[cat];
   let o=pin && cands.find(c=>c.s===pin), fb=null;
   if(pin && !o){ fb = `${state.sellers[pin].n}: ${state.sellers[pin].online?'нет в наличии':'сегодня не работает'} → замена`; }
-  if(!o){ const regs=cands.filter(c=>isRegular(c.s)).sort((a,b)=>state.sellers[b.s].rating-state.sellers[a.s].rating); o=regs[0]||cheapest; }
+  if(!o){ const regs=cands.filter(c=>isRegular(c.s)).sort((a,b)=>rt(b)-rt(a)); o=regs[0]||cheapest; }
   return {k,q,o,fb,pinned:pin&&o.s===pin};
 }
-function calc(kind){
-  const lines=Object.entries(state.cart).map(([k,q])=>pickFor(k,q,kind));
-  const goods=lines.filter(l=>!l.none).reduce((s,l)=>s+l.o.price*l.q,0);
-  const store=lines.filter(l=>!l.none).reduce((s,l)=>s+PRODUCTS[l.k].store*l.q,0);
-  const m=M(); const delivery = m.freeFrom&&goods>=m.freeFrom?0:m.delivery; const service=Math.round(goods*m.service);
-  const points=new Set(lines.filter(l=>!l.none).map(l=>l.o.s));
-  return {kind,lines,goods,store,delivery,service,total:goods+delivery+service,points:points.size};
+// шторка выбора продавца для позиции корзины
+function sellerSheet(k){ const P=PRODUCTS[k], q=state.cart[k]; const cur=pickFor(k,q,chosen);
+  const L=state.offers.filter(o=>o.p===k).sort((a,b)=>a.price-b.price);
+  modal(`<h3>${P.e} ${P.n} · ${fq(q,P.u)}</h3><div class="fine" style="margin:-6px 0 10px">Выберите продавца · цена за 1 ${uL(P)}</div>
+   <div class="glist">${L.map(o=>{ const S=state.sellers[o.s], av=available(o,q), on=!cur.none&&cur.o.s===o.s;
+     return `<button class="grow" data-sel="${o.s}" ${av?`onclick="pickSeller('${k}','${o.s}')"`:'disabled style="opacity:.45"'}><span class="gi">${S.emoji}</span><span class="gl">${S.n}${isRegular(o.s)?' <span class="ptag">постоянный</span>':''}<small>${S.m} · ${S.pt} · ★${S.rating||'новый'}</small></span><span class="gv" style="text-align:right">${av?`<b style="color:var(--text)">${fmt(o.price)}</b><small style="display:block">${fmt(o.price*q)}</small>`:'нет'}</span>${on?'<span style="color:var(--accent);font-size:18px">✓</span>':''}</button>`; }).join('')}</div>
+   ${state.sel&&state.sel[k]?`<button class="btn gray" onclick="pickSeller('${k}','')">Автовыбор</button>`:''}`); }
+function pickSeller(k,s){ state.sel=state.sel||{}; if(s) state.sel[k]=s; else delete state.sel[k]; save(); hap(); closeModal(); render(); }
+function setVariant(k){ chosen=k; state.sel={}; save(); hap(); render(); }
+
+/* ---------- карточки оплаты ---------- */
+function mkCard(o,s,items){ o.pay.seq=(o.pay.seq||0)+1; const c={id:'c'+o.pay.seq,s,amt:Math.round(items.reduce((a,i)=>a+i.q*i.price,0)),st:'unpaid'}; items.forEach(i=>i.card=c.id); o.pay.cards.push(c); return c; }
+function initPay(o){ if(o.pay) return; const goods=o.items.filter(i=>i.state!=='missing').reduce((a,i)=>a+i.q*i.price,0);
+  o.pay={cards:[],service:Math.round(goods*o.serviceRate)}; const by={};
+  o.items.forEach(i=>{ if(i.state==='missing') return; (by[i.s]=by[i.s]||[]).push(i); });
+  Object.entries(by).forEach(([s,its])=>mkCard(o,s,its));
+  const dv=(o.delivery||0)+o.pay.service; if(dv) o.pay.cards.push({id:'cd',s:'deliv',amt:dv,st:'unpaid'}); }
+const activeCards=o=>o.pay?o.pay.cards.filter(c=>c.st!=='dropped'):[];
+const cardById=(o,cid)=>o.pay.cards.find(c=>c.id===cid);
+function prepayParts(o){ initPay(o); const A=activeCards(o), sc=A.filter(c=>c.s!=='deliv'), d=A.find(c=>c.s==='deliv');
+  const goods=sc.reduce((a,c)=>a+c.amt,0), dv=d?d.amt:0; return {goods,dv,service:o.pay.service,amount:goods+dv}; }
+function paidSum(o){ return o.pay?o.pay.cards.filter(c=>c.paidAt&&c.st!=='dropped').reduce((a,c)=>a+c.amt,0):0; }
+function updPay(o){ if(!['unpaid','pay_check','pay_expired'].includes(o.status)) return; const A=activeCards(o); let s;
+  if(!A.some(c=>c.s!=='deliv')){ setStatus(o,'cancelled','все позиции убраны'); return; }
+  if(A.every(c=>c.st==='ok')){ setStatus(o,'new','оплата подтверждена'); toast('Все оплаты подтверждены — заказ у сборщика'); return; }
+  s=A.some(c=>c.st==='fail')?'pay_expired':A.every(c=>c.st!=='unpaid')?'pay_check':'unpaid';
+  if(s!==o.status){ o.status=s; o.log.push({s,t:now()}); } save(); renderAll(); }
+function payProgress(o){ const A=activeCards(o), sel=A.filter(c=>c.s!=='deliv'), d=A.find(c=>c.s==='deliv'); const n=sel.filter(c=>c.st==='ok').length;
+  return {done:A.filter(c=>c.st==='ok').length,total:A.length,text:`${n} из ${sel.length} ${pl(sel.length,['продавца','продавцов','продавцов'])}${d?` · доставка ${d.st==='ok'?'✓':'…'}`:''}`}; }
+function nearestDeadline(o){ const D=activeCards(o).filter(c=>c.st==='check').map(c=>c.deadline); return D.length?Math.min(...D):null; }
+// клиент: «Оплатил»
+function payCard(id,cid){ const o=findO(id), c=cardById(o,cid); if(!c||c.st!=='unpaid') return; c.st='check'; c.paidAt=now(); c.deadline=now()+CONFIG.paymentConfirmMinutes*60e3; o.log.push({s:'paid_'+c.s,t:now()}); hap('ok'); updPay(o); if($('payCards')) startPay(id); }
+// продавец/сборщик: «Получил» / «Не пришло»
+function confirmCard(id,cid){ const o=findO(id), c=cardById(o,cid); if(!c||c.st!=='check') return; c.st='ok'; o.log.push({s:'ok_'+c.s,t:now()}); hap('ok'); toast('Отмечено: получил'); updPay(o); }
+function rejectCard(id,cid){ const o=findO(id), c=cardById(o,cid); if(!c||c.st!=='check') return; c.st='fail'; c.why='no'; o.log.push({s:'fail_'+c.s,t:now()}); hap('err'); toast('Клиент получит уведомление'); updPay(o); }
+function repayCard(id,cid){ const o=findO(id), c=cardById(o,cid); if(!c||c.st!=='fail') return; c.st='unpaid'; c.paidAt=null; c.why=null; save(); updPay(o); startPay(id); }
+// клиент: «Заменить продавца» — следующий по цене, новая карточка
+function replaceSeller(id,cid){ const o=findO(id), c=cardById(o,cid); if(!c||c.st!=='fail'||c.s==='deliv') return;
+  o.pay.bad=o.pay.bad||[]; o.pay.bad.push(c.s); const its=o.items.filter(i=>i.card===cid), moved={}, gone=[];
+  its.forEach(i=>{ const alt=state.offers.filter(x=>x.p===i.k&&!o.pay.bad.includes(x.s)&&available(x,i.q)).sort((a,b)=>rankPrice(a)-rankPrice(b)||a.price-b.price)[0];
+    const of=state.offers.find(x=>x.s===i.s&&x.p===i.k); if(of) of.stock=+(of.stock+i.q).toFixed(2);
+    if(alt){ i.s=alt.s; i.price=alt.price; alt.stock=Math.max(0,+(alt.stock-i.q).toFixed(2)); (moved[alt.s]=moved[alt.s]||[]).push(i); } else { i.state='dropped'; gone.push(PRODUCTS[i.k].n); } });
+  c.st='dropped'; c.refund=c.paidAt?c.amt:0; c.replaced=true;
+  Object.entries(moved).forEach(([s,L])=>mkCard(o,s,L)); o.log.push({s:'replace_seller',t:now()});
+  toast(Object.keys(moved).length?`Новый продавец: ${Object.keys(moved).map(s=>state.sellers[s].n).join(', ')}`:'Замены нет — позиции убраны'+(gone.length?'':''));
+  save(); updPay(o); if(['unpaid','pay_check','pay_expired'].includes(o.status)) startPay(id); else closeModal(); }
+// клиент: «Убрать позиции»
+function dropCard(id,cid){ const o=findO(id), c=cardById(o,cid); if(!c||c.s==='deliv') return;
+  o.items.filter(i=>i.card===cid).forEach(i=>{ i.state='dropped'; const of=state.offers.find(x=>x.s===i.s&&x.p===i.k); if(of) of.stock=+(of.stock+i.q).toFixed(2); });
+  c.st='dropped'; c.refund=c.paidAt?c.amt:0; o.log.push({s:'drop_'+c.s,t:now()}); if(c.refund) toast(`Возврат ${fmt(c.refund)} от продавца`);
+  save(); updPay(o); if(['unpaid','pay_check','pay_expired'].includes(o.status)) startPay(id); else closeModal(); }
+function copyKaspi(num){ try{ navigator.clipboard&&navigator.clipboard.writeText(num.replace(/[^\d+]/g,'')); }catch(e){} toast('Номер скопирован'); hap(); }
+function openKaspi(amt,num){ toast(`Демо: откроется Kaspi · перевод ${fmt(amt)} на ${num}`); }
+function cardHTML(o,c){ const isD=c.s==='deliv', S=isD?null:state.sellers[c.s], num=kaspiOf(c.s);
+  const its=o.items.filter(i=>i.card===c.id);
+  const head=isD?`<b>🛵 Доставка · сборщик</b><small>${o.delivery?`доставка ${fmt(o.delivery)}`:''}${o.pay.service?` · сервис ${Math.round(o.serviceRate*100)}% ${fmt(o.pay.service)}`:''}</small>`
+    :`<b>${S.emoji} ${S.n}</b><small>${S.m} · ${S.pt}</small>`;
+  const badge={unpaid:['Не оплачено','warn'],check:['Ждём подтверждения',''],ok:['Подтверждено','done'],fail:[c.why==='timeout'?'Время вышло':'Не пришло','bad'],dropped:[c.replaced?'Заменён':'Убрано','']}[c.st];
+  let body='';
+  if(c.st==='dropped') return `<div class="paycard off" data-card="${c.id}"><div class="pk-h"><div>${head}</div><span class="status">${badge[0]}</span></div>${c.refund?`<div class="pillmsg o" style="margin:8px 0 0">Возврат ${fmt(c.refund)} от продавца</div>`:''}</div>`;
+  if(c.st==='unpaid'||c.st==='fail') body+=`<div class="kaspi"><span>Kaspi<b>${num}</b></span><button class="link" onclick="copyKaspi('${num}')">Скопировать</button></div>`;
+  if(c.st==='unpaid') body+=`<div class="f2"><button class="btn secondary" style="margin:0" onclick="openKaspi(${c.amt},'${num}')">Открыть Kaspi</button><button class="btn" style="margin:0" onclick="payCard(${o.id},'${c.id}')">Оплатил</button></div>`;
+  if(c.st==='check') body+=`<div class="fine" style="margin:6px 0 0">${isD?'Сборщик':'Продавец'} проверяет перевод · ⏱ <span data-cd="${c.deadline}">${cd(c.deadline)}</span></div>`;
+  if(c.st==='fail') body+=isD?`<div class="f2"><button class="btn" style="margin:0" onclick="repayCard(${o.id},'${c.id}')">Оплатил ещё раз</button><button class="btn gray" style="margin:0" onclick="support(${o.id})">Поддержка</button></div>`
+    :`<button class="btn" onclick="replaceSeller(${o.id},'${c.id}')">Заменить продавца</button><div class="f2"><button class="btn gray" style="margin:0" onclick="dropCard(${o.id},'${c.id}')">Убрать позиции${c.paidAt?` · возврат ${fmt(c.amt)}`:''}</button><button class="btn gray" style="margin:0" onclick="support(${o.id})">Написать в поддержку</button></div>`;
+  return `<div class="paycard ${c.st}" data-card="${c.id}"><div class="pk-h"><div>${head}</div><span class="status ${badge[1]}">${badge[0]}</span></div>
+    ${its.length?`<div class="pk-it">${its.map(i=>`${PRODUCTS[i.k].n} ${fq(i.q,PRODUCTS[i.k].u)}`).join(' · ')}</div>`:''}<div class="pk-sum">${fmt(c.amt)}</div>${body}</div>`; }
+function startPay(id){ const o=findO(id); if(!['unpaid','pay_check','pay_expired'].includes(o.status)) return; initPay(o); const p=prepayParts(o), hasKg=o.items.some(i=>PRODUCTS[i.k].u==='kg'&&i.state!=='dropped');
+  modal(`<h3>Оплата заказа №${id}</h3><div class="fine" style="margin:-6px 0 10px">Переводы напрямую продавцам на Kaspi · ${fmt(p.amount)} · ${payProgress(o).text}</div>
+   <div id="payCards">${o.pay.cards.map(c=>cardHTML(o,c)).join('')}</div>
+   ${hasKg?`<div class="pillmsg g" style="margin:0 0 8px">Больше заказанного не положим · недовес больше 5% вернём</div>`:''}
+   <div class="fine" style="justify-content:center">Сборка начнётся, когда все подтвердят оплату ${qBtn('pay')}</div>`); }
+function checkTimers(){ let ch=false; const t=now();
+  for(const o of state.orders){
+    if(['deliv_agree','deliv_counter'].includes(o.status)&&o.agreeDeadline&&t>o.agreeDeadline){ o.status='deliv_fail'; o.log.push({s:'deliv_fail',t}); ch=true; }
+    if(o.pay&&['unpaid','pay_check','pay_expired'].includes(o.status)){ let f=false; o.pay.cards.forEach(c=>{ if(c.st==='check'&&t>c.deadline){ c.st='fail'; c.why='timeout'; f=true; } });
+      if(f){ o.status='pay_expired'; o.log.push({s:'pay_expired',t}); ch=true; } }
+  } if(ch) save(); return ch; }
+function cancelOrder(id){ const o=findO(id); if(!o||!PRE_COLLECT.includes(o.status)){toast('Заказ уже собирают — напишите в поддержку');return;}
+  const paid=paidSum(o); confirmBox(paid?`Отменить заказ №${id}? Продавцы вернут ${fmt(paid)} на Kaspi.`:`Отменить заказ №${id}?`,()=>{ restock(o);
+    if(o.pay) o.pay.cards.forEach(c=>{ if(c.st!=='dropped'){ c.refund=c.paidAt?c.amt:0; c.st='dropped'; } });
+    setStatus(o,'cancelled'); if(paid) toast(`Возврат ${fmt(paid)} от продавцов`); }); }
+/* ---------- продавец/сборщик: подтверждение переводов ---------- */
+function payQueue(s){ return state.orders.flatMap(o=>o.pay&&['unpaid','pay_check','pay_expired'].includes(o.status)?o.pay.cards.filter(c=>c.s===s&&c.st==='check').map(c=>[o,c]):[]); }
+function sellerPayTodo(me){ return payQueue(me).length; }
+function payQueueHTML(s,title){ const L=payQueue(s); if(!L.length) return '';
+  return `<div class="ttl" style="font-size:24px">${title}</div>${L.map(([o,c])=>`<div class="ri" data-q="${c.id}"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · Kaspi от ${esc(o.phone||'клиента')}</div><div class="ri-q">${fmt(c.amt)}</div>
+    <div class="meta">${s==='deliv'?'Доставка'+(o.pay.service?' и сервис':''):o.items.filter(i=>i.card===c.id).map(i=>PRODUCTS[i.k].n).join(', ')} · ⏱ <span data-cd="${c.deadline}">${cd(c.deadline)}</span></div></div></div>
+    <div class="ri-a"><button class="btn gray" style="white-space:nowrap" onclick="rejectCard(${o.id},'${c.id}')">Не пришло</button><button class="btn ok" onclick="confirmCard(${o.id},'${c.id}')">✓ Получил</button></div></div>`).join('')}`; }
+function sellerPayBlock(me){ return payQueueHTML(me,'Подтвердите оплату'); }
+/* ---------- возвраты: недовес + отменённые/заменённые карточки ---------- */
+function billQ(i){ if(['removed','missing','dropped'].includes(i.state)) return 0; if(i.fact==null) return i.q; const P=PRODUCTS[i.k];
+  if(P.u==='kg' && i.fact>=i.q*(1-UNDER_FREE)) return i.q; return Math.min(i.q,i.fact); }
+function itemRefund(i){ if(['missing','dropped'].includes(i.state)) return 0; return Math.round((i.q-billQ(i))*i.price); }
+function orderTotal(o){ const g=o.items.reduce((s,i)=>s+billQ(i)*i.price,0); const sv=o.pay?o.pay.service:Math.round(g*o.serviceRate); return {g,service:sv,total:Math.round(g+delivOf(o)+sv)}; }
+function sellerRefunds(o){ const r={}; if(!o.pay) return r; const paidC=new Set(o.pay.cards.filter(c=>c.paidAt).map(c=>c.id));
+  o.items.forEach(i=>{ const v=paidC.has(i.card)||!i.card?itemRefund(i):0; if(v>0) r[i.s]=(r[i.s]||0)+v; });
+  o.pay.cards.forEach(c=>{ if(c.refund) r[c.s]=(r[c.s]||0)+c.refund; }); return r; }
+function refundInfo(o){ const r=sellerRefunds(o), ids=Object.keys(r), done=o.returned||{}; const sum=ids.reduce((s,k)=>s+r[k],0), left=ids.filter(k=>!done[k]).reduce((s,k)=>s+r[k],0); return {r,sum,left}; }
+function markReturned(id,sid){ const o=findO(id); o.returned=o.returned||{}; o.returned[sid]=true; o.log.push({s:'refund_'+sid,t:now()}); save(); hap('ok'); toast('Отмечено: вернул'); renderAll(); }
+function sellerRefundList(me){ return state.orders.filter(o=>{ const r=sellerRefunds(o); return r[me]&&!(o.returned||{})[me]; }); }
+function sellerRefundBlock(me){ const L=sellerRefundList(me); if(!L.length) return '';
+  return `<div class="ttl" style="font-size:24px">Верните клиенту</div>${L.map(o=>{ const its=o.items.filter(i=>i.s===me&&itemRefund(i)>0), cs=o.pay.cards.filter(c=>c.s===me&&c.refund);
+    const why=[...its.map(i=>`${PRODUCTS[i.k].n}: ${i.state==='removed'?'нет':`${fq(i.fact,PRODUCTS[i.k].u)} из ${fq(i.q,PRODUCTS[i.k].u)}`}${i.photo?' 📷':''}`), ...cs.map(c=>o.status==='cancelled'?'заказ отменён':c.replaced?'заказ передан другому продавцу':'позиции убраны')].join(' · ');
+    return `<div class="ri"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · Kaspi ${esc(o.phone||'')}</div><div class="ri-q">${fmt(sellerRefunds(o)[me])}</div>
+     <div class="meta">${why}</div></div></div>
+     <div class="ri-a"><button class="btn ok" onclick="markReturned(${o.id},'${me}')">✓ Вернул</button></div></div>`; }).join('')}`; }
+function clientActions(o,sheet){ const b=(cls,fn,t)=>`<button class="btn ${sheet?'':'sm'} ${cls}" onclick="event.stopPropagation();${fn}">${t}</button>`; let h='';
+  if(o.status==='deliv_counter') h+=b('',`agreeCounter(${o.id})`,`Ок · ${fmt(o.counter)}`)+b('gray',`cancelOrder(${o.id})`,'Отменить');
+  if(o.status==='deliv_fail') h+=b('',`reofferSheet(${o.id})`,'Предложить другую цену')+b('gray',`cancelOrder(${o.id})`,'Отменить');
+  if(o.status==='unpaid') h+=b('',`startPay(${o.id})`,`Оплатить ${fmt(prepayParts(o).amount-paidSum(o))}`);
+  if(o.status==='pay_check') h+=b('secondary',`startPay(${o.id})`,'Оплаты');
+  if(o.status==='pay_expired') h+=b('danger',`startPay(${o.id})`,'Выбрать, что сделать')+b('gray',`cancelOrder(${o.id})`,'Отменить и вернуть деньги')+b('gray',`support(${o.id})`,'Написать в поддержку');
+  if(o.status==='delivered'&&!o.rated) h+=b('',`rateOrder(${o.id})`,'Оценить');
+  return h; }
+function subLine(o){ if(o.status==='deliv_agree') return `Ваша цена ${fmt(o.delivOffer)} · ответ <span data-cd="${o.agreeDeadline}">${cd(o.agreeDeadline)}</span>`;
+  if(o.status==='deliv_counter') return `Сборщик просит ${fmt(o.counter)} вместо ${fmt(o.delivOffer)} · <span data-cd="${o.agreeDeadline}">${cd(o.agreeDeadline)}</span>`;
+  if(['unpaid','pay_check'].includes(o.status)&&o.pay){ const d=nearestDeadline(o); return `${payProgress(o).text}${d?` · <span data-cd="${d}">${cd(d)}</span>`:''}`; }
+  if(o.status==='pay_expired'&&o.pay){ const f=o.pay.cards.filter(c=>c.st==='fail').map(c=>c.s==='deliv'?'сборщик':state.sellers[c.s].n); return `Не подтвердил: ${f.join(', ')}`; }
+  return ST_SUB[o.status]; }
+
+/* ================= UI ================= */
+const IC = {
+ home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 10.2 12 3.5l8.5 6.7V19a1.5 1.5 0 0 1-1.5 1.5h-4.2v-5.8H9.2v5.8H5A1.5 1.5 0 0 1 3.5 19z"/></svg>',
+ orders:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M6 3.5h12v17l-3-1.8-3 1.8-3-1.8-3 1.8z"/><path d="M9 8.5h6M9 12.5h6"/></svg>',
+ cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2.5 4h2.3l2.3 11h10.6l2.3-8H6"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg>',
+ profile:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1.4-3.8 4.2-5.6 7.5-5.6s6.1 1.8 7.5 5.6"/></svg>',
+ bag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M5 8h14l-1.2 12.5H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>',
+ tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 12V3.5H12l8.5 8.5-8.5 8.5z"/><circle cx="8" cy="8" r="1.4"/></svg>',
+ star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z"/></svg>',
+ search:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>',
+ chev:'<svg class="chev" width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5l5 5-5 5"/></svg>',
+ down:'<svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5l4.5 4.5 4.5-4.5"/></svg>',
+ back:'<svg width="11" height="18" viewBox="0 0 11 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 2 9l7 7"/></svg>'
+};
+const HINTS = {
+ save:()=>savingHint(),
+ variants:()=>`<h3>Как собираем заказ</h3><p class="hint"><b>Выгодно</b> — самая низкая цена по каждой позиции. Итог никогда не дороже другого варианта.<br><br><b>Мои продавцы</b> — ваши закреплённые продавцы (Профиль → Мои продавцы), иначе постоянные с лучшим рейтингом.</p>`,
+ tol:()=>`<h3>Весовой товар</h3><p class="hint">Вы платите за заказанный вес. Продавец кладёт не больше заказанного — доплат не бывает. Недовес до 5% входит в цену. Если недовес больше 5%, продавец вернёт разницу на Kaspi; сборщик фотографирует весы.<br><br>Тушки, куски мяса и арбузы продаются поштучно, вес примерный.</p>`,
+ regular:()=>`<h3>Статус «постоянный»</h3><p class="hint">≥ 20 выполненных заказов, рейтинг ≥ 4.6, споры ≤ 3%, выдача вовремя ≥ 90%, на рынке ≥ 3 мес. Пересчитывается автоматически. Постоянный получает приоритет, если дороже не больше чем на 5%.</p>`,
+ floor:()=>`<h3>Защита от демпинга</h3><p class="hint">Цена ниже 85% от средней по рынку не поднимает товар в выдаче. Слишком низкую цену сохранить нельзя — так рынок не превращается в войну цен.</p>`,
+ pay:()=>`<h3>Как проходит оплата</h3><p class="hint">1. ${isHome()?'Сборщик подтверждает цену доставки.':'Доставка по тарифу для бизнеса.'}<br>2. Вы переводите каждому продавцу на Kaspi за его позиции и нажимаете «Оплатил». Доставку${isHome()?'':' и сервис 3%'} — сборщику.<br>3. Каждый получатель подтверждает перевод — до ${CONFIG.paymentConfirmMinutes} мин. Если перевод не дошёл, можно заменить продавца или убрать позиции.<br>4. Сборка начинается, когда подтвердили все. Общего счёта сервиса нет.</p>`,
+ pins:()=>`<h3>Мои продавцы</h3><p class="hint">Закреплённый продавец используется в варианте «Мои продавцы». Если у него сегодня нет товара — подберём другого постоянного и предупредим.</p>`
+};
+function hint(k){ hap(); modal(HINTS[k]()+`<button class="btn gray" onclick="closeModal()">Понятно</button>`); }
+const qBtn = k => `<button class="q" onclick="event.stopPropagation();hint('${k}')" aria-label="Подробнее">?</button>`;
+const hue = k => CATS[PRODUCTS[k].cat].h;
+const uL = P => P.u==='kg'?'кг':'шт';
+
+/* ---------- карточка товара ---------- */
+function pcard(k){
+  const P=PRODUCTS[k], pr=priceFor(k), q=state.cart[k]||0, pct=pr&&P.store&&P.store>pr?Math.round((1-pr/P.store)*100):0;
+  const ctl = q ? `<div class="step"><button onclick="chg('${k}',-1)" aria-label="Меньше">−</button><span>${fq(q,P.u)}</span><button onclick="chg('${k}',1)" ${pr?'':'disabled'} aria-label="Больше">+</button></div>`
+               : pr ? `<button class="pc-add" onclick="chg('${k}',1)" aria-label="В корзину">+</button>` : '';
+  return `<div class="pc" data-pc="${k}"><div class="pc-img" style="--h:${hue(k)}"><span>${P.e}</span>${pct>=10?`<i class="pc-off">−${pct}%</i>`:''}</div>
+   <div class="pc-b"><div class="pc-p">${pr?`<b>${fmt(pr)}</b>${pct>0?`<s>${fmt(P.store)}</s>`:''}`:'<span class="na">Нет сегодня</span>'}</div><div class="pc-n">${P.n}</div><div class="pc-u">за 1 ${uL(P)}${P.approx?` ≈${fq(P.approx,'kg')}`:''}${pct>0?` · <span class="src">${P.src.name}, ${P.src.date}</span>`:''}</div></div>${ctl}</div>`;
 }
-function buildOffers(){
+function refreshPC(k){ document.querySelectorAll(`[data-pc="${k}"]`).forEach(el=>{ el.outerHTML=pcard(k); }); }
+function searchProducts(q){ const n=normName(q); if(!n) return []; const fz=matchProduct(n);
+  return Object.keys(PRODUCTS).filter(k=>{ const P=PRODUCTS[k]; return normName(P.n).includes(n)||P.syn.some(s=>s.startsWith(n)||s.includes(' '+n))||CATS[P.cat].t.toLowerCase().startsWith(n)||k===fz; }); }
+function onSearch(v){ query=v; const b=$('homeBody'); if(b) b.innerHTML=homeBody(); }
+
+/* ---------- Главная ---------- */
+function homeBody(){
+  if(query.trim()){ const r=searchProducts(query);
+    return r.length?`<div class="pgrid" style="margin-top:4px">${r.map(pcard).join('')}</div>`
+      :`<div class="empty" style="padding-top:24px"><div class="ee">🔍</div><b>Ничего не нашли</b><span>Напишите списком — подскажем</span><button class="btn secondary" onclick="openList()">📝 Написать списком</button></div>`; }
+  const last=state.orders.find(o=>o.status!=='cancelled');
+  const pop=['potato','onion','tomato','beef_sh','apple','eggs','carp','chicken','cucumber','greens'];
+  return `${bannerHTML()}
+   <button class="rowbtn" onclick="openList()"><span class="ri">📝</span><span class="rt"><b>Написать списком</b><span>Как в заметках — разберём сами</span></span>${IC.chev}</button>
+   ${last?`<button class="rowbtn" onclick="repeatOrder(${last.id})"><span class="ri">🔁</span><span class="rt"><b>Повторить заказ №${last.id}</b><span>${last.items.map(i=>PRODUCTS[i.k].n).join(', ')}</span></span>${IC.chev}</button>`:''}
+   <h2 class="sec">Категории</h2>
+   <div class="tiles">${Object.entries(CATS).map(([k,c])=>`<button class="tile" style="--h:${c.h}" onclick="openCat('${k}')"><b>${c.t}</b><span class="te">${c.e}</span></button>`).join('')}</div>
+   <h2 class="sec">Популярное</h2>
+   <div class="hs">${pop.map(pcard).join('')}</div>`; }
+function openCat(k){ catOpen=k; tab='home'; hap(); render(); window.scrollTo(0,0); const a=document.querySelector('.chips .chip.active'); a&&a.scrollIntoView({inline:'center',block:'nearest'}); }
+function closeCat(){ catOpen=null; render(); }
+function vCat(){ const c=CATS[catOpen]; const ks=Object.keys(PRODUCTS).filter(k=>PRODUCTS[k].cat===catOpen);
+  return `<div class="topbar"><button class="iconbtn" onclick="closeCat()" aria-label="Назад">${IC.back}</button><h1>${c.t}</h1><span style="width:36px"></span></div>
+   <div class="chips hs">${Object.entries(CATS).map(([k,x])=>`<button class="chip ${k===catOpen?'active':''}" onclick="openCat('${k}')">${x.e} ${x.t}</button>`).join('')}</div>
+   <div class="pgrid">${ks.map(pcard).join('')}</div>`; }
+
+/* ---------- Корзина ---------- */
+function openVariants(){
   offers={best:calc('best'),regular:calc('regular')};
-  const b=offers.best,r=offers.regular,m=M(),home=state.mode!=='biz';
-  const diff=r.total-b.total;
-  const block=(o,title)=>{
-    const byPt={}; o.lines.forEach(l=>{ const key=l.none?'_none':l.o.s; (byPt[key]=byPt[key]||[]).push(l); });
-    let h=`<div class="offer-block ${chosen===o.kind?'sel':''}" onclick="chosen='${o.kind}';buildOffers();hap()"><div class="offer-title"><span>${chosen===o.kind?'◉':'○'} ${title}</span><span>${fmt(o.total)}</span></div>`;
-    for(const [s,ls] of Object.entries(byPt)){
-      if(s==='_none'){ h+=`<div class="point warnt">Нет ни у кого сейчас</div>`+ls.map(l=>`<div class="meta">✕ ${PRODUCTS[l.k].n} ${fq(l.q,PRODUCTS[l.k].u)} — не войдёт в заказ</div>`).join(''); continue; }
+  const block=(o,title)=>{ const by={}; o.lines.forEach(l=>{ const key=l.none?'_none':l.o.s; (by[key]=by[key]||[]).push(l); });
+    let h=`<div class="card vblock"><h4><span>${title}</span><span>${fmt(o.total)}</span></h4>`;
+    for(const [s,ls] of Object.entries(by)){
+      if(s==='_none'){ h+=`<div class="vs-p warnt">Нет ни у кого сейчас</div>`+ls.map(l=>`<div class="vl"><span>${PRODUCTS[l.k].n}</span><span class="warnt">не войдёт</span></div>`).join(''); continue; }
       const S=state.sellers[s];
-      h+=`<div class="point">${S.emoji} ${S.n} · ${S.m}${isRegular(s)?'<span class="badge-regular">постоянный</span>':''}<div class="meta">${S.pt} · ★${S.rating||'новый'}</div></div>`;
-      h+=ls.map(l=>{const P=PRODUCTS[l.k];const sum=l.o.price*l.q;const st=P.store*l.q;
-        return `<div class="item-row"><div>${P.n} · ${fq(l.q,P.u)}<div class="meta">${fmt(l.o.price)}/${P.u==='kg'?'кг':'шт'} · свежесть: ${l.o.fresh}${l.prio?' · выбран постоянный (≤5% дороже)':''}${l.pinned?' · <span class="badge-pin">ваш</span>':''}</div>${l.fb?`<div class="meta warnt">${l.fb}</div>`:''}</div>
-        <div class="price">${fmt(sum)}${home?`<div class="meta save">магазин ~${fmt(st)}</div>`:''}</div></div>`}).join('');
+      h+=`<div class="vs-p">${S.emoji} ${S.n} <small>${S.m} · ★${S.rating||'новый'}</small>${isRegular(s)?'<span class="tagg">постоянный</span>':''}</div>`;
+      h+=ls.map(l=>{const P=PRODUCTS[l.k]; return `<div class="vl"><span>${P.n} · ${fq(l.q,P.u)}${l.pinned?' <span class="tago">ваш</span>':''}${l.fb?`<small>${l.fb}</small>`:''}</span><span>${fmt(l.o.price*l.q)}</span></div>`}).join('');
     }
-    h+=`<div class="meta" style="margin-top:6px">Товары ${fmt(o.goods)} · Доставка ${o.delivery?fmt(o.delivery):'бесплатно'}${o.service?` · Сервис 3% ${fmt(o.service)}`:''} · Точек: ${o.points}</div>`;
-    if(home && o.store>o.goods) h+=`<div class="save">Экономия ~${fmt(o.store-o.total)} даже с доставкой</div>`;
-    if(o.goods<m.minOrder) h+=`<div class="warnt">Минимальный заказ ${fmt(m.minOrder)} — добавьте ещё на ${fmt(m.minOrder-o.goods)}</div>`;
-    return h+'</div>';
-  };
-  document.getElementById('offersList').innerHTML =
-    (home?`<div class="info">Доставка по Астане — <b>${fmt(m.delivery)}</b> фиксированно, без скрытых сборов. Цены магазина — примерные (демо).</div>`:`<div class="info">Опт: сервис 3%, доставка ${fmt(m.delivery)}, бесплатно от ${fmt(m.freeFrom)}. Вес ±${m.tol}%.</div>`)
-    + block(b,'💰 Самый выгодный') + block(r,'🤝 Постоянный продавец')
-    + `<div class="meta" style="margin-bottom:10px">${diff>0?`Лояльность стоит <b>${fmt(diff)}</b> (${(diff/b.total*100).toFixed(1)}%)`:'Постоянный продавец сейчас не дороже'} </div>`;
-  document.getElementById('orderOpts').innerHTML=`
-   <label class="l">Если товара нет или не тот вес</label>
-   <select onchange="opts.sub=this.value"><option value="call" ${opts.sub==='call'?'selected':''}>Позвонить мне</option><option value="similar" ${opts.sub==='similar'?'selected':''}>Заменить похожим</option><option value="remove" ${opts.sub==='remove'?'selected':''}>Убрать позицию</option></select>
-   <label class="l">Время доставки</label><select onchange="opts.slot=+this.value">${m.slots.map((s,i)=>`<option value="${i}" ${opts.slot===i?'selected':''}>${s}</option>`).join('')}</select>
-   <label class="l">Адрес</label><input id="addr" placeholder="${home?'ул., дом, кв.':'Название заведения, адрес, вход для поставщиков'}" value="${esc(opts.addr)}" oninput="opts.addr=this.value">
-   <label class="l">Оплата</label><select onchange="opts.pay=this.value"><option value="kaspi" ${opts.pay==='kaspi'?'selected':''}>Kaspi после сборки (по факту веса)</option><option value="cash" ${opts.pay==='cash'?'selected':''}>Наличные курьеру</option>${home?'':`<option value="invoice" ${opts.pay==='invoice'?'selected':''}>Счёт на ТОО/ИП (безнал)</option>`}</select>
-   <div class="meta" style="margin-bottom:10px">Весовые товары: допуск ±${m.tol}%. Итог пересчитается по факту, вы увидите фото и вес до оплаты.</div>`;
-  document.getElementById('offersCard').classList.remove('hidden');
-  const o=offers[chosen]; document.getElementById('orderBtn').textContent=`Заказать · ${fmt(o.total)}`; updateMain();
-}
-let busy=false;
-function placeOrder(){
-  if(busy) return; const o=offers&&offers[chosen];
-  if(!o||!Object.keys(state.cart).length){ toast('Корзина пуста'); hap('err'); return; }
-  const ok=o.lines.filter(l=>!l.none); if(!ok.length){ toast('Ни одной позиции нет в наличии'); hap('err'); return; }
-  if(o.goods<M().minOrder){ toast(`Минимальный заказ ${fmt(M().minOrder)}`); hap('err'); return; }
-  if(!opts.addr.trim()||opts.addr.trim().length<5){ toast('Укажите адрес доставки'); hap('err'); document.getElementById('addr').focus(); return; }
-  busy=true; document.getElementById('orderBtn').disabled=true;
-  const id=++state.seq;
-  const order={id,mode:state.mode,kind:chosen,created:Date.now(),status:'new',sub:opts.sub,pay:opts.pay,slot:M().slots[opts.slot],addr:opts.addr.trim(),tol:M().tol,
-    delivery:o.delivery,serviceRate:M().service,storeTotal:o.store,
-    items:ok.map(l=>({k:l.k,q:l.q,s:l.o.s,price:l.o.price,fact:null,factPrice:null,state:'pending',photo:false,issued:false})),
-    missing:o.lines.filter(l=>l.none).map(l=>l.k), log:[{s:'new',t:Date.now()}], cart:{...state.cart}};
-  ok.forEach(l=>{ l.o.stock=Math.max(0,+(l.o.stock-l.q).toFixed(2)); });
-  state.orders.unshift(order); state.cart={}; save();
-  setTimeout(()=>{busy=false;document.getElementById('orderBtn').disabled=false;},800);
-  hap('ok'); toast(`Заказ №${id} оформлен`); renderAll();
+    return h+'</div>'; };
+  const diff=offers.regular.total-offers.best.total;
+  modal(`<h3>Как собрать ${qBtn('variants')}</h3>${block(offers.best,'💰 Выгодно')}${block(offers.regular,'🤝 '+(Object.keys(state.pins).length?'Мои продавцы':'Постоянные'))}
+   <div class="fine" style="margin:0 0 14px">${diff>0?`Разница ${fmt(diff)}`:'Постоянные сейчас не дороже'}</div><button class="btn gray" onclick="closeModal()">Закрыть</button>`);
 }
 
-/* ---------- Заказы клиента ---------- */
-function orderTotal(o){ const g=o.items.reduce((s,i)=>s+(i.state==='removed'||i.state==='missing'?0:(i.fact!=null?i.fact:i.q)*(i.factPrice!=null?i.factPrice:i.price)),0); return {g,total:g+o.delivery+Math.round(g*o.serviceRate)}; }
-function stCls(s){ return s==='delivered'?'done':(s==='cancelled'||s==='dispute')?'bad':s==='collected'?'warn':''; }
-function timeline(o){ const done=new Set(o.log.map(l=>l.s)); const tm=s=>{const l=o.log.find(x=>x.s===s);return l?new Date(l.t).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''};
-  const flow=[...STATUSES]; if(done.has('cancelled')) flow.push('cancelled'); if(done.has('dispute')) flow.push('dispute');
-  return `<div class="tl">${flow.map(s=>`<div class="${o.status===s?'cur':''}" style="opacity:${done.has(s)?1:.35}">${done.has(s)?'●':'○'} ${ST[s]} ${tm(s)}</div>`).join('')}</div>`; }
-function setStatus(o,s,note){ o.status=s; o.log.push({s,t:Date.now(),note}); save(); hap('ok'); renderAll(); }
-function renderClientOrders(){
-  const el=document.getElementById('clientOrders');
-  if(!state.orders.length){ el.innerHTML='<div class="meta">Пока нет заказов. Первый заказ — за пару минут.</div>'; return; }
-  el.innerHTML=state.orders.map(o=>{const t=orderTotal(o); const changed=o.items.some(i=>i.state!=='pending'&&i.state!=='ok'||i.fact!=null&&Math.abs(i.fact-i.q)>1e-9);
-    return `<div class="order-row" style="display:block"><div style="display:flex;justify-content:space-between"><b>№${o.id} · ${o.kind==='best'?'Выгодный':'Постоянный'}</b><span class="status ${stCls(o.status)}">${ST[o.status]}</span></div>
-    <div class="meta">${o.items.length} поз. · ${o.slot} · ${esc(o.addr)} · ${o.pay==='kaspi'?'Kaspi по факту':o.pay==='cash'?'наличные':'счёт'}</div>
-    <div class="price" style="text-align:left;margin-top:4px">${fmt(t.total)}${changed?' <span class="meta">(пересчитано по факту)</span>':''}</div>
-    ${o.missing.length?`<div class="meta warnt">Не было в наличии: ${o.missing.map(k=>PRODUCTS[k].n).join(', ')}</div>`:''}
-    <details><summary class="meta" style="cursor:pointer">Детали и статус</summary>${timeline(o)}
-     ${o.items.map(i=>{const P=PRODUCTS[i.k];return `<div class="meta">${i.photo?'📷 ':''}${P.n}: ${fq(i.q,P.u)}${i.fact!=null?` → факт ${fq(i.fact,P.u)}`:''} ${i.state==='missing'?'— нет':i.state==='removed'?'— убрано':i.state==='replaced'?'— замена':''} · ${state.sellers[i.s].n}</div>`}).join('')}
-     ${o.dispute?`<div class="meta warnt">Претензия: ${esc(o.dispute)}</div>`:''}</details>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
-     ${['new','accepted'].includes(o.status)?`<button class="btn small danger" onclick="cancelOrder(${o.id})">Отменить</button>`:''}
-     ${o.status==='collected'&&o.pay==='kaspi'&&!o.paid?`<button class="btn small ok" onclick="payOrder(${o.id})">Оплатить Kaspi ${fmt(t.total)}</button>`:''}
-     ${o.status==='delivered'&&!o.rated?`<button class="btn small ok" onclick="rateOrder(${o.id})">Оценить</button>`:''}
-     ${['delivered','delivering'].includes(o.status)?`<button class="btn small secondary" onclick="openDispute(${o.id})">Проблема с заказом</button>`:''}
-     <button class="btn small secondary" onclick="repeatOrder(${o.id})">Повторить</button>
-     <button class="btn small secondary" onclick="saveTpl(${o.id})">В шаблоны</button></div></div>`}).join('');
-}
-function cancelOrder(id){ const o=state.orders.find(x=>x.id===id); if(!o||!['new','accepted'].includes(o.status)){toast('Заказ уже собирают — отмена через поддержку');return;}
-  confirmBox(`Отменить заказ №${id}?`,()=>{ o.items.forEach(i=>{const of=state.offers.find(x=>x.s===i.s&&x.p===i.k); if(of) of.stock+=i.q;}); setStatus(o,'cancelled'); }); }
-function payOrder(id){ const o=state.orders.find(x=>x.id===id); const t=orderTotal(o);
-  modal(`<h3>Оплата Kaspi (демо)</h3><div style="font-size:64px;text-align:center">▦</div><div class="info">Сумма по факту сборки: <b>${fmt(t.total)}</b>. В реальной версии — Kaspi QR/счёт на номер; здесь заглушка.</div><button class="btn" onclick="(function(){const o=state.orders.find(x=>x.id===${id});o.paid=true;o.log.push({s:'paid',t:Date.now()});save();closeModal();toast('Оплачено');renderAll()})()">Я оплатил</button><button class="btn secondary" onclick="closeModal()">Позже</button>`); }
-function rateOrder(id){ modal(`<h3>Оценка заказа №${id}</h3><div class="chips">${[5,4,3,2,1].map(n=>`<button class="chip" onclick="doRate(${id},${n})">${'★'.repeat(n)}</button>`).join('')}</div><div class="meta">Оценка влияет на рейтинг продавцов и статус «постоянный».</div>`); }
-function doRate(id,n){ const o=state.orders.find(x=>x.id===id); o.rated=n; new Set(o.items.map(i=>i.s)).forEach(s=>{const S=state.sellers[s]; S.rating=+(S.done?((S.rating*S.done+n)/(S.done+1)):n).toFixed(2); S.done++;}); save(); closeModal(); toast('Спасибо!'); renderAll(); }
-function openDispute(id){ const o=state.orders.find(x=>x.id===id);
-  modal(`<h3>Проблема с заказом №${id}</h3><label class="l">Позиция</label><select id="dItem">${o.items.map((i,n)=>`<option value="${n}">${PRODUCTS[i.k].n}</option>`).join('')}</select>
-  <label class="l">Что не так</label><select id="dReason"><option>Несвежий / брак</option><option>Недовес</option><option>Не тот товар</option><option>Не привезли</option></select>
-  <textarea id="dText" placeholder="Опишите коротко"></textarea><div class="meta" style="margin-bottom:8px">📷 Прикрепите фото (в демо — заглушка). Сравним с фото сборщика. Возврат за позицию — за 24 ч.</div>
-  <button class="btn" onclick="submitDispute(${id})">Отправить претензию</button><button class="btn secondary" onclick="closeModal()">Отмена</button>`); }
-function submitDispute(id){ const o=state.orders.find(x=>x.id===id); const i=o.items[+document.getElementById('dItem').value]; const r=document.getElementById('dReason').value;
-  o.dispute=`${PRODUCTS[i.k].n}: ${r}. ${document.getElementById('dText').value}`; state.sellers[i.s].disputes++; closeModal(); setStatus(o,'dispute',o.dispute); toast('Претензия отправлена'); }
-function repeatOrder(id){ const o=state.orders.find(x=>x.id===id); state.cart={...o.cart}; save(); renderCart(); toast('Корзина собрана заново по текущим ценам'); window.scrollTo({top:document.getElementById('cartCard').offsetTop-10,behavior:'smooth'}); }
-function saveTpl(id){ const o=state.orders.find(x=>x.id===id); const name=`Шаблон ${state.templates.length+1} (№${id})`; state.templates.push({name,cart:{...o.cart}}); save(); renderTpl(); toast('Сохранено в шаблоны'); }
-function renderTpl(){ document.getElementById('tplChips').innerHTML=state.templates.map((t,i)=>`<button class="chip" onclick="state.cart={...state.templates[${i}].cart};save();renderCart();toast('Шаблон в корзине')">⭐ ${esc(t.name)}</button>`).join('')+ (state.templates.length?`<button class="chip" onclick="state.templates=[];save();renderTpl()">✕</button>`:''); }
-function renderPins(){ document.getElementById('pins').innerHTML=Object.entries(CATS).map(([c,t])=>{ const ss=Object.entries(state.sellers).filter(([,s])=>s.cats.includes(c));
-  return `<div class="item-row"><div>${t}</div><select style="width:58%;margin:0" onchange="pin('${c}',this.value)"><option value="">авто (лучший постоянный)</option>${ss.map(([id,s])=>`<option value="${id}" ${state.pins[c]===id?'selected':''}>${s.n} · ${s.m} ★${s.rating||'—'}${isRegular(id)?' ✓':''}</option>`).join('')}</select></div>`}).join('')+'<div class="meta">Закреплённый продавец используется в варианте «Постоянный». Если у него нет товара — подберём другого постоянного и предупредим.</div>'; }
-function pin(c,v){ if(v) state.pins[c]=v; else delete state.pins[c]; save(); hap(); if(Object.keys(state.cart).length) buildOffers(); }
+/* ---------- Заказы ---------- */
+/* ---------- Профиль ---------- */
+function openTpls(){ modal(`<h3>Шаблоны</h3><div class="glist">${state.templates.map((t,i)=>`<button class="grow" onclick="useTpl(${i})"><span class="gl">⭐ ${esc(t.name)}<small>${Object.keys(t.cart).map(k=>PRODUCTS[k].n).join(', ')}</small></span>${IC.chev}</button>`).join('')}</div>
+  <button class="btn danger" onclick="state.templates=[];save();closeModal();render()">Удалить все</button>`); }
+function editAddr(){ modal(`<h3>Адрес доставки</h3><input class="inp" id="addrIn" placeholder="${state.mode==='biz'?'Заведение, адрес, вход для поставщиков':'Улица, дом, квартира'}" value="${esc(opts.addr)}" autocomplete="street-address">
+  <button class="btn" onclick="saveAddr()">Сохранить</button>`); setTimeout(()=>{const i=$('addrIn'); i&&i.focus();},250); }
+function saveAddr(){ const v=$('addrIn').value.trim(); if(v.length<5){ toast('Укажите адрес полностью'); hap('err'); return; } opts.addr=v; save(); closeModal(); hap('ok'); render(); }
+function openList(){ hap(); modal(`<h3>Написать списком</h3><textarea id="clientList" placeholder="Говядина 1,5 кг&#10;Лук пол кило&#10;Картошка 3 кг&#10;Яйца 2 десятка">${esc(unknownLines.join('\n'))}</textarea>
+  <div id="unknown"></div><button class="btn" id="parseBtn" onclick="parseToCart()">Добавить в корзину</button>
+  ${state.templates.length?`<div class="chips hs" style="margin-top:12px">${state.templates.map((t,i)=>`<button class="chip" onclick="useTpl(${i})">⭐ ${esc(t.name)}</button>`).join('')}</div>`:''}`); renderUnknown(); }
 
-/* ---------- Сборщик ---------- */
-let openOrder=null;
-function renderCollector(){
-  const act=state.orders.filter(o=>['new','accepted','collecting','collected','delivering'].includes(o.status));
-  document.getElementById('colOrders').innerHTML=act.length?act.map(o=>{const pts=new Set(o.items.map(i=>i.s)).size;
-    return `<div class="order-row"><div><b>№${o.id}</b> ${o.mode==='biz'?'🏢':'🏠'}<div class="meta">${o.items.length} поз. · ${pts} точ. · ${o.slot}<br>${esc(o.addr)} · замены: ${{call:'звонить',similar:'похожим',remove:'убрать'}[o.sub]}</div></div>
-    <div style="text-align:right"><span class="status ${stCls(o.status)}">${ST[o.status]}</span><br><br>
-    ${o.status==='new'?`<button class="btn small" onclick="accept(${o.id})">Принять</button>`:`<button class="btn small" onclick="openRoute(${o.id})">Открыть</button>`}</div></div>`}).join(''):'<div class="meta">Нет активных заказов 🎉</div>';
-  if(openOrder) renderRoute(); else document.getElementById('routeCard').classList.add('hidden');
-}
-function accept(id){ const o=state.orders.find(x=>x.id===id); if(o.status!=='new') return; setStatus(o,'accepted'); openRoute(id); }
-function openRoute(id){ openOrder=id; renderRoute(); updateBack(); document.getElementById('routeCard').scrollIntoView({behavior:'smooth'}); }
-function renderRoute(){
-  const o=state.orders.find(x=>x.id===openOrder); const card=document.getElementById('routeCard'); if(!o){card.classList.add('hidden');return;}
-  card.classList.remove('hidden');
-  const groups={}; o.items.forEach((it,n)=>{(groups[it.s]=groups[it.s]||[]).push([it,n]);});
+/* ---------- Партнёры: сборщик ---------- */
+function toShop(){ app='shop'; tab='profile'; openOrder=null; window.scrollTo(0,0); render(); }
+function ptop(title,backLbl,backFn,right=''){ return `<div class="ptop"><button class="bs" onclick="${backFn}">${IC.back}<span style="margin-left:4px">${backLbl}</span></button><b>${title}</b><span class="pr">${right}</span></div>`; }
+function vRoute(){
+  const o=state.orders.find(x=>x.id===openOrder); if(!o){ openOrder=null; return vCollector(); }
+  const groups={}; o.items.forEach((it,n)=>{ if(it.state==='dropped') return; (groups[it.s]=groups[it.s]||[]).push([it,n]);});
   // маршрут: сначала по рынку, затем по ряду
   const order=Object.keys(groups).sort((a,b)=>(state.sellers[a].m+state.sellers[a].pt).localeCompare(state.sellers[b].m+state.sellers[b].pt));
-  const t=orderTotal(o); const doneN=o.items.filter(i=>i.state!=='pending').length;
-  const editable=['accepted','collecting'].includes(o.status);
-  document.getElementById('routeTitle').innerHTML=`Заказ №${o.id} <span class="status ${stCls(o.status)}">${ST[o.status]}</span>`;
-  let h=`<div class="info">Собрано ${doneN}/${o.items.length} · Итог сейчас <b>${fmt(t.total)}</b> · допуск веса ±${o.tol}%</div>`;
-  order.forEach((s,idx)=>{const S=state.sellers[s];
-    h+=`<div class="point">${idx+1}. ${S.emoji} ${S.n} — ${S.m}, ${S.pt}${S.online?'':' <span class="warnt">(офлайн)</span>'}</div>`;
-    h+=groups[s].map(([it,n])=>{const P=PRODUCTS[it.k]; const dev=it.fact!=null?(it.fact-it.q)/it.q*100:0; const over=Math.abs(dev)>o.tol;
-      return `<div class="item-row" style="display:block"><div style="display:flex;justify-content:space-between"><div><b>${it.state==='ok'?'✅':it.state==='missing'||it.state==='removed'?'⛔':it.state==='replaced'?'🔁':'⬜'} ${P.n}</b> · ${fq(it.q,P.u)}<div class="meta">${fmt(it.price)}/${P.u==='kg'?'кг':'шт'}${it.issued?' · продавец выдал':''}</div></div>
-       <div class="photo" onclick="${editable?`photo(${n})`:''}">${it.photo?'📷':'＋'}</div></div>
-       ${editable&&it.state==='pending'?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center">
-         <input class="inl" id="f${n}" type="number" step="0.01" placeholder="факт ${P.u==='kg'?'кг':'шт'}" value="${it.q}">
-         <input class="inl" id="p${n}" type="number" placeholder="цена" value="${it.price}">
-         <button class="btn small ok" onclick="collect(${n})">Взял</button>
-         <button class="btn small secondary" onclick="missing(${n})">Нет</button></div>`:''}
-       ${it.fact!=null&&over?`<div class="meta warnt">Отклонение ${dev.toFixed(1)}% — вне допуска, клиент предупреждён</div>`:''}</div>`}).join('');
+  const t=orderTotal(o), doneN=o.items.filter(i=>!['pending','dropped'].includes(i.state)).length, allN=o.items.filter(i=>i.state!=='dropped').length, editable=['accepted','collecting'].includes(o.status);
+  let h=ptop(`Заказ №${o.id}`,'Заказы','openOrder=null;render()',`<span class="status ${stCls(o.status)}">${ST[o.status]}</span>`);
+  h+=`<div class="stage"><div class="prog done">${Array.from({length:allN},(_,i)=>`<i class="${i<doneN?'on':''}"></i>`).join('')}</div><span>${doneN}/${allN} · ${fmt(t.total)}</span></div>`;
+  order.forEach((s,idx)=>{ const S=state.sellers[s];
+    h+=`<div class="ptitle" style="text-transform:none;font-size:14px;color:var(--text);margin-top:16px">${idx+1}. ${S.emoji} ${S.n} · ${S.m}<div class="meta" style="font-weight:400">${S.pt}${S.online?'':' · <span class="warnt">офлайн</span>'}</div></div>`;
+    h+=groups[s].map(([it,n])=>{ const P=PRODUCTS[it.k]; 
+      if(it.state!=='pending'||!editable){ const ic=it.state==='ok'?'✅':it.state==='missing'||it.state==='removed'?'⛔':it.state==='replaced'?'🔁':'⬜';
+        return `<div class="ri done"><span style="font-size:20px">${ic}</span><div class="rm">${P.n}<small>${itemLine(it,P)}</small></div>${it.photo?'<span>📷</span>':''}</div>`; }
+      return `<div class="ri"><div class="ri-h"><div><b>${P.e} ${P.n}</b><div class="ri-q">${fq(it.q,P.u)}${P.approx?` <small style="font-size:14px;color:var(--hint)">≈${fq(P.approx*it.q,'kg')}</small>`:''}</div><div class="meta">${fmt(it.price)}/${uL(P)}${it.issued?' · <span class="ptag">продавец подготовил</span>':''}${it.replacedFrom?' · замена':''}</div></div>
+        <button class="phb ${it.photo?'on':''}" onclick="photo(${n})">📷 ${it.photo?'Есть':'Фото'}</button></div>
+        <div class="ri-in f2"><label><span>${P.u==='kg'?'Вес на весах, кг':'Взял, шт'}</span><input class="inp" id="f${n}" type="number" inputmode="decimal" step="${P.u==='kg'?'0.01':'1'}" max="${it.q}" value="${it.q}" oninput="capInput(this,${it.q})"></label><div class="capnote">не больше заказанного<br>${P.u==='kg'?'недовес > 5% — фото и возврат':''}</div></div>
+        <div class="ri-a"><button class="btn gray" onclick="missing(${n})">Нет</button><button class="btn ok" onclick="collect(${n})">✓ Взял</button></div></div>`; }).join('');
   });
-  if(o.status==='accepted') h+=`<button class="btn" onclick="setStatus(state.orders.find(x=>x.id===${o.id}),'collecting')">Начать сбор</button>`;
-  if(o.status==='collecting') h+=`<button class="btn" ${doneN<o.items.length?'disabled':''} onclick="finishCollect(${o.id})">Собран (${doneN}/${o.items.length})</button>`;
-  if(o.status==='collected') h+=`<button class="btn" onclick="startDeliver(${o.id})">Выехал к клиенту</button>`;
-  if(o.status==='delivering') h+=`<button class="btn ok" onclick="setStatus(state.orders.find(x=>x.id===${o.id}),'delivered');openOrder=null;updateBack()">Доставлен</button>`;
-  document.getElementById('route').innerHTML=h;
+  let act='';
+  if(o.status==='accepted') act=`<button class="btn" onclick="setStatus(state.orders.find(x=>x.id===${o.id}),'collecting')">Начать сбор</button>`;
+  if(o.status==='collecting') act=`<button class="btn" ${doneN<allN?'disabled':''} onclick="finishCollect(${o.id})">Заказ собран · ${doneN}/${allN}</button>`;
+  if(o.status==='collected') act=`<button class="btn" onclick="startDeliver(${o.id})">🚚 Выехал к клиенту</button>`;
+  if(o.status==='delivering') act=`<button class="btn ok" onclick="setStatus(state.orders.find(x=>x.id===${o.id}),'delivered');openOrder=null;render()">✓ Доставлен</button>`;
+  return h+(act?`<div class="actbar">${act}</div>`:'');
 }
-function photo(n){ const o=state.orders.find(x=>x.id===openOrder); o.items[n].photo=!o.items[n].photo; save(); hap(); renderRoute(); }
-function collect(n){ const o=state.orders.find(x=>x.id===openOrder); if(o.status==='accepted') {o.status='collecting';o.log.push({s:'collecting',t:Date.now()});}
-  const it=o.items[n]; const f=parseFloat(document.getElementById('f'+n).value), p=parseFloat(document.getElementById('p'+n).value);
-  if(!(f>0)){ toast('Укажите фактический вес/кол-во'); hap('err'); return; }
-  if(!(p>0)){ toast('Укажите цену'); hap('err'); return; }
-  if(p>it.price*1.05){ toast('Цена выше согласованной более чем на 5% — нужна согласие клиента'); hap('err'); return; }
-  if(!it.photo){ toast('Сделайте фото товара на весах (нажмите ＋)'); hap('err'); return; }
-  const dev=Math.abs(f-it.q)/it.q*100; if(dev>o.tol*3){ toast(`Слишком большое отклонение (${dev.toFixed(0)}%) — проверьте вес`); hap('err'); return; }
-  it.fact=f; it.factPrice=p; it.state='ok'; save(); hap('ok'); renderAll();
-}
-function missing(n){ const o=state.orders.find(x=>x.id===openOrder); const it=o.items[n]; if(o.status==='accepted'){o.status='collecting';o.log.push({s:'collecting',t:Date.now()});}
-  const alt=state.offers.filter(x=>x.p===it.k&&x.s!==it.s&&available(x,it.q)).sort((a,b)=>a.price-b.price)[0];
-  const simK=SIMILAR[it.k]; const sim=simK&&state.offers.filter(x=>x.p===simK&&available(x,it.q)).sort((a,b)=>a.price-b.price)[0];
-  const rule={call:'Позвонить клиенту',similar:'Заменить похожим',remove:'Убрать позицию'}[o.sub];
-  modal(`<h3>Нет: ${PRODUCTS[it.k].n}</h3><div class="info">Правило клиента: <b>${rule}</b></div>
-   ${alt?`<button class="btn" onclick="replace(${n},'${alt.s}','${it.k}',${alt.price})">Взять у ${state.sellers[alt.s].n} (${state.sellers[alt.s].m}) — ${fmt(alt.price)}</button>`:''}
-   ${sim&&o.sub!=='remove'?`<button class="btn secondary" onclick="replace(${n},'${sim.s}','${simK}',${sim.price})">Замена: ${PRODUCTS[simK].n} — ${fmt(sim.price)}</button>`:''}
-   ${o.sub==='call'?`<a class="btn secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="tel:+77000000000">📞 Позвонить клиенту</a>`:''}
-   <button class="btn danger" style="margin-top:8px" onclick="removeItem(${n})">Убрать из заказа</button><button class="btn secondary" onclick="closeModal()">Назад</button>`);
-}
-function replace(n,s,k,price){ const o=state.orders.find(x=>x.id===openOrder); const it=o.items[n]; it.s=s; it.k=k; it.price=price; it.state='pending'; it.replacedFrom=true; o.log.push({s:'replace',t:Date.now()}); save(); closeModal(); toast('Позиция переназначена — соберите её'); renderAll(); }
-function removeItem(n){ const o=state.orders.find(x=>x.id===openOrder); o.items[n].state='removed'; save(); closeModal(); renderAll(); }
-function finishCollect(id){ const o=state.orders.find(x=>x.id===id); if(o.items.some(i=>i.state==='pending')){toast('Есть несобранные позиции');return;} if(o.items.every(i=>i.state==='removed')){ setStatus(o,'cancelled','нечего везти'); return; }
-  o.items.filter(i=>i.state==='ok').forEach(i=>{}); setStatus(o,'collected'); toast(`Клиенту отправлен итог по факту: ${fmt(orderTotal(o).total)}`); }
-function startDeliver(id){ const o=state.orders.find(x=>x.id===id); if(o.pay==='kaspi'&&!o.paid){ confirmBox('Клиент ещё не оплатил Kaspi. Выехать всё равно (оплата при получении)?',()=>setStatus(o,'delivering')); return; } setStatus(o,'delivering'); }
 
-/* ---------- Продавец ---------- */
-function renderSeller(){
-  const sel=document.getElementById('sellerSel'); sel.innerHTML=Object.entries(state.sellers).map(([id,s])=>`<option value="${id}" ${state.me===id?'selected':''}>${s.n} · ${s.m}</option>`).join('');
+/* ---------- Партнёры: продавец ---------- */
+function sellerTodo(){ return state.orders.filter(o=>['accepted','collecting'].includes(o.status)).flatMap(o=>o.items).filter(i=>i.s===state.me&&!i.issued&&i.state!=='removed').length; }
+function vSeller(){
   const me=state.me, S=state.sellers[me];
-  const crit=[[S.done>=20,`заказов ${S.done}/20`],[S.rating>=4.6,`рейтинг ${S.rating||'—'}/4.6`],[S.disputes/Math.max(1,S.done)<=.03,`споры ${(S.disputes/Math.max(1,S.done)*100).toFixed(1)}%/3%`],[S.ontime>=90,`вовремя ${S.ontime}%/90%`],[S.months>=3,`стаж ${S.months}/3 мес`]];
-  document.getElementById('sellerStatus').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><div>${S.pt}${isRegular(me)?'<span class="badge-regular">постоянный</span>':''}</div>
-   <button class="btn small ${S.online?'ok':'danger'}" onclick="state.sellers[state.me].online=!state.sellers[state.me].online;save();renderAll()">${S.online?'На месте':'Не работаю'}</button></div>
-   <div class="meta">${crit.map(([ok,t])=>(ok?'✅ ':'▫️ ')+t).join(' · ')}</div>`;
-  const inc=[]; state.orders.filter(o=>['accepted','collecting'].includes(o.status)).forEach(o=>o.items.forEach((it,n)=>{ if(it.s===me&&it.state!=='removed') inc.push([o,it,n]); }));
-  document.getElementById('sellerIncoming').innerHTML=inc.length?inc.map(([o,it,n])=>{const P=PRODUCTS[it.k];return `<div class="item-row"><div>№${o.id} · ${P.n} · <b>${fq(it.q,P.u)}</b><div class="meta">${fmt(it.price)} · ${o.slot}</div></div>${it.issued?'<span class="status done">выдано</span>':`<button class="btn small" onclick="issue(${o.id},${n})">Подготовил</button>`}</div>`}).join(''):'<div class="meta">Пока ничего. Как только сборщик примет заказ с вашими товарами — увидите здесь.</div>';
-  const my=state.offers.filter(o=>o.s===me);
-  document.getElementById('sellerProducts').innerHTML=my.length?my.map(o=>{const P=PRODUCTS[o.p]; const md=marketMedian(o.p,me), fl=floorPrice(o.p,me); const i=state.offers.indexOf(o);
-    const warn=md&&o.price<fl?`<div class="meta warnt">Ниже пола ${fmt(fl)} (85% медианы) — преимущества в выдаче не даёт</div>`:md&&o.price<md*ANTI.warn?`<div class="meta warnt">На ${Math.round((1-o.price/md)*100)}% ниже рынка — проверьте, не в убыток ли</div>`:'';
-    return `<div class="product-row" style="display:block"><div style="display:flex;justify-content:space-between"><b>${P.n}</b><label class="meta"><input type="checkbox" style="width:auto;margin:0" ${o.on?'checked':''} onchange="state.offers[${i}].on=this.checked;save();renderAll()"> в наличии</label></div>
-     <div class="meta">медиана рынка ${md?fmt(md):'—'} · магазин ~${fmt(P.store)}</div>
-     <div style="display:flex;gap:6px;margin-top:6px;align-items:center"><input class="inl" type="number" value="${o.price}" onchange="setPrice(${i},this.value)"> ₸ <input class="inl" type="number" value="${o.stock}" onchange="state.offers[${i}].stock=Math.max(0,+this.value);save();renderAll()"> ${P.u==='kg'?'кг':'шт'}
-     <select style="width:auto;margin:0;padding:6px" onchange="state.offers[${i}].fresh=this.value;save()">${['сегодня','вчера','—'].map(f=>`<option ${o.fresh===f?'selected':''}>${f}</option>`).join('')}</select></div>${warn}</div>`}).join(''):'<div class="meta">Добавьте первый товар ниже.</div>';
-  document.getElementById('newProd').innerHTML=Object.entries(PRODUCTS).filter(([k])=>!my.some(o=>o.p===k)).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join('');
-  const sold=state.orders.filter(o=>!['cancelled'].includes(o.status)).flatMap(o=>o.items.filter(i=>i.s===me&&i.state==='ok'));
-  const rev=sold.reduce((s,i)=>s+i.fact*i.factPrice,0);
-  document.getElementById('sellerStats').innerHTML=`<div class="item-row"><div>Позиций продано (демо)</div><b>${sold.length}</b></div><div class="item-row"><div>Выручка</div><b>${fmt(rev)}</b></div><div class="item-row"><div>Всего заказов</div><b>${S.done}</b></div><div class="item-row"><div>Клиентов закрепили вас</div><b>${Object.values(state.pins).filter(v=>v===me).length}</b></div>`;
+  const selr=`<select class="gsel" style="max-width:120px;color:var(--accent)" onchange="state.me=this.value;save();render()">${Object.entries(state.sellers).map(([id,s])=>`<option value="${id}" ${me===id?'selected':''}>${s.n}</option>`).join('')}</select>`;
+  let h=ptop(`${S.emoji} ${S.n}`,'Магазин','toShop()',selr);
+  if(sellerTab==='issue'){
+    const inc=[]; state.orders.filter(o=>['accepted','collecting'].includes(o.status)).forEach(o=>o.items.forEach((it,n)=>{ if(it.s===me&&!['removed','dropped'].includes(it.state)) inc.push([o,it,n]); }));
+    h+=sellerPayBlock(me)+sellerRefundBlock(me)+`<div class="ttl" style="font-size:24px">К выдаче</div>`;
+    h+=inc.length?inc.map(([o,it,n])=>{const P=PRODUCTS[it.k]; return `<div class="ri"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · ${o.slot}</div><b>${P.e} ${P.n}</b><div class="ri-q">${fq(it.q,P.u)}${P.approx?` <small style="font-size:14px;color:var(--hint)">≈${fq(P.approx*it.q,'kg')}</small>`:''}</div></div>${it.issued?'<span class="status done">Готово</span>':''}</div>
+      ${it.issued?'':`<div class="ri-a"><button class="btn ok" onclick="issue(${o.id},${n})">✓ Подготовил</button></div>`}</div>`}).join('')
+      :`<div class="empty"><div class="ee">📦</div><b>Пока нечего выдавать</b><span>Когда сборщик примет заказ с вашими товарами — он появится здесь</span></div>`;
+  } else if(sellerTab==='products'){
+    const my=state.offers.filter(o=>o.s===me);
+    h+=`<div class="ttl" style="font-size:24px">Товары</div>
+     <div class="glist"><label class="grow"><span class="gi">${S.online?'🟢':'⚪️'}</span><span class="gl">Я на месте сегодня</span><input type="checkbox" class="sw" ${S.online?'checked':''} onchange="state.sellers[state.me].online=this.checked;save();render()"></label></div>`;
+    h+=my.map(o=>{const P=PRODUCTS[o.p]; const md=marketMedian(o.p,me), fl=floorPrice(o.p,me); const i=state.offers.indexOf(o);
+      const warn=md&&o.price<fl?`<div class="pillmsg o">Ниже защитной цены ${fmt(fl)} ${qBtn('floor')}</div>`:md&&o.price<md*ANTI.warn?`<div class="pillmsg o">На ${Math.round((1-o.price/md)*100)}% ниже рынка ${qBtn('floor')}</div>`:'';
+      return `<div class="ri" style="${o.on?'':'opacity:.6'}"><div class="ri-h" style="align-items:center"><b style="font-size:16px">${P.e} ${P.n}</b><input type="checkbox" class="sw" aria-label="В наличии" ${o.on?'checked':''} onchange="state.offers[${i}].on=this.checked;save();render()"></div>
+       <div class="ri-in f3"><label><span>Цена ₸/${uL(P)}</span><input class="inp" type="number" inputmode="numeric" value="${o.price}" onchange="setPrice(${i},this.value)"></label>
+        <label><span>Остаток, ${uL(P)}</span><input class="inp" type="number" inputmode="decimal" value="${o.stock}" onchange="state.offers[${i}].stock=Math.max(0,+this.value);save();renderAll()"></label>
+        <label><span>Свежесть</span><select class="inp" onchange="state.offers[${i}].fresh=this.value;save()">${['сегодня','вчера','—'].map(f=>`<option ${o.fresh===f?'selected':''}>${f}</option>`).join('')}</select></label></div>
+       <div class="fine">Рынок ${md?fmt(md):'—'}${P.store?` · ${P.src.name} ${fmt(P.store)} (${P.src.date})`:''}</div>${warn}</div>`}).join('')||`<div class="empty"><div class="ee">🏷️</div><b>Товаров пока нет</b></div>`;
+    h+=`<button class="btn secondary" style="margin-top:8px" onclick="openAddProduct()">＋ Добавить товар</button>`;
+  } else {
+    const reg=isRegular(me), dr=S.disputes/Math.max(1,S.done);
+    const crit=[[S.done>=20,'Заказов',`${S.done} / 20`],[S.rating>=4.6,'Рейтинг',`${S.rating||'—'} / 4.6`],[dr<=.03,'Споры',`${(dr*100).toFixed(1)}% / 3%`],[S.ontime>=90,'Вовремя',`${S.ontime}% / 90%`],[S.months>=3,'Стаж',`${S.months} / 3 мес`]];
+    const sold=state.orders.filter(o=>o.status!=='cancelled').flatMap(o=>o.items.filter(i=>i.s===me&&i.state==='ok')); const rev=sold.reduce((s,i)=>s+i.fact*i.factPrice,0);
+    h+=`<div class="ttl" style="font-size:24px">Рейтинг</div>
+     <div class="card" style="padding:14px"><div class="hero"><span class="he ${reg?'':'no'}">${reg?'⭐':'🌱'}</span><div style="flex:1"><b style="font-size:17px">${reg?'Постоянный продавец':'Пока не постоянный'}</b><div class="meta">${reg?'Приоритет в выдаче':'Выполните условия ниже'}</div></div>${qBtn('regular')}</div></div>
+     <div class="card">${crit.map(([ok,t,v])=>`<div class="ck"><i class="${ok?'y':''}">${ok?'✓':''}</i><span>${t}</span><span>${v}</span></div>`).join('')}</div>
+     <div class="glist"><div class="grow"><span class="gl">Продано позиций</span><span class="gv">${sold.length}</span></div><div class="grow"><span class="gl">Выручка</span><span class="gv">${fmt(rev)}</span></div>
+      <div class="grow"><span class="gl">Закрепили вас</span><span class="gv">${Object.values(state.pins).filter(v=>v===me).length}</span></div><div class="grow"><span class="gl">Точка</span><span class="gv">${S.pt}</span></div></div>`;
+  }
+  return h;
 }
-function setPrice(i,v){ const o=state.offers[i]; const p=Math.round(+v); if(!(p>0)){toast('Цена должна быть больше 0');renderSeller();return;}
-  const fl=floorPrice(o.p,o.s); if(fl&&p<fl*.8){ toast(`Слишком низко: минимум ${fmt(Math.round(fl*.8))}. Демпинг вредит всем.`); hap('err'); renderSeller(); return; }
-  o.price=p; save(); hap(); renderAll(); }
-function addProduct(){ const k=document.getElementById('newProd').value, p=+document.getElementById('newPrice').value, s=+document.getElementById('newStock').value;
-  if(!k){toast('Все товары уже добавлены');return;} if(!(p>0)||!(s>=0)){toast('Укажите цену и остаток');hap('err');return;}
-  const fl=floorPrice(k,state.me); if(fl&&p<fl*.8){toast(`Минимум ${fmt(Math.round(fl*.8))}`);hap('err');return;}
-  state.offers.push({s:state.me,p:k,price:Math.round(p),stock:s,fresh:'сегодня',on:true}); const S=state.sellers[state.me]; if(!S.cats.includes(PRODUCTS[k].cat)) S.cats.push(PRODUCTS[k].cat);
-  document.getElementById('newPrice').value=''; document.getElementById('newStock').value=''; save(); hap('ok'); renderAll(); }
-function issue(id,n){ const o=state.orders.find(x=>x.id===id); o.items[n].issued=true; save(); hap('ok'); renderAll(); }
+function openAddProduct(){ const my=state.offers.filter(o=>o.s===state.me); const left=Object.entries(PRODUCTS).filter(([k])=>!my.some(o=>o.p===k));
+  if(!left.length){ toast('Все товары уже добавлены'); return; }
+  modal(`<h3>Новый товар</h3><select class="inp" id="newProd">${left.map(([k,p])=>`<option value="${k}">${p.e} ${p.n}</option>`).join('')}</select>
+   <div class="f2" style="margin-bottom:12px"><label><span>Цена, ₸</span><input class="inp" id="newPrice" type="number" inputmode="numeric"></label><label><span>Остаток</span><input class="inp" id="newStock" type="number" inputmode="decimal"></label></div>
+   <button class="btn" onclick="addProduct()">Добавить</button>`); }
 
-/* ---------- Режим, UI-обвязка ---------- */
-function openModePicker(first){
-  modal(`<h3>${first?'Добро пожаловать в Закупщик':'Режим'}</h3><div class="meta" style="margin-bottom:10px">Можно сменить в любой момент кнопкой вверху.</div>
-   <button class="btn" onclick="setMode('home')">🏠 Для дома<div class="meta" style="color:inherit;opacity:.85">от 0,5 кг и поштучно · доставка ${fmt(MODES.home.delivery)} · заказ от ${fmt(MODES.home.minOrder)}</div></button>
-   <button class="btn secondary" onclick="setMode('biz')">🏢 Для бизнеса (кафе, рестораны)<div class="meta">опт · утренние слоты · счёт на ТОО/ИП · заказ от ${fmt(MODES.biz.minOrder)}</div></button>`);
+/* ---------- Приветствие ---------- */
+/* ---------- Навигация, обвязка ---------- */
+function setTab(t){ app='shop'; if(tab===t&&catOpen){ catOpen=null; } tab=t; if(t!=='home') catOpen=null; hap(); window.scrollTo(0,0); render(); }
+function sellerSetTab(t){ sellerTab=t; hap(); window.scrollTo(0,0); render(); }
+function switchRole(r){ if(r==='client'){ app='shop'; tab='home'; } else app=r; openOrder=null; render(); window.scrollTo(0,0); } // совместимость
+function renderAll(){ render(); }
+function chrome(){
+  const tb=$('tabbar'), h=state.mode?tabbarHTML():''; tb.innerHTML=h; tb.classList.toggle('hidden',!h);
+  document.body.classList.toggle('no-tab',!h); document.body.classList.toggle('has-act',!!document.querySelector('.actbar'));
+  updateMain(); updateBack();
 }
-function setMode(m){ state.mode=m; opts.slot=0; if(m==='home'&&opts.pay==='invoice') opts.pay='kaspi'; save(); closeModal(); hap('ok'); renderAll(); }
-let role='client';
-function switchRole(r){ role=r; openOrder=null; document.querySelectorAll('.role-tab').forEach(b=>b.classList.toggle('active',b.dataset.r===r));
-  ['client','collector','seller'].forEach(x=>document.getElementById(x+'View').classList.toggle('hidden',x!==r)); hap(); renderAll(); updateBack(); window.scrollTo(0,0); }
-function toast(t){ const d=document.createElement('div'); d.className='toast'; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
-function modal(h){ closeModal(); const d=document.createElement('div'); d.className='modal'; d.id='modal'; d.innerHTML=`<div class="card">${h}</div>`; d.onclick=e=>{if(e.target===d&&state.mode)closeModal();}; document.body.appendChild(d); updateBack(); }
-function closeModal(){ const m=document.getElementById('modal'); if(m) m.remove(); updateBack(); }
-function confirmBox(t,cb){ if(inTG&&tg.showConfirm){ tg.showConfirm(t,ok=>ok&&cb()); return; } modal(`<h3>${esc(t)}</h3><button class="btn danger" id="cYes">Да</button><button class="btn secondary" onclick="closeModal()">Нет</button>`); document.getElementById('cYes').onclick=()=>{closeModal();cb();}; }
-function back(){ if(document.getElementById('modal')&&state.mode){closeModal();return;} if(openOrder){openOrder=null;renderAll();updateBack();} }
-function updateBack(){ const need=!!(document.getElementById('modal')&&state.mode)||!!openOrder; if(inTG){ need?tg.BackButton.show():tg.BackButton.hide(); } }
-let mainAction=null;
+function toast(t){ document.querySelectorAll('.toast').forEach(x=>x.remove()); const d=document.createElement('div'); d.className='toast'; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),2400); }
+function modal(h){ closeModal(); const d=document.createElement('div'); d.className='modal'; d.id='modal'; d.innerHTML=`<div class="sh">${h}</div>`; d.onclick=e=>{if(e.target===d)closeModal();}; document.body.appendChild(d); updateBack(); updateMain(); }
+function closeModal(){ const m=$('modal'); if(m) m.remove(); updateBack(); updateMain(); }
+function confirmBox(t,cb){ if(inTG&&tg.showConfirm){ tg.showConfirm(t,ok=>ok&&cb()); return; } modal(`<h3>${esc(t)}</h3><button class="btn danger" id="cYes">Да</button><button class="btn gray" onclick="closeModal()">Нет</button>`); $('cYes').onclick=()=>{closeModal();cb();}; }
+function back(){ if($('modal')){closeModal();return;} if(app==='collector'&&openOrder){openOrder=null;render();return;} if(app!=='shop'){toShop();return;} if(catOpen){closeCat();return;} if(tab!=='home') setTab('home'); }
+function updateBack(){ const need=!!state.mode&&(!!$('modal')||app!=='shop'||!!catOpen||tab!=='home'); if(inTG){ try{ need?tg.BackButton.show():tg.BackButton.hide(); }catch(e){} } }
+// MainButton Telegram — только «Оформить» в корзине
 function updateMain(){
   let txt=null; mainAction=null;
-  if(role==='client' && offers && Object.keys(state.cart).length && !document.getElementById('offersCard').classList.contains('hidden')){ txt=`Заказать · ${fmt(offers[chosen].total)}`; mainAction=placeOrder; }
-  else if(role==='client' && inputMode==='list' && !Object.keys(state.cart).length){ txt='Добавить в корзину'; mainAction=parseToCart; }
-  if(inTG){ document.getElementById('fallbackMain').classList.add('hidden'); if(txt){ tg.MainButton.setText(txt); tg.MainButton.show(); } else tg.MainButton.hide(); }
-  else { const fb=document.getElementById('fallbackMain'); fb.classList.toggle('hidden',!txt); document.getElementById('fbBtn').textContent=txt||''; }
+  if(state.mode && app==='shop' && tab==='cart' && Object.keys(state.cart).length && !$('modal')){ txt=`Оформить · ${fmt(calc(chosen).total)}`; mainAction=placeOrder; }
+  if(inTG){ $('fallbackMain').classList.add('hidden'); try{ if(txt){ tg.MainButton.setText(txt); tg.MainButton.show(); } else tg.MainButton.hide(); }catch(e){} }
+  else { $('fallbackMain').classList.toggle('hidden',!txt); $('fbBtn').textContent=txt||''; }
+  document.body.classList.toggle('has-main',!!txt&&!inTG);
 }
-document.getElementById('fbBtn').onclick=()=>mainAction&&mainAction();
-function renderAll(){
-  document.getElementById('modePill').textContent=(state.mode==='biz'?'🏢 Бизнес':'🏠 Дом')+' ▾';
-  document.getElementById('sub').textContent=state.mode==='biz'?'Опт для кафе и ресторанов · Астана':'Рынок · Сбор · Доставка · Астана';
-  renderCart(); renderCatalog(); renderClientOrders(); renderPins(); renderTpl(); renderCollector(); renderSeller();
-  const n=state.orders.filter(o=>o.status==='new').length; document.getElementById('colBadge').innerHTML=n?`<span class="badge">${n}</span>`:'';
-  const m=state.orders.filter(o=>['accepted','collecting'].includes(o.status)).flatMap(o=>o.items).filter(i=>i.s===state.me&&!i.issued&&i.state!=='removed').length; document.getElementById('selBadge').innerHTML=m?`<span class="badge">${m}</span>`:'';
-  updateMain();
+$('fbBtn').onclick=()=>mainAction&&mainAction();
+/* тема: тёмная/светлая — по Telegram, иначе по яркости фона темы или системе */
+function isDarkTheme(){
+  if(inTG && tg.colorScheme) return tg.colorScheme==='dark';
+  const v=getComputedStyle(document.documentElement).getPropertyValue('--tg-theme-bg-color').trim();
+  const m=v.match(/^#([0-9a-f]{6})$/i); if(m){ const n=parseInt(m[1],16); const L=.2126*(n>>16)+.7152*((n>>8)&255)+.0722*(n&255); return L<128; }
+  return !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
 }
+function applyScheme(){ const d=isDarkTheme(); document.documentElement.classList.toggle('dark',d); document.documentElement.style.colorScheme=d?'dark':'light'; }
+applyScheme(); try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyScheme); }catch(e){}
 if(inTG){ tg.ready(); tg.expand(); tg.MainButton.onClick(()=>mainAction&&mainAction()); tg.BackButton.onClick(back);
-  const applyTheme=()=>document.documentElement.style.colorScheme=tg.colorScheme; applyTheme(); tg.onEvent('themeChanged',applyTheme); }
+  const applyTheme=()=>{ applyScheme(); try{ tg.setHeaderColor('bg_color'); tg.setBackgroundColor('bg_color'); }catch(e){} };
+  applyTheme(); tg.onEvent('themeChanged',applyTheme); }
 window.resetDemo=()=>{ localStorage.removeItem(KEY); location.reload(); };
-renderAll(); if(!state.mode) openModePicker(true);
+render();
 </script>
 </body>
 </html>
