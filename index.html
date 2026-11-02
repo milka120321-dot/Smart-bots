@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Закупщик</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--tg-theme-bg-color,#f5f5f5);color:var(--tg-theme-text-color,#111);padding:12px 12px 110px;font-size:15px}
+.header{text-align:center;margin-bottom:10px;position:relative}
+.header h1{font-size:22px}.header p{font-size:13px;opacity:.6;margin-top:2px}
+.mode-pill{position:absolute;right:0;top:2px;font-size:12px;padding:4px 8px;border-radius:14px;border:none;background:var(--tg-theme-secondary-bg-color,#fff);cursor:pointer}
+.role-tabs,.seg{display:flex;gap:6px;margin-bottom:12px}
+.role-tab,.seg button{flex:1;padding:10px 4px;text-align:center;border-radius:12px;border:none;background:var(--tg-theme-secondary-bg-color,#fff);color:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.role-tab.active,.seg button.active{background:var(--tg-theme-button-color,#2481cc);color:var(--tg-theme-button-text-color,#fff)}
+.card{background:var(--tg-theme-secondary-bg-color,#fff);border-radius:14px;padding:14px;margin-bottom:12px}
+.card h3{font-size:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+textarea,input,select{width:100%;padding:11px;border:1px solid rgba(0,0,0,.12);border-radius:12px;font-size:15px;background:var(--tg-theme-bg-color,#fff);color:inherit;margin-bottom:10px}
+textarea{min-height:110px;resize:vertical}
+input.inl{width:78px;padding:6px;margin:0;font-size:14px}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:600;background:var(--tg-theme-button-color,#2481cc);color:var(--tg-theme-button-text-color,#fff);cursor:pointer}
+.btn:disabled{opacity:.5}
+.btn.secondary{background:#eee;color:#333;margin-top:8px}
+.btn.small{padding:7px 11px;width:auto;font-size:13px;margin:0}
+.btn.danger{background:#ff3b30;color:#fff}.btn.ok{background:#34c759;color:#fff}
+.item-row,.order-row,.product-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.06);gap:10px}
+.item-row:last-child,.order-row:last-child,.product-row:last-child{border-bottom:none}
+.meta{font-size:12px;opacity:.6;margin-top:2px}
+.price{font-weight:600;white-space:nowrap;text-align:right}
+.status{font-size:12px;padding:3px 8px;border-radius:20px;background:#e8f0fe;color:#1a73e8;white-space:nowrap}
+.status.done{background:#e6f7ea;color:#1f8a3b}.status.bad{background:#fde8e7;color:#c62828}.status.warn{background:#fff4e0;color:#a15c00}
+.badge-regular{background:#34c759;color:#fff;font-size:11px;padding:2px 6px;border-radius:10px;margin-left:6px;white-space:nowrap}
+.badge-pin{background:#ff9500;color:#fff;font-size:11px;padding:2px 6px;border-radius:10px;margin-left:4px}
+.offer-block{margin-bottom:12px;padding:12px;border-radius:12px;border:2px solid rgba(0,0,0,.07);cursor:pointer}
+.offer-block.sel{border-color:var(--tg-theme-button-color,#2481cc)}
+.offer-title{font-weight:700;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.hidden{display:none!important}
+.total{font-weight:700;font-size:17px;text-align:right;margin-top:8px}
+.badge{display:inline-block;background:#ff3b30;color:#fff;border-radius:10px;font-size:11px;padding:1px 6px;margin-left:4px}
+.save{color:#1f8a3b;font-weight:600}.warnt{color:#c62828}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{padding:6px 10px;border-radius:16px;background:#eef2f6;border:none;font-size:13px;cursor:pointer;color:#222}
+.chip.active{background:var(--tg-theme-button-color,#2481cc);color:#fff}
+.qty{display:flex;align-items:center;gap:6px}.qty button{width:32px;height:32px;border-radius:50%;border:none;background:#eef2f6;font-size:18px;cursor:pointer}
+.tl{border-left:2px solid #cfd8e3;margin:8px 0 4px 6px;padding-left:10px;font-size:13px}
+.tl div{margin-bottom:4px}.tl div.cur{font-weight:700}
+.point{font-weight:700;margin:10px 0 4px;font-size:14px}
+.sticky{position:fixed;left:12px;right:12px;bottom:12px;z-index:5}
+.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 14px;border-radius:12px;font-size:14px;z-index:9;max-width:90%}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:8}
+.modal .card{width:100%;margin:0;border-radius:18px 18px 0 0;max-height:88vh;overflow:auto}
+.unk{background:#fff4e0;border-radius:10px;padding:8px;margin-bottom:6px;font-size:14px}
+.row2{display:flex;gap:8px}.row2>*{flex:1}
+label.l{font-size:13px;opacity:.7;display:block;margin-bottom:4px}
+.photo{width:44px;height:44px;border-radius:8px;background:#eef2f6;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.info{font-size:13px;background:#eef6ff;border-radius:10px;padding:8px 10px;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="header"><h1>Закупщик</h1><p id="sub">Рынок · Сбор · Доставка</p><button class="mode-pill" id="modePill" onclick="openModePicker()"></button></div>
+<div class="role-tabs" id="roleTabs">
+  <button class="role-tab active" data-r="client" onclick="switchRole('client')">Клиент</button>
+  <button class="role-tab" data-r="collector" onclick="switchRole('collector')">Сборщик<span id="colBadge"></span></button>
+  <button class="role-tab" data-r="seller" onclick="switchRole('seller')">Продавец<span id="selBadge"></span></button>
+</div>
+
+<div id="clientView">
+  <div class="seg" id="inputSeg"><button class="active" data-m="list" onclick="setInput('list')">✍️ Списком</button><button data-m="catalog" onclick="setInput('catalog')">🧺 Каталог</button></div>
+  <div class="card" id="listCard">
+    <h3>Напишите список</h3>
+    <textarea id="clientList" placeholder="Говядина лопатка 5 кг&#10;Лук 10 кг&#10;Помидоры 2 кг"></textarea>
+    <div class="chips" id="tplChips"></div>
+    <button class="btn" id="parseBtn" onclick="parseToCart()">Добавить в корзину</button>
+    <div id="unknown"></div>
+  </div>
+  <div class="card hidden" id="catalogCard">
+    <h3>Каталог</h3>
+    <div class="chips" id="catChips"></div>
+    <div id="catalogList"></div>
+  </div>
+  <div class="card" id="cartCard">
+    <h3>Корзина <button class="btn small secondary" style="margin:0" onclick="clearCart()">Очистить</button></h3>
+    <div id="cartList"></div>
+  </div>
+  <div class="card hidden" id="offersCard">
+    <h3>Варианты</h3>
+    <div id="offersList"></div>
+    <div id="orderOpts"></div>
+    <button class="btn" id="orderBtn" onclick="placeOrder()">Заказать</button>
+  </div>
+  <div class="card"><h3>Мои заказы</h3><div id="clientOrders"></div></div>
+  <div class="card"><h3>Мои продавцы</h3><div id="pins"></div></div>
+</div>
+
+<div id="collectorView" class="hidden">
+  <div class="card"><h3>Заказы к сбору</h3><div id="colOrders"></div></div>
+  <div class="card hidden" id="routeCard"><h3 id="routeTitle">Маршрут</h3><div id="route"></div></div>
+</div>
+
+<div id="sellerView" class="hidden">
+  <div class="card"><label class="l">Я продавец</label><select id="sellerSel" onchange="state.me=this.value;save();renderSeller()"></select><div id="sellerStatus"></div></div>
+  <div class="card"><h3>К выдаче сборщику</h3><div id="sellerIncoming"></div></div>
+  <div class="card"><h3>Мои товары и цены</h3><div id="sellerProducts"></div>
+    <details><summary style="cursor:pointer;margin-top:8px">+ Добавить товар</summary><div style="margin-top:8px">
+      <select id="newProd"></select><div class="row2"><input id="newPrice" type="number" placeholder="Цена ₸"><input id="newStock" type="number" placeholder="Остаток"></div>
+      <button class="btn" onclick="addProduct()">Добавить</button></div></details></div>
+  <div class="card"><h3>Статистика</h3><div id="sellerStats"></div></div>
+  <div class="card"><h3>Как стать «постоянным»</h3><div class="meta" style="opacity:.85">≥ 20 выполненных заказов · рейтинг ≥ 4.6 · брак/споры ≤ 3% · выдача вовремя ≥ 90% · на рынке ≥ 3 мес. Статус пересчитывается автоматически; постоянный получает приоритет при разнице в цене до 5%.</div></div>
+</div>
+
+<div class="sticky" id="fallbackMain"><button class="btn" id="fbBtn"></button></div>
+
+<script>
+const tg = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData !== undefined ? window.Telegram.WebApp : null;
+const inTG = !!(tg && tg.platform && tg.platform !== 'unknown');
+const hap = t => { try { inTG && tg.HapticFeedback && (t==='ok'||t==='err' ? tg.HapticFeedback.notificationOccurred(t==='ok'?'success':'error') : tg.HapticFeedback.impactOccurred('light')); } catch(e){} };
+const fmt = n => Math.round(n).toLocaleString('ru-RU') + ' ₸';
+const fq = (q,u) => (u==='kg' ? (+q.toFixed(2)).toString().replace('.',',')+' кг' : q+' шт');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- Справочники ---------- */
+const CATS = {meat:'🥩 Мясо',veg:'🥕 Овощи',fruit:'🍎 Фрукты',dairy:'🥛 Молочка',grocery:'🌾 Бакалея'};
+// store = примерная цена в магазине у дома (демо), step = шаг для +/-
+const PRODUCTS = {
+ beef_sh:{n:'Говядина лопатка',cat:'meat',u:'kg',store:4600,step:.5,syn:['говядина лопатка','лопатка','говядина','говяд','мясо говядина']},
+ beef_mince:{n:'Фарш говяжий',cat:'meat',u:'kg',store:4200,step:.5,syn:['фарш','фарш говяжий']},
+ lamb:{n:'Баранина',cat:'meat',u:'kg',store:5200,step:.5,syn:['баранина','баран','кой']},
+ chicken:{n:'Курица (тушка)',cat:'meat',u:'kg',store:1900,step:1,syn:['курица','кура','куриц','бройлер','тауык']},
+ onion:{n:'Лук репчатый',cat:'veg',u:'kg',store:260,step:.5,syn:['лук','лук репчатый','пияз']},
+ potato:{n:'Картофель',cat:'veg',u:'kg',store:280,step:1,syn:['картофель','картошка','картоха','картошку']},
+ carrot:{n:'Морковь',cat:'veg',u:'kg',store:300,step:.5,syn:['морковь','морковка','марковь']},
+ tomato:{n:'Помидоры',cat:'veg',u:'kg',store:1300,step:.5,syn:['помидоры','помидор','томаты','томат']},
+ cucumber:{n:'Огурцы',cat:'veg',u:'kg',store:1100,step:.5,syn:['огурцы','огурец','огурци']},
+ greens:{n:'Зелень (пучок)',cat:'veg',u:'pcs',store:250,step:1,syn:['зелень','укроп','петрушка','кинза']},
+ apple:{n:'Яблоки',cat:'fruit',u:'kg',store:900,step:.5,syn:['яблоки','яблоко','алма']},
+ banana:{n:'Бананы',cat:'fruit',u:'kg',store:1000,step:.5,syn:['бананы','банан']},
+ eggs:{n:'Яйца С1 (10 шт)',cat:'dairy',u:'pcs',store:750,step:1,syn:['яйца','яйцо','десяток яиц']},
+ milk:{n:'Молоко 1 л',cat:'dairy',u:'pcs',store:520,step:1,syn:['молоко','сут']},
+ kurt:{n:'Курт',cat:'dairy',u:'kg',store:4500,step:.5,syn:['курт','құрт']},
+ rice:{n:'Рис',cat:'grocery',u:'kg',store:700,step:1,syn:['рис','рис девзира','девзира']},
+ flour:{n:'Мука 1 с.',cat:'grocery',u:'kg',store:330,step:1,syn:['мука']}
+};
+const SIMILAR = {beef_sh:'beef_mince',beef_mince:'beef_sh',tomato:'cucumber',apple:'banana',lamb:'beef_sh'};
+const SELLERS0 = {
+ s1:{n:'Ерлан',m:'Шапагат',pt:'Мясной павильон, ряд 2, место 14',cats:['meat'],rating:4.9,done:340,disputes:4,ontime:96,months:40,online:true,emoji:'🥩'},
+ s2:{n:'Гульнара',m:'Шапагат',pt:'Овощной ряд 5, место 3',cats:['veg','fruit'],rating:4.8,done:210,disputes:3,ontime:94,months:26,online:true,emoji:'🥕'},
+ s3:{n:'Дамир',m:'Артём',pt:'Ряд 1, павильон 7',cats:['meat'],rating:4.5,done:12,disputes:1,ontime:85,months:2,online:true,emoji:'🍖'},
+ s4:{n:'Айгерим',m:'Артём',pt:'Ряд 3, место 21',cats:['veg','fruit','grocery'],rating:4.7,done:95,disputes:2,ontime:92,months:14,online:true,emoji:'🍎'},
+ s5:{n:'Сауле апа',m:'Шапагат',pt:'Молочный ряд, место 8',cats:['dairy'],rating:4.9,done:180,disputes:1,ontime:97,months:60,online:true,emoji:'🥛'},
+ s6:{n:'Нурлан (новый)',m:'Артём',pt:'Ряд 4, место 2',cats:['veg','grocery','dairy'],rating:0,done:0,disputes:0,ontime:0,months:0,online:true,emoji:'🧺'}
+};
+const OFFERS0 = [ // [seller, product, price, stock, freshness]
+ ['s1','beef_sh',3600,40,'сегодня'],['s1','beef_mince',3300,25,'сегодня'],['s1','lamb',4300,15,'вчера'],
+ ['s3','beef_sh',3450,30,'сегодня'],['s3','beef_mince',3200,10,'сегодня'],['s3','chicken',1450,50,'сегодня'],['s1','chicken',1550,30,'сегодня'],
+ ['s2','onion',170,300,'сегодня'],['s2','potato',190,400,'сегодня'],['s2','carrot',200,200,'сегодня'],['s2','tomato',950,60,'сегодня'],['s2','cucumber',750,50,'сегодня'],['s2','greens',150,80,'сегодня'],['s2','apple',650,100,'вчера'],
+ ['s4','onion',160,200,'сегодня'],['s4','potato',185,300,'вчера'],['s4','tomato',900,40,'сегодня'],['s4','apple',620,120,'сегодня'],['s4','banana',780,60,'сегодня'],['s4','rice',560,200,'—'],['s4','flour',260,150,'—'],
+ ['s5','eggs',600,100,'сегодня'],['s5','milk',420,60,'сегодня'],['s5','kurt',3800,10,'—'],
+ ['s6','onion',120,500,'сегодня'],['s6','rice',540,100,'—'],['s6','eggs',590,40,'сегодня']
+];
+const MODES = {
+ home:{t:'Для дома',delivery:1000,minOrder:4000,service:0,tol:10,slots:['Сегодня 15:00–17:00','Сегодня 18:00–20:00','Завтра 09:00–11:00','Завтра 12:00–14:00']},
+ biz:{t:'Для бизнеса',delivery:2500,freeFrom:100000,minOrder:30000,service:.03,tol:5,slots:['Завтра 06:00–08:00','Завтра 08:00–10:00','Послезавтра 06:00–08:00']}
+};
+const STATUSES = ['new','accepted','collecting','collected','delivering','delivered'];
+const ST = {new:'Новый',accepted:'Принят',collecting:'Собирается',collected:'Собран',delivering:'В пути',delivered:'Доставлен',cancelled:'Отменён',dispute:'Спор'};
+const ANTI = {floor:.85, warn:.9, prio:.05}; // пол = 85% медианы, предупреждение < 90%, приоритет постоянным в пределах 5%
+
+/* ---------- Состояние ---------- */
+const KEY='zakupshik_v2';
+let state;
+function fresh(){ return {mode:null, sellers:JSON.parse(JSON.stringify(SELLERS0)), offers:OFFERS0.map(o=>({s:o[0],p:o[1],price:o[2],stock:o[3],fresh:o[4],on:true})), cart:{}, orders:[], pins:{}, templates:[], me:'s1', seq:100}; }
+try { state = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch(e){ state = fresh(); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+const M = () => MODES[state.mode||'home'];
+
+/* ---------- Рейтинг / постоянный ---------- */
+function isRegular(id){ const s=state.sellers[id]; return s.done>=20 && s.rating>=4.6 && s.disputes/Math.max(1,s.done)<=.03 && s.ontime>=90 && s.months>=3; }
+function median(arr){ const a=[...arr].sort((x,y)=>x-y); if(!a.length) return 0; const m=Math.floor(a.length/2); return a.length%2?a[m]:(a[m-1]+a[m])/2; }
+function marketMedian(p, exceptSeller){ return median(state.offers.filter(o=>o.p===p && o.s!==exceptSeller).map(o=>o.price)); }
+function floorPrice(p, s){ const md=marketMedian(p,s); return md? Math.round(md*ANTI.floor):0; }
+// эффективная цена для ранжирования: демпинг ниже пола не даёт преимущества
+function rankPrice(o){ const f=floorPrice(o.p,o.s); return Math.max(o.price,f); }
+function available(o, qty){ const s=state.sellers[o.s]; return o.on && s.online && o.stock>=qty; }
+
+/* ---------- Парсер свободного списка ---------- */
+function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; const d=Array.from({length:m+1},(_,i)=>[i]); for(let j=1;j<=n;j++) d[0][j]=j;
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[m][n]; }
+function matchProduct(name){
+  name=name.toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-яәіңғүұқөһ\s]/gi,' ').replace(/\s+/g,' ').trim();
+  if(!name) return null; let best=null,bs=99;
+  for(const [k,p] of Object.entries(PRODUCTS)) for(const s of p.syn){
+    if(name===s) return k;
+    if(name.startsWith(s+' ')||name.includes(' '+s)||(s.length>3&&name.startsWith(s))) { if(1<bs){bs=1;best=k;} continue; }
+    const words=name.split(' '); for(const w of [name,...words]){ const d=lev(w,s); const lim=s.length<=4?1:2; if(d<=lim && d+1<bs){bs=d+1;best=k;} }
+  }
+  return best;
+}
+function parseLine(line){
+  let l=line.trim().toLowerCase().replace(',', '.'); if(!l) return null;
+  l=l.replace(/^[-•*\d]+[.)]\s+/, m=>/^\d+[.)]\s/.test(m)?'':'');
+  let qty=null,unit=null;
+  const re=/(\d+(?:\.\d+)?|пол|половин[ау])\s*(кг|килограмм\w*|кило|г|гр|грамм\w*|шт|штук\w*|десят\w*|пуч\w*|л|литр\w*)?\.?/i;
+  const m=l.match(re);
+  if(m){ qty = /пол/.test(m[1])?0.5:parseFloat(m[1]); unit=(m[2]||'').toLowerCase(); l=(l.slice(0,m.index)+' '+l.slice(m.index+m[0].length)).trim(); }
+  else if(/полкило|пол кило/.test(l)){ qty=.5; unit='кг'; l=l.replace(/пол ?кило/,''); }
+  const key=matchProduct(l);
+  if(!key) return {raw:line.trim(), key:null};
+  const p=PRODUCTS[key];
+  if(qty==null) qty = p.u==='kg'?1:1;
+  if(/^г(р|рамм)?/.test(unit||'') && unit!=='') qty=qty/1000;
+  if(/десят/.test(unit||'') && key==='eggs') qty=qty; // десяток = упаковка
+  if(p.u==='pcs' && /кг/.test(unit||'')) qty=Math.max(1,Math.round(qty));
+  return {raw:line.trim(), key, qty:+qty.toFixed(2)};
+}
+let unknownLines=[];
+function parseToCart(){
+  const txt=document.getElementById('clientList').value;
+  const lines=txt.split(/\n|;/).map(s=>s.trim()).filter(Boolean);
+  if(!lines.length){ toast('Список пустой — напишите хотя бы одну позицию'); hap('err'); return; }
+  let added=0; unknownLines=[];
+  for(const ln of lines){ const r=parseLine(ln); if(!r) continue; if(!r.key){unknownLines.push(r.raw);continue;} if(!(r.qty>0)){unknownLines.push(r.raw);continue;}
+    state.cart[r.key]=+((state.cart[r.key]||0)+r.qty).toFixed(2); added++; }
+  document.getElementById('clientList').value = unknownLines.join('\n');
+  save(); renderUnknown(); renderCart(); hap(added?'ok':'err');
+  toast(added?`Добавлено позиций: ${added}${unknownLines.length?`, не распознано: ${unknownLines.length}`:''}`:'Ничего не распознал — уточните названия');
+}
+function renderUnknown(){
+  const el=document.getElementById('unknown');
+  el.innerHTML = unknownLines.map((u,i)=>`<div class="unk">❓ «${esc(u)}» — не нашёл. Это:
+   <select onchange="fixUnknown(${i},this.value)"><option value="">выберите товар…</option>${Object.entries(PRODUCTS).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join('')}</select>
+   <button class="btn small secondary" onclick="dropUnknown(${i})">Убрать</button></div>`).join('');
+}
+function fixUnknown(i,k){ if(!k) return; const r=parseLine(unknownLines[i]); const q=(r&&r.qty)||1; state.cart[k]=+((state.cart[k]||0)+(q||1)).toFixed(2);
+  // запоминаем как синоним для следующих раз
+  const word=unknownLines[i].toLowerCase().replace(/[\d.,]+|кг|шт|г\b/g,'').trim(); if(word && !PRODUCTS[k].syn.includes(word)) PRODUCTS[k].syn.push(word);
+  unknownLines.splice(i,1); document.getElementById('clientList').value=unknownLines.join('\n'); save(); renderUnknown(); renderCart(); }
+function dropUnknown(i){ unknownLines.splice(i,1); document.getElementById('clientList').value=unknownLines.join('\n'); renderUnknown(); }
+
+/* ---------- Каталог ---------- */
+let curCat='veg', inputMode='list';
+function setInput(m){ inputMode=m; document.querySelectorAll('#inputSeg button').forEach(b=>b.classList.toggle('active',b.dataset.m===m));
+  document.getElementById('listCard').classList.toggle('hidden',m!=='list'); document.getElementById('catalogCard').classList.toggle('hidden',m!=='catalog'); renderCatalog(); }
+function bestMarketPrice(k){ const os=state.offers.filter(o=>o.p===k&&o.on&&state.sellers[o.s].online); return os.length?Math.min(...os.map(rankPrice)):0; }
+function renderCatalog(){
+  document.getElementById('catChips').innerHTML=Object.entries(CATS).map(([k,t])=>`<button class="chip ${k===curCat?'active':''}" onclick="curCat='${k}';renderCatalog()">${t}</button>`).join('');
+  document.getElementById('catalogList').innerHTML=Object.entries(PRODUCTS).filter(([,p])=>p.cat===curCat).map(([k,p])=>{
+    const mp=bestMarketPrice(k), q=state.cart[k]||0;
+    return `<div class="product-row"><div><b>${p.n}</b><div class="meta">${mp?`базар от ${fmt(mp)}/${p.u==='kg'?'кг':'шт'} · магазин ~${fmt(p.store)}`:'сейчас нет на рынке'}</div></div>
+     <div class="qty">${q?`<button onclick="chg('${k}',-1)">−</button><span style="min-width:46px;text-align:center">${fq(q,p.u)}</span>`:''}<button onclick="chg('${k}',1)" ${mp?'':'disabled'}>+</button></div></div>`;}).join('');
+}
+function chg(k,d){ const p=PRODUCTS[k]; const step=state.mode==='biz'&&p.u==='kg'?Math.max(p.step,1):p.step; let q=+((state.cart[k]||0)+d*step).toFixed(2); if(q<=0) delete state.cart[k]; else state.cart[k]=q; hap(); save(); renderCatalog(); renderCart(); }
+function clearCart(){ state.cart={}; save(); renderCart(); renderCatalog(); }
+
+/* ---------- Корзина и варианты ---------- */
+function renderCart(){
+  const keys=Object.keys(state.cart), el=document.getElementById('cartList');
+  if(!keys.length){ el.innerHTML='<div class="meta">Пусто. Напишите список или добавьте из каталога — всё попадёт сюда.</div>'; document.getElementById('offersCard').classList.add('hidden'); updateMain(); return; }
+  el.innerHTML=keys.map(k=>{const p=PRODUCTS[k];return `<div class="item-row"><div>${p.n}<div class="meta">${CATS[p.cat]}</div></div><div class="qty"><button onclick="chg('${k}',-1)">−</button><span style="min-width:52px;text-align:center">${fq(state.cart[k],p.u)}</span><button onclick="chg('${k}',1)">+</button></div></div>`}).join('');
+  buildOffers();
+}
+let offers=null, chosen='best', opts={sub:'call',pay:'kaspi',slot:0,addr:''};
+function pickFor(k,q,kind){
+  const cands=state.offers.filter(o=>o.p===k && available(o,q));
+  if(!cands.length) return {k,q,none:true};
+  const cheapest=cands.reduce((a,b)=>rankPrice(a)<=rankPrice(b)?a:b);
+  if(kind==='best'){
+    // приоритет постоянному, если разница ≤ 5%
+    const regs=cands.filter(o=>isRegular(o.s)&&rankPrice(o)<=rankPrice(cheapest)*(1+ANTI.prio));
+    const pick=regs.length? regs.reduce((a,b)=>a.price<=b.price?a:b):cheapest;
+    return {k,q,o:pick,prio:pick!==cheapest};
+  }
+  const cat=PRODUCTS[k].cat, pin=state.pins[cat];
+  let o=pin && cands.find(c=>c.s===pin), fb=null;
+  if(pin && !o){ fb = `${state.sellers[pin].n}: ${state.sellers[pin].online?'нет в наличии':'сегодня не работает'} → замена`; }
+  if(!o){ const regs=cands.filter(c=>isRegular(c.s)).sort((a,b)=>state.sellers[b.s].rating-state.sellers[a.s].rating); o=regs[0]||cheapest; }
+  return {k,q,o,fb,pinned:pin&&o.s===pin};
+}
+function calc(kind){
+  const lines=Object.entries(state.cart).map(([k,q])=>pickFor(k,q,kind));
+  const goods=lines.filter(l=>!l.none).reduce((s,l)=>s+l.o.price*l.q,0);
+  const store=lines.filter(l=>!l.none).reduce((s,l)=>s+PRODUCTS[l.k].store*l.q,0);
+  const m=M(); const delivery = m.freeFrom&&goods>=m.freeFrom?0:m.delivery; const service=Math.round(goods*m.service);
+  const points=new Set(lines.filter(l=>!l.none).map(l=>l.o.s));
+  return {kind,lines,goods,store,delivery,service,total:goods+delivery+service,points:points.size};
+}
+function buildOffers(){
+  offers={best:calc('best'),regular:calc('regular')};
+  const b=offers.best,r=offers.regular,m=M(),home=state.mode!=='biz';
+  const diff=r.total-b.total;
+  const block=(o,title)=>{
+    const byPt={}; o.lines.forEach(l=>{ const key=l.none?'_none':l.o.s; (byPt[key]=byPt[key]||[]).push(l); });
+    let h=`<div class="offer-block ${chosen===o.kind?'sel':''}" onclick="chosen='${o.kind}';buildOffers();hap()"><div class="offer-title"><span>${chosen===o.kind?'◉':'○'} ${title}</span><span>${fmt(o.total)}</span></div>`;
+    for(const [s,ls] of Object.entries(byPt)){
+      if(s==='_none'){ h+=`<div class="point warnt">Нет ни у кого сейчас</div>`+ls.map(l=>`<div class="meta">✕ ${PRODUCTS[l.k].n} ${fq(l.q,PRODUCTS[l.k].u)} — не войдёт в заказ</div>`).join(''); continue; }
+      const S=state.sellers[s];
+      h+=`<div class="point">${S.emoji} ${S.n} · ${S.m}${isRegular(s)?'<span class="badge-regular">постоянный</span>':''}<div class="meta">${S.pt} · ★${S.rating||'новый'}</div></div>`;
+      h+=ls.map(l=>{const P=PRODUCTS[l.k];const sum=l.o.price*l.q;const st=P.store*l.q;
+        return `<div class="item-row"><div>${P.n} · ${fq(l.q,P.u)}<div class="meta">${fmt(l.o.price)}/${P.u==='kg'?'кг':'шт'} · свежесть: ${l.o.fresh}${l.prio?' · выбран постоянный (≤5% дороже)':''}${l.pinned?' · <span class="badge-pin">ваш</span>':''}</div>${l.fb?`<div class="meta warnt">${l.fb}</div>`:''}</div>
+        <div class="price">${fmt(sum)}${home?`<div class="meta save">магазин ~${fmt(st)}</div>`:''}</div></div>`}).join('');
+    }
+    h+=`<div class="meta" style="margin-top:6px">Товары ${fmt(o.goods)} · Доставка ${o.delivery?fmt(o.delivery):'бесплатно'}${o.service?` · Сервис 3% ${fmt(o.service)}`:''} · Точек: ${o.points}</div>`;
+    if(home && o.store>o.goods) h+=`<div class="save">Экономия ~${fmt(o.store-o.total)} даже с доставкой</div>`;
+    if(o.goods<m.minOrder) h+=`<div class="warnt">Минимальный заказ ${fmt(m.minOrder)} — добавьте ещё на ${fmt(m.minOrder-o.goods)}</div>`;
+    return h+'</div>';
+  };
+  document.getElementById('offersList').innerHTML =
+    (home?`<div class="info">Доставка по Астане — <b>${fmt(m.delivery)}</b> фиксированно, без скрытых сборов. Цены магазина — примерные (демо).</div>`:`<div class="info">Опт: сервис 3%, доставка ${fmt(m.delivery)}, бесплатно от ${fmt(m.freeFrom)}. Вес ±${m.tol}%.</div>`)
+    + block(b,'💰 Самый выгодный') + block(r,'🤝 Постоянный продавец')
+    + `<div class="meta" style="margin-bottom:10px">${diff>0?`Лояльность стоит <b>${fmt(diff)}</b> (${(diff/b.total*100).toFixed(1)}%)`:'Постоянный продавец сейчас не дороже'} </div>`;
+  document.getElementById('orderOpts').innerHTML=`
+   <label class="l">Если товара нет или не тот вес</label>
+   <select onchange="opts.sub=this.value"><option value="call" ${opts.sub==='call'?'selected':''}>Позвонить мне</option><option value="similar" ${opts.sub==='similar'?'selected':''}>Заменить похожим</option><option value="remove" ${opts.sub==='remove'?'selected':''}>Убрать позицию</option></select>
+   <label class="l">Время доставки</label><select onchange="opts.slot=+this.value">${m.slots.map((s,i)=>`<option value="${i}" ${opts.slot===i?'selected':''}>${s}</option>`).join('')}</select>
+   <label class="l">Адрес</label><input id="addr" placeholder="${home?'ул., дом, кв.':'Название заведения, адрес, вход для поставщиков'}" value="${esc(opts.addr)}" oninput="opts.addr=this.value">
+   <label class="l">Оплата</label><select onchange="opts.pay=this.value"><option value="kaspi" ${opts.pay==='kaspi'?'selected':''}>Kaspi после сборки (по факту веса)</option><option value="cash" ${opts.pay==='cash'?'selected':''}>Наличные курьеру</option>${home?'':`<option value="invoice" ${opts.pay==='invoice'?'selected':''}>Счёт на ТОО/ИП (безнал)</option>`}</select>
+   <div class="meta" style="margin-bottom:10px">Весовые товары: допуск ±${m.tol}%. Итог пересчитается по факту, вы увидите фото и вес до оплаты.</div>`;
+  document.getElementById('offersCard').classList.remove('hidden');
+  const o=offers[chosen]; document.getElementById('orderBtn').textContent=`Заказать · ${fmt(o.total)}`; updateMain();
+}
+let busy=false;
+function placeOrder(){
+  if(busy) return; const o=offers&&offers[chosen];
+  if(!o||!Object.keys(state.cart).length){ toast('Корзина пуста'); hap('err'); return; }
+  const ok=o.lines.filter(l=>!l.none); if(!ok.length){ toast('Ни одной позиции нет в наличии'); hap('err'); return; }
+  if(o.goods<M().minOrder){ toast(`Минимальный заказ ${fmt(M().minOrder)}`); hap('err'); return; }
+  if(!opts.addr.trim()||opts.addr.trim().length<5){ toast('Укажите адрес доставки'); hap('err'); document.getElementById('addr').focus(); return; }
+  busy=true; document.getElementById('orderBtn').disabled=true;
+  const id=++state.seq;
+  const order={id,mode:state.mode,kind:chosen,created:Date.now(),status:'new',sub:opts.sub,pay:opts.pay,slot:M().slots[opts.slot],addr:opts.addr.trim(),tol:M().tol,
+    delivery:o.delivery,serviceRate:M().service,storeTotal:o.store,
+    items:ok.map(l=>({k:l.k,q:l.q,s:l.o.s,price:l.o.price,fact:null,factPrice:null,state:'pending',photo:false,issued:false})),
+    missing:o.lines.filter(l=>l.none).map(l=>l.k), log:[{s:'new',t:Date.now()}], cart:{...state.cart}};
+  ok.forEach(l=>{ l.o.stock=Math.max(0,+(l.o.stock-l.q).toFixed(2)); });
+  state.orders.unshift(order); state.cart={}; save();
+  setTimeout(()=>{busy=false;document.getElementById('orderBtn').disabled=false;},800);
+  hap('ok'); toast(`Заказ №${id} оформлен`); renderAll();
+}
+
+/* ---------- Заказы клиента ---------- */
+function orderTotal(o){ const g=o.items.reduce((s,i)=>s+(i.state==='removed'||i.state==='missing'?0:(i.fact!=null?i.fact:i.q)*(i.factPrice!=null?i.factPrice:i.price)),0); return {g,total:g+o.delivery+Math.round(g*o.serviceRate)}; }
+function stCls(s){ return s==='delivered'?'done':(s==='cancelled'||s==='dispute')?'bad':s==='collected'?'warn':''; }
+function timeline(o){ const done=new Set(o.log.map(l=>l.s)); const tm=s=>{const l=o.log.find(x=>x.s===s);return l?new Date(l.t).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''};
+  const flow=[...STATUSES]; if(done.has('cancelled')) flow.push('cancelled'); if(done.has('dispute')) flow.push('dispute');
+  return `<div class="tl">${flow.map(s=>`<div class="${o.status===s?'cur':''}" style="opacity:${done.has(s)?1:.35}">${done.has(s)?'●':'○'} ${ST[s]} ${tm(s)}</div>`).join('')}</div>`; }
+function setStatus(o,s,note){ o.status=s; o.log.push({s,t:Date.now(),note}); save(); hap('ok'); renderAll(); }
+function renderClientOrders(){
+  const el=document.getElementById('clientOrders');
+  if(!state.orders.length){ el.innerHTML='<div class="meta">Пока нет заказов. Первый заказ — за пару минут.</div>'; return; }
+  el.innerHTML=state.orders.map(o=>{const t=orderTotal(o); const changed=o.items.some(i=>i.state!=='pending'&&i.state!=='ok'||i.fact!=null&&Math.abs(i.fact-i.q)>1e-9);
+    return `<div class="order-row" style="display:block"><div style="display:flex;justify-content:space-between"><b>№${o.id} · ${o.kind==='best'?'Выгодный':'Постоянный'}</b><span class="status ${stCls(o.status)}">${ST[o.status]}</span></div>
+    <div class="meta">${o.items.length} поз. · ${o.slot} · ${esc(o.addr)} · ${o.pay==='kaspi'?'Kaspi по факту':o.pay==='cash'?'наличные':'счёт'}</div>
+    <div class="price" style="text-align:left;margin-top:4px">${fmt(t.total)}${changed?' <span class="meta">(пересчитано по факту)</span>':''}</div>
+    ${o.missing.length?`<div class="meta warnt">Не было в наличии: ${o.missing.map(k=>PRODUCTS[k].n).join(', ')}</div>`:''}
+    <details><summary class="meta" style="cursor:pointer">Детали и статус</summary>${timeline(o)}
+     ${o.items.map(i=>{const P=PRODUCTS[i.k];return `<div class="meta">${i.photo?'📷 ':''}${P.n}: ${fq(i.q,P.u)}${i.fact!=null?` → факт ${fq(i.fact,P.u)}`:''} ${i.state==='missing'?'— нет':i.state==='removed'?'— убрано':i.state==='replaced'?'— замена':''} · ${state.sellers[i.s].n}</div>`}).join('')}
+     ${o.dispute?`<div class="meta warnt">Претензия: ${esc(o.dispute)}</div>`:''}</details>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+     ${['new','accepted'].includes(o.status)?`<button class="btn small danger" onclick="cancelOrder(${o.id})">Отменить</button>`:''}
+     ${o.status==='collected'&&o.pay==='kaspi'&&!o.paid?`<button class="btn small ok" onclick="payOrder(${o.id})">Оплатить Kaspi ${fmt(t.total)}</button>`:''}
+     ${o.status==='delivered'&&!o.rated?`<button class="btn small ok" onclick="rateOrder(${o.id})">Оценить</button>`:''}
+     ${['delivered','delivering'].includes(o.status)?`<button class="btn small secondary" onclick="openDispute(${o.id})">Проблема с заказом</button>`:''}
+     <button class="btn small secondary" onclick="repeatOrder(${o.id})">Повторить</button>
+     <button class="btn small secondary" onclick="saveTpl(${o.id})">В шаблоны</button></div></div>`}).join('');
+}
+function cancelOrder(id){ const o=state.orders.find(x=>x.id===id); if(!o||!['new','accepted'].includes(o.status)){toast('Заказ уже собирают — отмена через поддержку');return;}
+  confirmBox(`Отменить заказ №${id}?`,()=>{ o.items.forEach(i=>{const of=state.offers.find(x=>x.s===i.s&&x.p===i.k); if(of) of.stock+=i.q;}); setStatus(o,'cancelled'); }); }
+function payOrder(id){ const o=state.orders.find(x=>x.id===id); const t=orderTotal(o);
+  modal(`<h3>Оплата Kaspi (демо)</h3><div style="font-size:64px;text-align:center">▦</div><div class="info">Сумма по факту сборки: <b>${fmt(t.total)}</b>. В реальной версии — Kaspi QR/счёт на номер; здесь заглушка.</div><button class="btn" onclick="(function(){const o=state.orders.find(x=>x.id===${id});o.paid=true;o.log.push({s:'paid',t:Date.now()});save();closeModal();toast('Оплачено');renderAll()})()">Я оплатил</button><button class="btn secondary" onclick="closeModal()">Позже</button>`); }
+function rateOrder(id){ modal(`<h3>Оценка заказа №${id}</h3><div class="chips">${[5,4,3,2,1].map(n=>`<button class="chip" onclick="doRate(${id},${n})">${'★'.repeat(n)}</button>`).join('')}</div><div class="meta">Оценка влияет на рейтинг продавцов и статус «постоянный».</div>`); }
+function doRate(id,n){ const o=state.orders.find(x=>x.id===id); o.rated=n; new Set(o.items.map(i=>i.s)).forEach(s=>{const S=state.sellers[s]; S.rating=+(S.done?((S.rating*S.done+n)/(S.done+1)):n).toFixed(2); S.done++;}); save(); closeModal(); toast('Спасибо!'); renderAll(); }
+function openDispute(id){ const o=state.orders.find(x=>x.id===id);
+  modal(`<h3>Проблема с заказом №${id}</h3><label class="l">Позиция</label><select id="dItem">${o.items.map((i,n)=>`<option value="${n}">${PRODUCTS[i.k].n}</option>`).join('')}</select>
+  <label class="l">Что не так</label><select id="dReason"><option>Несвежий / брак</option><option>Недовес</option><option>Не тот товар</option><option>Не привезли</option></select>
+  <textarea id="dText" placeholder="Опишите коротко"></textarea><div class="meta" style="margin-bottom:8px">📷 Прикрепите фото (в демо — заглушка). Сравним с фото сборщика. Возврат за позицию — за 24 ч.</div>
+  <button class="btn" onclick="submitDispute(${id})">Отправить претензию</button><button class="btn secondary" onclick="closeModal()">Отмена</button>`); }
+function submitDispute(id){ const o=state.orders.find(x=>x.id===id); const i=o.items[+document.getElementById('dItem').value]; const r=document.getElementById('dReason').value;
+  o.dispute=`${PRODUCTS[i.k].n}: ${r}. ${document.getElementById('dText').value}`; state.sellers[i.s].disputes++; closeModal(); setStatus(o,'dispute',o.dispute); toast('Претензия отправлена'); }
+function repeatOrder(id){ const o=state.orders.find(x=>x.id===id); state.cart={...o.cart}; save(); renderCart(); toast('Корзина собрана заново по текущим ценам'); window.scrollTo({top:document.getElementById('cartCard').offsetTop-10,behavior:'smooth'}); }
+function saveTpl(id){ const o=state.orders.find(x=>x.id===id); const name=`Шаблон ${state.templates.length+1} (№${id})`; state.templates.push({name,cart:{...o.cart}}); save(); renderTpl(); toast('Сохранено в шаблоны'); }
+function renderTpl(){ document.getElementById('tplChips').innerHTML=state.templates.map((t,i)=>`<button class="chip" onclick="state.cart={...state.templates[${i}].cart};save();renderCart();toast('Шаблон в корзине')">⭐ ${esc(t.name)}</button>`).join('')+ (state.templates.length?`<button class="chip" onclick="state.templates=[];save();renderTpl()">✕</button>`:''); }
+function renderPins(){ document.getElementById('pins').innerHTML=Object.entries(CATS).map(([c,t])=>{ const ss=Object.entries(state.sellers).filter(([,s])=>s.cats.includes(c));
+  return `<div class="item-row"><div>${t}</div><select style="width:58%;margin:0" onchange="pin('${c}',this.value)"><option value="">авто (лучший постоянный)</option>${ss.map(([id,s])=>`<option value="${id}" ${state.pins[c]===id?'selected':''}>${s.n} · ${s.m} ★${s.rating||'—'}${isRegular(id)?' ✓':''}</option>`).join('')}</select></div>`}).join('')+'<div class="meta">Закреплённый продавец используется в варианте «Постоянный». Если у него нет товара — подберём другого постоянного и предупредим.</div>'; }
+function pin(c,v){ if(v) state.pins[c]=v; else delete state.pins[c]; save(); hap(); if(Object.keys(state.cart).length) buildOffers(); }
+
+/* ---------- Сборщик ---------- */
+let openOrder=null;
+function renderCollector(){
+  const act=state.orders.filter(o=>['new','accepted','collecting','collected','delivering'].includes(o.status));
+  document.getElementById('colOrders').innerHTML=act.length?act.map(o=>{const pts=new Set(o.items.map(i=>i.s)).size;
+    return `<div class="order-row"><div><b>№${o.id}</b> ${o.mode==='biz'?'🏢':'🏠'}<div class="meta">${o.items.length} поз. · ${pts} точ. · ${o.slot}<br>${esc(o.addr)} · замены: ${{call:'звонить',similar:'похожим',remove:'убрать'}[o.sub]}</div></div>
+    <div style="text-align:right"><span class="status ${stCls(o.status)}">${ST[o.status]}</span><br><br>
+    ${o.status==='new'?`<button class="btn small" onclick="accept(${o.id})">Принять</button>`:`<button class="btn small" onclick="openRoute(${o.id})">Открыть</button>`}</div></div>`}).join(''):'<div class="meta">Нет активных заказов 🎉</div>';
+  if(openOrder) renderRoute(); else document.getElementById('routeCard').classList.add('hidden');
+}
+function accept(id){ const o=state.orders.find(x=>x.id===id); if(o.status!=='new') return; setStatus(o,'accepted'); openRoute(id); }
+function openRoute(id){ openOrder=id; renderRoute(); updateBack(); document.getElementById('routeCard').scrollIntoView({behavior:'smooth'}); }
+function renderRoute(){
+  const o=state.orders.find(x=>x.id===openOrder); const card=document.getElementById('routeCard'); if(!o){card.classList.add('hidden');return;}
+  card.classList.remove('hidden');
+  const groups={}; o.items.forEach((it,n)=>{(groups[it.s]=groups[it.s]||[]).push([it,n]);});
+  // маршрут: сначала по рынку, затем по ряду
+  const order=Object.keys(groups).sort((a,b)=>(state.sellers[a].m+state.sellers[a].pt).localeCompare(state.sellers[b].m+state.sellers[b].pt));
+  const t=orderTotal(o); const doneN=o.items.filter(i=>i.state!=='pending').length;
+  const editable=['accepted','collecting'].includes(o.status);
+  document.getElementById('routeTitle').innerHTML=`Заказ №${o.id} <span class="status ${stCls(o.status)}">${ST[o.status]}</span>`;
+  let h=`<div class="info">Собрано ${doneN}/${o.items.length} · Итог сейчас <b>${fmt(t.total)}</b> · допуск веса ±${o.tol}%</div>`;
+  order.forEach((s,idx)=>{const S=state.sellers[s];
+    h+=`<div class="point">${idx+1}. ${S.emoji} ${S.n} — ${S.m}, ${S.pt}${S.online?'':' <span class="warnt">(офлайн)</span>'}</div>`;
+    h+=groups[s].map(([it,n])=>{const P=PRODUCTS[it.k]; const dev=it.fact!=null?(it.fact-it.q)/it.q*100:0; const over=Math.abs(dev)>o.tol;
+      return `<div class="item-row" style="display:block"><div style="display:flex;justify-content:space-between"><div><b>${it.state==='ok'?'✅':it.state==='missing'||it.state==='removed'?'⛔':it.state==='replaced'?'🔁':'⬜'} ${P.n}</b> · ${fq(it.q,P.u)}<div class="meta">${fmt(it.price)}/${P.u==='kg'?'кг':'шт'}${it.issued?' · продавец выдал':''}</div></div>
+       <div class="photo" onclick="${editable?`photo(${n})`:''}">${it.photo?'📷':'＋'}</div></div>
+       ${editable&&it.state==='pending'?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center">
+         <input class="inl" id="f${n}" type="number" step="0.01" placeholder="факт ${P.u==='kg'?'кг':'шт'}" value="${it.q}">
+         <input class="inl" id="p${n}" type="number" placeholder="цена" value="${it.price}">
+         <button class="btn small ok" onclick="collect(${n})">Взял</button>
+         <button class="btn small secondary" onclick="missing(${n})">Нет</button></div>`:''}
+       ${it.fact!=null&&over?`<div class="meta warnt">Отклонение ${dev.toFixed(1)}% — вне допуска, клиент предупреждён</div>`:''}</div>`}).join('');
+  });
+  if(o.status==='accepted') h+=`<button class="btn" onclick="setStatus(state.orders.find(x=>x.id===${o.id}),'collecting')">Начать сбор</button>`;
+  if(o.status==='collecting') h+=`<button class="btn" ${doneN<o.items.length?'disabled':''} onclick="finishCollect(${o.id})">Собран (${doneN}/${o.items.length})</button>`;
+  if(o.status==='collected') h+=`<button class="btn" onclick="startDeliver(${o.id})">Выехал к клиенту</button>`;
+  if(o.status==='delivering') h+=`<button class="btn ok" onclick="setStatus(state.orders.find(x=>x.id===${o.id}),'delivered');openOrder=null;updateBack()">Доставлен</button>`;
+  document.getElementById('route').innerHTML=h;
+}
+function photo(n){ const o=state.orders.find(x=>x.id===openOrder); o.items[n].photo=!o.items[n].photo; save(); hap(); renderRoute(); }
+function collect(n){ const o=state.orders.find(x=>x.id===openOrder); if(o.status==='accepted') {o.status='collecting';o.log.push({s:'collecting',t:Date.now()});}
+  const it=o.items[n]; const f=parseFloat(document.getElementById('f'+n).value), p=parseFloat(document.getElementById('p'+n).value);
+  if(!(f>0)){ toast('Укажите фактический вес/кол-во'); hap('err'); return; }
+  if(!(p>0)){ toast('Укажите цену'); hap('err'); return; }
+  if(p>it.price*1.05){ toast('Цена выше согласованной более чем на 5% — нужна согласие клиента'); hap('err'); return; }
+  if(!it.photo){ toast('Сделайте фото товара на весах (нажмите ＋)'); hap('err'); return; }
+  const dev=Math.abs(f-it.q)/it.q*100; if(dev>o.tol*3){ toast(`Слишком большое отклонение (${dev.toFixed(0)}%) — проверьте вес`); hap('err'); return; }
+  it.fact=f; it.factPrice=p; it.state='ok'; save(); hap('ok'); renderAll();
+}
+function missing(n){ const o=state.orders.find(x=>x.id===openOrder); const it=o.items[n]; if(o.status==='accepted'){o.status='collecting';o.log.push({s:'collecting',t:Date.now()});}
+  const alt=state.offers.filter(x=>x.p===it.k&&x.s!==it.s&&available(x,it.q)).sort((a,b)=>a.price-b.price)[0];
+  const simK=SIMILAR[it.k]; const sim=simK&&state.offers.filter(x=>x.p===simK&&available(x,it.q)).sort((a,b)=>a.price-b.price)[0];
+  const rule={call:'Позвонить клиенту',similar:'Заменить похожим',remove:'Убрать позицию'}[o.sub];
+  modal(`<h3>Нет: ${PRODUCTS[it.k].n}</h3><div class="info">Правило клиента: <b>${rule}</b></div>
+   ${alt?`<button class="btn" onclick="replace(${n},'${alt.s}','${it.k}',${alt.price})">Взять у ${state.sellers[alt.s].n} (${state.sellers[alt.s].m}) — ${fmt(alt.price)}</button>`:''}
+   ${sim&&o.sub!=='remove'?`<button class="btn secondary" onclick="replace(${n},'${sim.s}','${simK}',${sim.price})">Замена: ${PRODUCTS[simK].n} — ${fmt(sim.price)}</button>`:''}
+   ${o.sub==='call'?`<a class="btn secondary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="tel:+77000000000">📞 Позвонить клиенту</a>`:''}
+   <button class="btn danger" style="margin-top:8px" onclick="removeItem(${n})">Убрать из заказа</button><button class="btn secondary" onclick="closeModal()">Назад</button>`);
+}
+function replace(n,s,k,price){ const o=state.orders.find(x=>x.id===openOrder); const it=o.items[n]; it.s=s; it.k=k; it.price=price; it.state='pending'; it.replacedFrom=true; o.log.push({s:'replace',t:Date.now()}); save(); closeModal(); toast('Позиция переназначена — соберите её'); renderAll(); }
+function removeItem(n){ const o=state.orders.find(x=>x.id===openOrder); o.items[n].state='removed'; save(); closeModal(); renderAll(); }
+function finishCollect(id){ const o=state.orders.find(x=>x.id===id); if(o.items.some(i=>i.state==='pending')){toast('Есть несобранные позиции');return;} if(o.items.every(i=>i.state==='removed')){ setStatus(o,'cancelled','нечего везти'); return; }
+  o.items.filter(i=>i.state==='ok').forEach(i=>{}); setStatus(o,'collected'); toast(`Клиенту отправлен итог по факту: ${fmt(orderTotal(o).total)}`); }
+function startDeliver(id){ const o=state.orders.find(x=>x.id===id); if(o.pay==='kaspi'&&!o.paid){ confirmBox('Клиент ещё не оплатил Kaspi. Выехать всё равно (оплата при получении)?',()=>setStatus(o,'delivering')); return; } setStatus(o,'delivering'); }
+
+/* ---------- Продавец ---------- */
+function renderSeller(){
+  const sel=document.getElementById('sellerSel'); sel.innerHTML=Object.entries(state.sellers).map(([id,s])=>`<option value="${id}" ${state.me===id?'selected':''}>${s.n} · ${s.m}</option>`).join('');
+  const me=state.me, S=state.sellers[me];
+  const crit=[[S.done>=20,`заказов ${S.done}/20`],[S.rating>=4.6,`рейтинг ${S.rating||'—'}/4.6`],[S.disputes/Math.max(1,S.done)<=.03,`споры ${(S.disputes/Math.max(1,S.done)*100).toFixed(1)}%/3%`],[S.ontime>=90,`вовремя ${S.ontime}%/90%`],[S.months>=3,`стаж ${S.months}/3 мес`]];
+  document.getElementById('sellerStatus').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><div>${S.pt}${isRegular(me)?'<span class="badge-regular">постоянный</span>':''}</div>
+   <button class="btn small ${S.online?'ok':'danger'}" onclick="state.sellers[state.me].online=!state.sellers[state.me].online;save();renderAll()">${S.online?'На месте':'Не работаю'}</button></div>
+   <div class="meta">${crit.map(([ok,t])=>(ok?'✅ ':'▫️ ')+t).join(' · ')}</div>`;
+  const inc=[]; state.orders.filter(o=>['accepted','collecting'].includes(o.status)).forEach(o=>o.items.forEach((it,n)=>{ if(it.s===me&&it.state!=='removed') inc.push([o,it,n]); }));
+  document.getElementById('sellerIncoming').innerHTML=inc.length?inc.map(([o,it,n])=>{const P=PRODUCTS[it.k];return `<div class="item-row"><div>№${o.id} · ${P.n} · <b>${fq(it.q,P.u)}</b><div class="meta">${fmt(it.price)} · ${o.slot}</div></div>${it.issued?'<span class="status done">выдано</span>':`<button class="btn small" onclick="issue(${o.id},${n})">Подготовил</button>`}</div>`}).join(''):'<div class="meta">Пока ничего. Как только сборщик примет заказ с вашими товарами — увидите здесь.</div>';
+  const my=state.offers.filter(o=>o.s===me);
+  document.getElementById('sellerProducts').innerHTML=my.length?my.map(o=>{const P=PRODUCTS[o.p]; const md=marketMedian(o.p,me), fl=floorPrice(o.p,me); const i=state.offers.indexOf(o);
+    const warn=md&&o.price<fl?`<div class="meta warnt">Ниже пола ${fmt(fl)} (85% медианы) — преимущества в выдаче не даёт</div>`:md&&o.price<md*ANTI.warn?`<div class="meta warnt">На ${Math.round((1-o.price/md)*100)}% ниже рынка — проверьте, не в убыток ли</div>`:'';
+    return `<div class="product-row" style="display:block"><div style="display:flex;justify-content:space-between"><b>${P.n}</b><label class="meta"><input type="checkbox" style="width:auto;margin:0" ${o.on?'checked':''} onchange="state.offers[${i}].on=this.checked;save();renderAll()"> в наличии</label></div>
+     <div class="meta">медиана рынка ${md?fmt(md):'—'} · магазин ~${fmt(P.store)}</div>
+     <div style="display:flex;gap:6px;margin-top:6px;align-items:center"><input class="inl" type="number" value="${o.price}" onchange="setPrice(${i},this.value)"> ₸ <input class="inl" type="number" value="${o.stock}" onchange="state.offers[${i}].stock=Math.max(0,+this.value);save();renderAll()"> ${P.u==='kg'?'кг':'шт'}
+     <select style="width:auto;margin:0;padding:6px" onchange="state.offers[${i}].fresh=this.value;save()">${['сегодня','вчера','—'].map(f=>`<option ${o.fresh===f?'selected':''}>${f}</option>`).join('')}</select></div>${warn}</div>`}).join(''):'<div class="meta">Добавьте первый товар ниже.</div>';
+  document.getElementById('newProd').innerHTML=Object.entries(PRODUCTS).filter(([k])=>!my.some(o=>o.p===k)).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join('');
+  const sold=state.orders.filter(o=>!['cancelled'].includes(o.status)).flatMap(o=>o.items.filter(i=>i.s===me&&i.state==='ok'));
+  const rev=sold.reduce((s,i)=>s+i.fact*i.factPrice,0);
+  document.getElementById('sellerStats').innerHTML=`<div class="item-row"><div>Позиций продано (демо)</div><b>${sold.length}</b></div><div class="item-row"><div>Выручка</div><b>${fmt(rev)}</b></div><div class="item-row"><div>Всего заказов</div><b>${S.done}</b></div><div class="item-row"><div>Клиентов закрепили вас</div><b>${Object.values(state.pins).filter(v=>v===me).length}</b></div>`;
+}
+function setPrice(i,v){ const o=state.offers[i]; const p=Math.round(+v); if(!(p>0)){toast('Цена должна быть больше 0');renderSeller();return;}
+  const fl=floorPrice(o.p,o.s); if(fl&&p<fl*.8){ toast(`Слишком низко: минимум ${fmt(Math.round(fl*.8))}. Демпинг вредит всем.`); hap('err'); renderSeller(); return; }
+  o.price=p; save(); hap(); renderAll(); }
+function addProduct(){ const k=document.getElementById('newProd').value, p=+document.getElementById('newPrice').value, s=+document.getElementById('newStock').value;
+  if(!k){toast('Все товары уже добавлены');return;} if(!(p>0)||!(s>=0)){toast('Укажите цену и остаток');hap('err');return;}
+  const fl=floorPrice(k,state.me); if(fl&&p<fl*.8){toast(`Минимум ${fmt(Math.round(fl*.8))}`);hap('err');return;}
+  state.offers.push({s:state.me,p:k,price:Math.round(p),stock:s,fresh:'сегодня',on:true}); const S=state.sellers[state.me]; if(!S.cats.includes(PRODUCTS[k].cat)) S.cats.push(PRODUCTS[k].cat);
+  document.getElementById('newPrice').value=''; document.getElementById('newStock').value=''; save(); hap('ok'); renderAll(); }
+function issue(id,n){ const o=state.orders.find(x=>x.id===id); o.items[n].issued=true; save(); hap('ok'); renderAll(); }
+
+/* ---------- Режим, UI-обвязка ---------- */
+function openModePicker(first){
+  modal(`<h3>${first?'Добро пожаловать в Закупщик':'Режим'}</h3><div class="meta" style="margin-bottom:10px">Можно сменить в любой момент кнопкой вверху.</div>
+   <button class="btn" onclick="setMode('home')">🏠 Для дома<div class="meta" style="color:inherit;opacity:.85">от 0,5 кг и поштучно · доставка ${fmt(MODES.home.delivery)} · заказ от ${fmt(MODES.home.minOrder)}</div></button>
+   <button class="btn secondary" onclick="setMode('biz')">🏢 Для бизнеса (кафе, рестораны)<div class="meta">опт · утренние слоты · счёт на ТОО/ИП · заказ от ${fmt(MODES.biz.minOrder)}</div></button>`);
+}
+function setMode(m){ state.mode=m; opts.slot=0; if(m==='home'&&opts.pay==='invoice') opts.pay='kaspi'; save(); closeModal(); hap('ok'); renderAll(); }
+let role='client';
+function switchRole(r){ role=r; openOrder=null; document.querySelectorAll('.role-tab').forEach(b=>b.classList.toggle('active',b.dataset.r===r));
+  ['client','collector','seller'].forEach(x=>document.getElementById(x+'View').classList.toggle('hidden',x!==r)); hap(); renderAll(); updateBack(); window.scrollTo(0,0); }
+function toast(t){ const d=document.createElement('div'); d.className='toast'; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
+function modal(h){ closeModal(); const d=document.createElement('div'); d.className='modal'; d.id='modal'; d.innerHTML=`<div class="card">${h}</div>`; d.onclick=e=>{if(e.target===d&&state.mode)closeModal();}; document.body.appendChild(d); updateBack(); }
+function closeModal(){ const m=document.getElementById('modal'); if(m) m.remove(); updateBack(); }
+function confirmBox(t,cb){ if(inTG&&tg.showConfirm){ tg.showConfirm(t,ok=>ok&&cb()); return; } modal(`<h3>${esc(t)}</h3><button class="btn danger" id="cYes">Да</button><button class="btn secondary" onclick="closeModal()">Нет</button>`); document.getElementById('cYes').onclick=()=>{closeModal();cb();}; }
+function back(){ if(document.getElementById('modal')&&state.mode){closeModal();return;} if(openOrder){openOrder=null;renderAll();updateBack();} }
+function updateBack(){ const need=!!(document.getElementById('modal')&&state.mode)||!!openOrder; if(inTG){ need?tg.BackButton.show():tg.BackButton.hide(); } }
+let mainAction=null;
+function updateMain(){
+  let txt=null; mainAction=null;
+  if(role==='client' && offers && Object.keys(state.cart).length && !document.getElementById('offersCard').classList.contains('hidden')){ txt=`Заказать · ${fmt(offers[chosen].total)}`; mainAction=placeOrder; }
+  else if(role==='client' && inputMode==='list' && !Object.keys(state.cart).length){ txt='Добавить в корзину'; mainAction=parseToCart; }
+  if(inTG){ document.getElementById('fallbackMain').classList.add('hidden'); if(txt){ tg.MainButton.setText(txt); tg.MainButton.show(); } else tg.MainButton.hide(); }
+  else { const fb=document.getElementById('fallbackMain'); fb.classList.toggle('hidden',!txt); document.getElementById('fbBtn').textContent=txt||''; }
+}
+document.getElementById('fbBtn').onclick=()=>mainAction&&mainAction();
+function renderAll(){
+  document.getElementById('modePill').textContent=(state.mode==='biz'?'🏢 Бизнес':'🏠 Дом')+' ▾';
+  document.getElementById('sub').textContent=state.mode==='biz'?'Опт для кафе и ресторанов · Астана':'Рынок · Сбор · Доставка · Астана';
+  renderCart(); renderCatalog(); renderClientOrders(); renderPins(); renderTpl(); renderCollector(); renderSeller();
+  const n=state.orders.filter(o=>o.status==='new').length; document.getElementById('colBadge').innerHTML=n?`<span class="badge">${n}</span>`:'';
+  const m=state.orders.filter(o=>['accepted','collecting'].includes(o.status)).flatMap(o=>o.items).filter(i=>i.s===state.me&&!i.issued&&i.state!=='removed').length; document.getElementById('selBadge').innerHTML=m?`<span class="badge">${m}</span>`:'';
+  updateMain();
+}
+if(inTG){ tg.ready(); tg.expand(); tg.MainButton.onClick(()=>mainAction&&mainAction()); tg.BackButton.onClick(back);
+  const applyTheme=()=>document.documentElement.style.colorScheme=tg.colorScheme; applyTheme(); tg.onEvent('themeChanged',applyTheme); }
+window.resetDemo=()=>{ localStorage.removeItem(KEY); location.reload(); };
+renderAll(); if(!state.mode) openModePicker(true);
+</script>
+</body>
+</html>
