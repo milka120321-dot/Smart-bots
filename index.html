@@ -434,6 +434,20 @@ label.fl{margin:0}label.fl>span{display:block;margin:0 0 4px 2px}
 .admfloor{padding:14px}.admfloor .fine{display:block;text-align:left}.afrow{display:flex;align-items:center;gap:8px}.afrow .inp{width:80px;margin:0;height:40px;text-align:right}.afrow span{color:var(--hint);font-size:14px;flex:1}.afrow .btn{width:auto;margin:0;padding:0 16px;height:40px}
 #admSort{margin-left:auto;flex-shrink:0}
 .impErr{max-height:180px;overflow:auto}
+.cmbtn{display:inline-block;margin:6px 0 0;padding:4px 10px;border-radius:14px;border:none;background:var(--sec2,rgba(127,127,127,.14));color:var(--accent);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.cmst{display:block;margin-top:4px;font-size:12px;color:var(--hint)}.cmst.o{color:var(--orange)}.cmst.g{color:var(--green,#34c759)}
+.chips.wrap{flex-wrap:wrap;overflow:visible}.chips.wrap .chip{margin-bottom:6px}
+.cpph{display:flex;align-items:center;justify-content:center;height:84px;border-radius:12px;border:1.5px dashed var(--sep);background-size:cover;background-position:center;color:var(--hint);font-size:14px;cursor:pointer;margin-bottom:6px;position:relative;overflow:hidden}
+.cpph input{position:absolute;inset:0;opacity:0;cursor:pointer}.cpph.on{border-style:solid;border-color:var(--accent);height:120px}.cpph.on span{background:rgba(0,0,0,.55);color:#fff;padding:4px 10px;border-radius:10px}
+.seg3{display:flex;gap:6px;margin-bottom:8px}.seg3 button{flex:1;border:none;border-radius:12px;padding:9px 4px;background:var(--sec2,rgba(127,127,127,.14));color:var(--text);font:inherit;font-size:13px;font-weight:600;cursor:pointer;line-height:1.2}
+.seg3 button small{display:block;font-weight:400;color:var(--hint);font-size:11px;margin-top:2px}.seg3 button.on{background:var(--accent);color:#fff}.seg3 button.on small{color:rgba(255,255,255,.85)}
+.hid{display:none!important}.nbt{color:var(--orange)}.cmt{color:var(--orange)}
+.nbm{display:block;font-size:12px;color:var(--hint);margin:2px 0}.findm{margin:4px 0 0!important;width:auto!important;padding:0 12px!important;height:32px}
+.cmth{width:64px;height:64px;border-radius:10px;object-fit:cover;flex:none;cursor:pointer}.cmth.sm{width:40px;height:40px;border-radius:8px;margin-right:10px}
+.cmcard .ri-h{gap:10px}#pReview .btn{margin:8px 0 0;width:auto;padding:0 14px}
+
+.ci-p .nbw{display:block;width:100%}.nbw .warnt{display:block;font-weight:600}
+#noBuyList .grow{align-items:flex-start}#noBuyList .btn{width:auto;flex:none;margin:4px 0 0;padding:0 12px;height:32px}
 </style>
 </head>
 <body>
@@ -984,7 +998,7 @@ function vCartBase(){
   const L=new Map(o.lines.map(l=>[l.k,l])); const pinsN=Object.keys(state.pins).length;
   const items=keys.map(k=>{ const P=PRODUCTS[k], l=L.get(k), q=state.cart[k]; const sv=l.none?0:itemSave(k,l.o.price,q);
     return `<div class="ci"><div class="ci-img" style="--h:${hue(k)}">${P.e}</div><div class="ci-b" onclick="${l.none?'':`sellerSheet('${k}')`}" data-ci="${k}"><div class="ci-n">${P.n}</div>${l.none?'':`<div class="ci-s">${state.sellers[l.o.s].emoji} ${state.sellers[l.o.s].n}${l.manual?' · выбран вами':''} ›</div>`}
-      <div class="ci-p">${l.none?'<span class="warnt">Нет в наличии</span>':`<b>${fmt(l.o.price*q)}</b>${sv>0?`<s>${fmt(P.store*q)}</s>`:''}`}</div></div>
+      <div class="ci-p">${l.none?noneHTML(k):`<b>${fmt(l.o.price*q)}</b>${sv>0?`<s>${fmt(P.store*q)}</s>`:''}`}</div></div>
       <div class="step sm"><button onclick="chg('${k}',-1)" aria-label="Меньше">−</button><span>${fq(q,P.u)}</span><button onclick="chg('${k}',1)" aria-label="Больше">+</button></div></div>`; }).join('');
   const v=(k,e,t)=>`<button class="var ${chosen===k?'sel':''}" onclick="setVariant('${k}')"><span class="vtag"></span><span class="vt">${e} ${t}</span><b>${fmt(offers[k].total)}</b><span class="vs">${offers[k].points} ${pl(offers[k].points,['продавец','продавца','продавцов'])}</span></button>`;
   const sel=(id,val,list,fn)=>`<select class="gsel" id="${id}" onchange="${fn}">${list.map(([v,t])=>`<option value="${v}" ${val==v?'selected':''}>${t}</option>`).join('')}</select>`;
@@ -1142,8 +1156,8 @@ function startDeliver(id){ setStatus(findO(id),'delivering'); }
 function refundPill(o){ const ri=refundInfo(o); if(o.refund) return `<div class="pillmsg g" style="margin:10px 0 0">Возврат ${fmt(o.refund)}</div>`;
   if(!ri.sum) return ''; return ri.left?`<div class="pillmsg o" style="margin:10px 0 0">Возврат ${fmt(ri.left)} от продавца</div>`:`<div class="pillmsg g" style="margin:10px 0 0">Продавцы вернули ${fmt(ri.sum)}</div>`; }
 function openOrderSheetBase(id){ const o=findO(id); if(!o) return; const t=orderTotal(o), ri=refundInfo(o);
-  const items=o.items.map(i=>{const P=PRODUCTS[i.k], rf=o.pay?itemRefund(i):0; const st=i.state==='missing'?'не было при заказе':i.state==='dropped'?'убрано при оплате':i.state==='removed'?'не было у продавца':'';
-    return `<div class="li" style="align-items:flex-start"><span>${i.photo?'📷 ':''}${P.n}${i.replacedFrom?' · замена':''}<small style="display:block;color:var(--hint);font-size:12px">${st||`заказ ${fq(i.q,P.u)}${P.approx?` ≈${fq(P.approx*i.q,'kg')}`:''}${i.fact!=null?` · факт ${fq(i.fact,P.u)}`:''}`}</small></span><span style="text-align:right">${fmt(billQ(i)*i.price)}${rf?`<small style="display:block;color:var(--orange);font-size:12px">возврат ${fmt(rf)}</small>`:''}</span></div>`}).join('');
+  const items=o.items.map((i,n)=>{const P=PRODUCTS[i.k], rf=o.pay?itemRefund(i):0; const st=i.state==='missing'?'не было при заказе':i.state==='dropped'?'убрано при оплате':i.state==='removed'?'не было у продавца':'';
+    return `<div class="li" style="align-items:flex-start"><span>${i.photo?'📷 ':''}${P.n}${i.replacedFrom?' · замена':''}<small style="display:block;color:var(--hint);font-size:12px">${st||`заказ ${fq(i.q,P.u)}${P.approx?` ≈${fq(P.approx*i.q,'kg')}`:''}${i.fact!=null?` · факт ${fq(i.fact,P.u)}`:''}`}</small>${itemCmpl(o,n)}</span><span style="text-align:right">${fmt(billQ(i)*i.price)}${rf?`<small style="display:block;color:var(--orange);font-size:12px">возврат ${fmt(rf)}</small>`:''}</span></div>`}).join('');
   const acts=clientActions(o,true)+resNote(o);
   modal(`<h3>Заказ №${o.id}<span class="status ${stCls(o.status)}">${ST[o.status]}</span></h3>
    <div class="card">${timeline(o)}<div class="fine" style="margin:8px 0 0">${subLine(o)}</div></div>
@@ -1163,7 +1177,7 @@ function openOrderSheetBase(id){ const o=findO(id); if(!o) return; const t=order
 /* ================= v4.3: оплата напрямую каждому продавцу (без общего счёта) ================= */
 const COLLECTOR = {n:'Сборщик', kaspi:'+7 (705) 555-12-12'};
 function kaspiOfBase(s){ if(s==='deliv') return COLLECTOR.kaspi; const n=String(s).replace(/\D/g,'').padStart(2,'0'); return `+7 (707) 10${n[0]}-${n}-${n}`.replace('(707) 10'+n[0],'(707) 1'+n.padStart(2,'0')); }
-function pickFor(k,q,kind,auto){
+function pickForBase(k,q,kind,auto){
   const cands=state.offers.filter(o=>o.p===k && available(o,q));
   if(!cands.length) return {k,q,none:true};
   const man=!auto&&state.sel&&state.sel[k]; const mo=man&&cands.find(c=>c.s===man);
@@ -1182,7 +1196,7 @@ function sellerSheet(k){ const P=PRODUCTS[k], q=state.cart[k]; const cur=pickFor
   const L=state.offers.filter(o=>o.p===k&&!(state.sellers[o.s]||{}).blocked).sort((a,b)=>a.price-b.price);
   modal(`<h3>${P.e} ${P.n} · ${fq(q,P.u)}</h3><div class="fine" style="margin:-6px 0 10px">Выберите продавца · цена за 1 ${uL(P)}</div>
    <div class="glist">${L.map(o=>{ const S=state.sellers[o.s], av=available(o,q), on=!cur.none&&cur.o.s===o.s;
-     return `<button class="grow" data-sel="${o.s}" ${av?`onclick="pickSeller('${k}','${o.s}')"`:'disabled style="opacity:.45"'}><span class="gi">${S.emoji}</span><span class="gl">${S.n}${S.verified?' <span class="vtag">Проверен ✓</span>':''}${isRegular(o.s)?' <span class="ptag">постоянный</span>':''}<small>${S.m} · ${S.pt} · ★${S.rating||'новый'}</small></span><span class="gv" style="text-align:right">${av?`<b style="color:var(--text)">${fmt(o.price)}</b><small style="display:block">${fmt(o.price*q)}</small>`:'нет'}</span>${on?'<span style="color:var(--accent);font-size:18px">✓</span>':''}</button>`; }).join('')}</div>
+     return `<button class="grow" data-sel="${o.s}" ${av?`onclick="pickSeller('${k}','${o.s}')"`:'disabled style="opacity:.45"'}><span class="gi">${S.emoji}</span><span class="gl">${S.n}${S.verified?' <span class="vtag">Проверен ✓</span>':''}${isRegular(o.s)?' <span class="ptag">постоянный</span>':''}<small>${S.m} · ${S.pt} · ★${S.rating||'новый'}${myCmplTag(o.s,k)}</small></span><span class="gv" style="text-align:right">${av?`<b style="color:var(--text)">${fmt(o.price)}</b><small style="display:block">${fmt(o.price*q)}</small>`:(myBlk(o.s,k)?'не берёте':'нет')}</span>${on?'<span style="color:var(--accent);font-size:18px">✓</span>':''}</button>`; }).join('')}</div>
    ${state.sel&&state.sel[k]?`<button class="btn gray" onclick="pickSeller('${k}','')">Автовыбор</button>`:''}`); }
 function pickSeller(k,s){ state.sel=state.sel||{}; if(s) state.sel[k]=s; else delete state.sel[k]; save(); hap(); closeModal(); render(); }
 function setVariant(k){ chosen=k; state.sel={}; save(); hap(); render(); }
@@ -1657,14 +1671,14 @@ function saveBiz(){ const v=id=>($(id).value||'').trim(); const bin=v('bzBin').r
 /* ---------- Оформление: клиент и «найти на рынке» уходят в заказ ---------- */
 function clientInfo(){ const r=state.reg, b=state.biz; if(!isHome()) return {kind:'venue',name:b.name||(r&&r.data.name)||'Заведение',bin:b.bin||(r&&r.data.bin)||'',accept:b.accept,contact:b.cName?`${b.cName} ${b.cPhone}`:'',verified:!!(r&&r.role==='venue'&&r.status==='verified'),docs:r&&r.role==='venue'?r.status:'none'};
   return {kind:'person',name:(r&&r.data.name)||'',verified:false}; }
-function placeOrder(){ const seq=state.seq, cu=[...(state.custom||[])]; placeOrderBase(); if(state.seq===seq) return; const o=state.orders[0];
+function placeOrderV6(){ const seq=state.seq, cu=[...(state.custom||[])]; placeOrderBase(); if(state.seq===seq) return; const o=state.orders[0];
   o.client=clientInfo(); o.extra=cu.map(x=>({id:x.id,text:x.text,st:'search'})); if(cu.length){ state.custom=[]; } save(); render(); }
 const clientTag = o => o.client&&o.client.kind==='venue'?` · ${esc(o.client.name)} ${o.client.verified?'<span class="vtag">Проверено ✓</span>':'<span class="vtag no">документы на проверке</span>'}`:'';
 /* ---------- «Найти на рынке»: сборщик называет продавца и цену, клиент доплачивает этому продавцу ---------- */
 const XST={search:'Ищем на рынке',offer:'Ждём ответа клиента',check:'Продавец проверяет перевод',ok:'Оплачено ✓',taken:'Взял ✓',declined:'Клиент отказался',notfound:'Не нашли',fail:'Перевод не пришёл'};
 const xPending = o => (o.extra||[]).some(x=>['search','offer','check','ok','fail'].includes(x.st));
 function extraById(o,id){ return (o.extra||[]).find(x=>x.id===id); }
-function offerExtra(oid,xid){ const o=findO(oid), x=extraById(o,xid); const s=$('xs_'+xid).value, a=Math.round(+$('xa_'+xid).value);
+function offerExtra(oid,xid){ const o=findO(oid), x=extraById(o,xid); const s=$('xs_'+xid).value, a=Math.round(+$('xa_'+xid).value); if(s&&!extraSellerOk(o,s)){ toast('Клиент не берёт у этого продавца'); hap('err'); return; }
   if(!s){ toast('Выберите продавца'); hap('err'); return; } if(!(a>0)){ toast('Укажите цену'); hap('err'); return; }
   if(o.status==='accepted'){ o.status='collecting'; o.log.push({s:'collecting',t:now()}); }
   Object.assign(x,{st:'offer',s,amt:a,desc:($('xd_'+xid).value||'').trim().slice(0,60)}); o.log.push({s:'extra_offer',t:now()}); save(); hap('ok'); toast('Цена отправлена клиенту'); renderAll(); }
@@ -1692,7 +1706,7 @@ function sellerPayBlock(me){ const L=extraQueue(me); let h=payQueueHTML(me,'По
   return h; }
 function sellerPayTodo(me){ return payQueue(me).length+extraQueue(me).length; }
 function routeExtraHTML(o){ const X=o.extra||[]; if(!X.length) return ''; const ed=['accepted','collecting'].includes(o.status);
-  const sl=Object.entries(state.sellers).filter(([,s])=>s.online);
+  const sl=Object.entries(state.sellers).filter(([id,s])=>s.online&&!s.blocked&&extraSellerOk(o,id));
   return `<div class="ptitle" style="text-transform:none;font-size:14px;color:var(--text);margin-top:16px">🔎 Найти на рынке<div class="meta" style="font-weight:400">Найдите, договоритесь с продавцом и отправьте клиенту цену</div></div>`+X.map(x=>{
     if(x.st==='search'&&ed) return `<div class="ri" data-rx="${x.id}"><div class="ri-h"><div><b>«${esc(x.text)}»</b><div class="meta">клиент доплатит продавцу отдельно</div></div></div>
       <label class="fl"><span>Что нашли</span><input class="inp" id="xd_${x.id}" placeholder="например, Майонез Махеев 3 кг"></label>
@@ -1700,7 +1714,7 @@ function routeExtraHTML(o){ const X=o.extra||[]; if(!X.length) return ''; const 
       <div class="ri-a"><button class="btn gray" onclick="notFoundExtra(${o.id},'${x.id}')">Не нашёл</button><button class="btn ok" onclick="offerExtra(${o.id},'${x.id}')">Отправить цену</button></div></div>`;
     const S=x.s&&state.sellers[x.s]; const ic={offer:'⏳',check:'⏳',ok:'💳',taken:'✅',declined:'⛔',notfound:'⛔',fail:'⚠️',search:'⬜'}[x.st];
     return `<div class="ri done" data-rx="${x.id}"><span style="font-size:20px">${ic}</span><div class="rm">«${esc(x.text)}»<small>${XST[x.st]}${S?` · ${S.n} · ${fmt(x.amt)}`:''}</small></div>${x.st==='ok'&&ed?`<button class="btn sm ok" onclick="takeExtra(${o.id},'${x.id}')">✓ Взял</button>`:''}</div>`; }).join(''); }
-function vRoute(){ const o=state.orders.find(x=>x.id===openOrder); let h=vRouteBase(); if(!o||!openOrder) return h;
+function vRouteV6(){ const o=state.orders.find(x=>x.id===openOrder); let h=vRouteBase(); if(!o||!openOrder) return h;
   const ex=routeExtraHTML(o); const i=h.indexOf('<div class="actbar">'); h=i>=0?h.slice(0,i)+ex+h.slice(i):h+ex;
   if(xPending(o)) h=h.replace(/<button class="btn" (disabled )?onclick="finishCollect\((\d+)\)">[^<]*/,'<button class="btn" disabled onclick="finishCollect($2)">Ждём ответ по «найти на рынке»');
   return h; }
@@ -1843,7 +1857,7 @@ function vGate(a){ const r=state.reg, R=ROLES[a];
    <div class="gate-demo"><button class="link" onclick="openPartnerBase('${a}')">Код партнёра</button></div>`; }
 function openPartner(a){ const r=state.reg; if(r&&r.role===a&&r.status==='verified') unlocked[a]=true;
   if(r&&r.role===a&&!unlocked[a]){ app=a; openOrder=null; window.scrollTo(0,0); render(); return; } openPartnerBase(a); }
-function vProfile(){ let h=vProfileBase(); const r=state.reg, R=r&&ROLES[r.role], b=state.biz;
+function vProfileV6(){ let h=vProfileBase(); const r=state.reg, R=r&&ROLES[r.role], b=state.biz;
   const reg=r?`<div class="card regc" data-reg="${r.role}"><div class="hero"><span class="he">${R.e}</span><div style="flex:1;min-width:0"><b style="font-size:17px">${esc(r.data.name||r.data.fio||R.t)}</b><div class="meta">${R.t} ${RST(r)}</div></div></div>
      <div class="f2" style="margin-top:12px">${R.d.length?`<button class="btn sm secondary" style="margin:0" onclick="openDocs()">Документы</button>`:`<button class="btn sm secondary" style="margin:0" onclick="openDocs()">Данные</button>`}<button class="btn sm gray" style="margin:0" onclick="changeRole()">Сменить роль</button></div>
      ${regMsg(r)}</div>`
@@ -1930,7 +1944,7 @@ function applyCatalog(){ for(const [k,d] of Object.entries(ADM.cat.add)) applyPr
   for(const [k,v] of Object.entries(ADM.cat.hidden)) if(PRODUCTS[k]) PRODUCTS[k].hidden=!!v; SYNIDX=null; }
 
 /* ---------- обёртки над логикой приложения ---------- */
-function available(o,qty){ const P=PRODUCTS[o.p], S=state.sellers[o.s]; if(!P||P.hidden||!S||S.blocked) return false; return availableBase(o,qty); }
+function availableV6(o,qty){ const P=PRODUCTS[o.p], S=state.sellers[o.s]; if(!P||P.hidden||!S||S.blocked) return false; return availableBase(o,qty); }
 function isRegular(id){ const s=state.sellers[id]; if(!s) return false; if(s.regOv==='on') return true; if(s.regOv==='off') return false; return isRegularBase(id); }
 function curCol(){ const r=state.reg; return r&&r.role==='collector'&&r.status==='verified'&&r.id?r.id:'c0'; }
 function accept(id){ const o=findO(id); if(o&&o.status==='new') o.col=curCol(); acceptBase(id); }
@@ -1941,7 +1955,7 @@ function sellerRefundBlock(me){ let h=sellerRefundBlockBase(me); if(!h) return h
   state.orders.forEach(o=>{ const R=o.resolution; if(!R||R.by!=='client'||R.s!==me) return; const a=`Заказ №${o.id} · Kaspi ${esc(o.phone||'')}</div>`;
     h=h.replace(a,a+`<div class="regmsg" data-dres="${o.id}"><b>Решение по спору:</b> вернуть ${fmt(R.amt)}${R.comment?` — ${esc(R.comment)}`:''}</div>`); });
   return h; }
-function vSeller(){ const S=state.sellers[state.me]; let h=vSellerBase();
+function vSellerV6(){ const S=state.sellers[state.me]; let h=vSellerBase();
   if(S&&S.blocked) h=h.replace(/(<div class="ptop">[\s\S]*?<\/div>)/,`$1<div class="regmsg bad" id="selBlocked"><b>Точка приостановлена администратором.</b> Клиенты её сейчас не видят.${S.blocked.reason?` Причина: ${esc(S.blocked.reason)}.`:''}<small>Вопросы — в поддержку</small></div>`);
   return h; }
 function vCollector(){ const b=ADM.blockedCol[curCol()];
@@ -1968,7 +1982,7 @@ function orderProblems(o){ const P=[], t=now(); if(o.status==='cancelled') retur
   if(o.status==='deliv_fail'||(['deliv_agree','deliv_counter'].includes(o.status)&&o.agreeDeadline&&t>o.agreeDeadline)) P.push({k:'deliv',t:'Доставка не согласована'});
   if(o.status==='dispute'&&!o.resolution) P.push({k:'dispute',t:'Открытый спор'});
   return P; }
-function sellerStats(id){ const os=state.orders.filter(o=>o.status!=='cancelled'&&o.items.some(i=>i.s===id));
+function sellerStatsV6(id){ const os=state.orders.filter(o=>o.status!=='cancelled'&&o.items.some(i=>i.s===id));
   let paid=0,no=0,wi=0,un=0,cmp=0,open=0;
   os.forEach(o=>{ if(o.pay) paid+=o.pay.cards.filter(c=>c.s===id&&c.paidAt).length; if(o.log.some(l=>l.s==='fail_'+id)) no++;
     o.items.forEach(i=>{ if(i.s!==id||i.fact==null) return; wi++; const P=PRODUCTS[i.k]; if(P&&P.u==='kg'&&i.fact<i.q*(1-UNDER_FREE)) un++; });
@@ -2110,7 +2124,7 @@ function vAdmin(){ const nReg=adminApi.regs().filter(r=>r.status==='pending').le
    <div class="chips hs admtabs">${ADM_TABS.map(([k,t])=>`<button class="chip ${admTab===k?'active':''}" data-at="${k}" onclick="admGo('${k}')">${t}${k==='reg'&&nReg?` <span class="cnt">${nReg}</span>`:k==='sum'&&nPr?` <span class="cnt o">${nPr}</span>`:''}</button>`).join('')}</div>
    <div id="admBody" data-tab="${admTab}">${body()}</div>`; }
 const kpi=(v,l,id)=>`<div class="kpi" ${id?`id="${id}"`:''}><b>${v}</b><span>${l}</span></div>`;
-function admSum(){ const S=adminApi.summary();
+function admSumV6(){ const S=adminApi.summary();
   const PK={no:'🚫',late:'⏰',under:'⚖️',deliv:'🛵',dispute:'⚠️'};
   return `<div class="kpis">${kpi(S.today,'заказов сегодня','kToday')}${kpi(S.week,'за 7 дней','kWeek')}${kpi(fmt(S.turnover),'оборот за 7 дней','kTurn')}${kpi(fmt(S.service),`сервис ${Math.round(MODES.biz.service*100)}% · бизнес`,'kServ')}</div>
    <button class="rowbtn" onclick="admRegF='pending';admGo('reg')"><span class="ri">🪪</span><span class="rt"><b>Регистрации на проверке</b><span>${S.pending?S.pending+' ждут решения':'очередь пуста'}</span></span>${S.pending?`<span class="badge">${S.pending}</span>`:''}${IC.chev}</button>
@@ -2168,7 +2182,7 @@ function admParList(){ const q=admPQ.trim().toLowerCase(), dq=q.replace(/\D/g,''
   L.sort(admParSort==='rating'?(a,b)=>(b.S.rating||0)-(a.S.rating||0):admParSort==='problems'?(a,b)=>pr(b)-pr(a):(a,b)=>b.st.orders-a.st.orders||(b.S.done||0)-(a.S.done||0));
   return L.map(({id,S,st})=>`<button class="grow" data-par="${id}" onclick="admPartner('seller','${id}')"><span class="gi">${S.emoji||'🏪'}</span><span class="gl">${esc(S.n)} ${S.blocked?'<span class="tagr">заблокирован</span>':''}${S.verified?' <span class="tagg">✓</span>':''}${isRegular(id)?' <span class="tago">постоянный</span>':''}
     <small>${esc(S.m||'')} · ★${S.rating||'—'} · заказов ${st.orders} · не пришло ${st.noPct}% · недовес ${st.underPct}% · жалобы ${st.complaints}</small></span>${IC.chev}</button>`).join('')||'<div class="grow"><span class="gl">Никого</span></div>'; }
-function admPartner(kind,id){ let h;
+function admPartnerV6(kind,id){ let h;
   if(kind==='seller'){ const S=state.sellers[id], st=sellerStats(id), reg=S.regOv||'auto';
     h=`<h3>${S.emoji||'🏪'} ${esc(S.n)}</h3><div class="fine" style="margin:-6px 0 10px">${esc(S.m||'')} · ${esc(S.pt||'')} · Kaspi ${esc(kaspiOf(id))}</div>
      ${S.blocked?`<div class="regmsg bad"><b>Заблокирован</b> ${tA(S.blocked.t)} — ${esc(S.blocked.reason)}</div>`:''}
@@ -2197,7 +2211,7 @@ function admOrd(){ return `<label class="search">${IC.search}<input id="admOQ" t
   <div class="chips hs">${ORD_F.map(([k,t])=>`<button class="chip ${admOrdF===k?'active':''}" data-of="${k}" onclick="admOrdF='${k}';render()">${t}</button>`).join('')}</div>
   <div class="glist" id="admOList">${admOrdList()}</div>
   <button class="btn secondary" id="admCSV" onclick="admCSV()">Выгрузить CSV</button><div class="fine">Демо-заказы этого устройства · время — Астана</div>`; }
-function admOrdList(){ const L=adminApi.orders(admOrdF,admOQ); if(!L.length) return '<div class="grow"><span class="gl">Заказов нет</span></div>';
+function admOrdListV6(){ const L=adminApi.orders(admOrdF,admOQ); if(!L.length) return '<div class="grow"><span class="gl">Заказов нет</span></div>';
   return L.slice(0,100).map(o=>{ const pr=orderProblems(o), T=orderTotal(o); return `<button class="grow" data-oid="${o.id}" onclick="openAdmOrder(${o.id})"><span class="gi">${o.mode==='biz'?'🏢':'🏠'}</span><span class="gl">№${o.id} · ${ST[o.status]||o.status}${pr.length?` <span class="tagr">${pr.length} ⚠</span>`:''}${o.resolution?' <span class="tagg">спор решён</span>':''}
     <small>${tA(o.created)} · ${esc((o.client&&o.client.name)||o.phone||'')}</small></span><span class="gv">${fmt(T.total)}</span>${IC.chev}</button>`; }).join(''); }
 function admDownload(name,text,type){ try{ const b=new Blob([text],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); return true; }catch(e){ toast('Не удалось сохранить файл'); return false; } }
@@ -2296,6 +2310,233 @@ applySettings(); applyCatalog();
 function resNote(o){ const R=o&&o.resolution; if(!R) return ''; const done=(o.returned||{})[R.s];
   return R.by==='client'?`<div class="regmsg ${done?'ok':''}" data-resnote><b>Решение по претензии:</b> продавец вернёт ${fmt(R.amt)} на Kaspi${done?' · ✓ вернул':''}${R.comment?`<br>${esc(R.comment)}`:''}</div>`
    :`<div class="regmsg ok" data-resnote><b>Решение по претензии:</b> в пользу продавца${R.comment?`<br>${esc(R.comment)}`:''}</div>`; }
+
+/* ================= v7: жалобы на товар и личное «не беру у этого продавца» ================= */
+Object.assign(DEF_SET,{cmplH:48,arDays:30,arCmpl:3,arBlk:3});
+for(const k of ['cmplH','arDays','arCmpl','arBlk']) if(ADM.settings[k]==null) ADM.settings[k]=DEF_SET[k];
+SET_F.push(['Жалобы',[['cmplH','Окно жалобы после доставки','ч',1,240],['arDays','Автоправило: период','дн',1,365],['arCmpl','Подтверждённых жалоб на просрочку/порчу','шт',1,50],['arBlk','Блокировок от разных клиентов','шт',1,50]]]);
+Object.assign(SET_L,{cmplH:'Окно жалобы (ч)',arDays:'Автоправило: период (дн)',arCmpl:'Автоправило: жалоб на просрочку/порчу',arBlk:'Автоправило: блокировок клиентов'});
+Object.assign(ACT_L,{cmpl_confirm:'Жалоба подтверждена',cmpl_reject:'Жалоба отклонена',auto_review:'Продавец на проверке',review_off:'Проверка снята',cmpl_in:'Новая жалоба'});
+const ME='me';
+const CR=[['expired','Просрочено',1],['rotten','Испорчено / гниль',1],['wrong','Не тот товар',0],['quality','Плохое качество',0],['other','Другое',0]];
+const CRL=Object.fromEntries(CR.map(x=>[x[0],x[1]])), CR_PHOTO=r=>!!(CR.find(x=>x[0]===r)||[])[2];
+const CMS={open:'Ждём ответа продавца',refunded:'Продавец вернул деньги на Kaspi',noted:'Продавец принял к сведению',disputed:'Продавец не согласен — разбирает поддержка',confirmed:'Поддержка подтвердила жалобу',rejected:'Поддержка отклонила жалобу'};
+const CMs=()=>state.cmpl||(state.cmpl=[]), PB=()=>state.pblk||(state.pblk=[]), CLI=()=>state.cli||(state.cli={});
+const clampR=v=>Math.max(1,Math.min(5,+v.toFixed(2)));
+function rateAdj(s,d){ const S=state.sellers[s]; if(S&&S.rating) S.rating=clampR(S.rating+d); }
+function deliveredAt(o){ const l=[...(o.log||[])].reverse().find(x=>x.s==='delivered'); return l?l.t:null; }
+function cmplWinMs(){ return (+ADM.settings.cmplH||48)*3600e3; }
+function cmplOpenFor(o){ const t=deliveredAt(o); return !!t&&['delivered','dispute'].includes(o.status)&&now()-t<=cmplWinMs(); }
+const itemSum=i=>Math.round(billQ(i)*i.price);
+const cmplOf=(oid,n)=>CMs().find(c=>c.oid===oid&&c.n===n);
+const myCmplOn=(s,k)=>CMs().filter(c=>c.cid===ME&&c.s===s&&(!k||c.k===k)).length;
+function myBlk(s,k){ return PB().some(b=>b.cid===ME&&b.s===s&&(!b.k||b.k===k)); }
+const myBlocks=()=>PB().filter(b=>b.cid===ME);
+function cmplStatusText(c){ let t=CMS[c.st]||c.st;
+  if(c.st==='refunded') t=`Продавец вернул ${fmt(c.amt)} на Kaspi`;
+  if(c.st==='confirmed'&&c.amt&&!c.returned) t=`Поддержка подтвердила · продавец вернёт ${fmt(c.amt)}`;
+  if(c.st==='confirmed'&&c.amt&&c.returned) t=`Поддержка подтвердила · продавец вернул ${fmt(c.amt)}`;
+  return t; }
+const cmplCls=c=>['refunded','confirmed','noted'].includes(c.st)?'g':c.st==='rejected'?'':'o';
+
+/* ---------- данные и правила ---------- */
+const cmplApi={
+  create(d){ const o=findO(d.oid), i=o&&o.items[d.n]; if(!i) return {ok:false,err:'Позиция не найдена'};
+    if(['removed','dropped','missing'].includes(i.state)) return {ok:false,err:'Эта позиция не была доставлена'};
+    const cid=d.cid||ME;
+    if(cid===ME&&!cmplOpenFor(o)) return {ok:false,err:`Жалобу можно отправить в течение ${ADM.settings.cmplH} ч после доставки`};
+    if(CMs().some(c=>c.oid===d.oid&&c.n===d.n&&c.cid===cid)) return {ok:false,err:'На эту позицию жалоба уже есть'};
+    if(!CRL[d.r]) return {ok:false,f:'r',err:'Выберите, что не так'};
+    if(CR_PHOTO(d.r)&&!(d.photo&&d.photo.thumb)) return {ok:false,f:'photo',err:'Для просрочки и порчи нужно фото'};
+    const text=String(d.text||'').trim().slice(0,300); if(d.r==='other'&&text.length<3) return {ok:false,f:'text',err:'Опишите, что не так'};
+    const max=itemSum(i); let amt=0;
+    if(d.want==='full') amt=max; else if(d.want==='part'){ amt=Math.round(+String(d.amt).replace(/\s/g,'')); if(!(amt>=1&&amt<=max)) return {ok:false,f:'amt',err:`Сумма от 1 до ${fmt(max)}`}; }
+    else if(d.want!=='none') return {ok:false,err:'Выберите требование'};
+    state.seq++; const c={id:'k'+state.seq,cid,oid:o.id,n:d.n,k:i.k,s:i.s,r:d.r,text,photo:d.photo||null,want:d.want,amt,t:d.t||now(),st:'open',reply:''};
+    CMs().unshift(c); rateAdj(i.s,-0.05); o.log.push({s:'cmpl',t:now(),note:`${PRODUCTS[i.k].n}: ${CRL[d.r]}`}); save(); admLog('cmpl_in',`${state.sellers[i.s].n} · ${PRODUCTS[i.k].n} · ${CRL[d.r]}`,true);
+    return {ok:true,c}; },
+  get(id){ return CMs().find(c=>c.id===id); },
+  sellerReturned(id){ const c=this.get(id); if(!c||!c.amt||c.returned) return {ok:false}; c.returned=true; c.retAt=now(); if(c.st==='open') c.st='refunded'; save(); return {ok:true}; },
+  sellerNoted(id,reply){ const c=this.get(id); if(!c||c.st!=='open') return {ok:false}; c.st='noted'; c.reply=String(reply||'').trim().slice(0,300); save(); return {ok:true}; },
+  sellerDisagree(id,reply){ const c=this.get(id); reply=String(reply||'').trim().slice(0,300); if(!c||c.st!=='open') return {ok:false,err:'Уже отвечено'}; if(reply.length<3) return {ok:false,err:'Напишите ответ клиенту и поддержке'};
+    c.st='disputed'; c.reply=reply; c.repAt=now(); save(); return {ok:true}; },
+  decide(id,act,comment){ const c=this.get(id); comment=String(comment||'').trim().slice(0,300); if(!c) return {ok:false,err:'Нет жалобы'};
+    if(['confirmed','rejected'].includes(c.st)) return {ok:false,err:'Решение уже записано'};
+    if(act==='reject'&&comment.length<3) return {ok:false,err:'Напишите, почему жалоба необоснованна'};
+    if(act!=='confirm'&&act!=='reject') return {ok:false};
+    c.st=act==='confirm'?'confirmed':'rejected'; c.adm={act,comment,t:now()};
+    rateAdj(c.s,act==='confirm'?-0.15:0.05); save();
+    admLog(act==='confirm'?'cmpl_confirm':'cmpl_reject',`${state.sellers[c.s].n} · ${PRODUCTS[c.k].n} · ${CRL[c.r]}${comment?' — '+comment:''}`);
+    if(act==='confirm') this.autoCheck(c.s); return {ok:true}; },
+  block(s,k,why,cid=ME){ if(!state.sellers[s]) return {ok:false}; const L=PB();
+    if(L.some(b=>b.cid===cid&&b.s===s&&(!b.k||b.k===k))) return {ok:true,already:true};
+    if(!k) for(let j=L.length-1;j>=0;j--) if(L[j].cid===cid&&L[j].s===s) L.splice(j,1);
+    L.push({cid,s,k:k||null,t:now(),why:String(why||'').slice(0,80)});
+    let note=[]; if(cid===ME) note=repickAfterBlock(s,k); save(); this.autoCheck(s); return {ok:true,note}; },
+  unblock(s,k,cid=ME){ const L=PB(), n=L.length; state.pblk=L.filter(b=>!(b.cid===cid&&b.s===s&&(b.k||null)===(k||null))); save(); return {ok:state.pblk.length<n}; },
+  stats(s){ const L=CMs().filter(c=>c.s===s), by={}; L.forEach(c=>by[c.r]=(by[c.r]||0)+1);
+    const os=state.orders.filter(o=>o.status!=='cancelled'&&o.items.some(i=>i.s===s));
+    const withC=new Set(L.filter(c=>os.some(o=>o.id===c.oid)).map(c=>c.oid)).size;
+    return {n:L.length,by,confirmed:L.filter(c=>c.st==='confirmed').length,rejected:L.filter(c=>c.st==='rejected').length,open:L.filter(c=>['open','disputed'].includes(c.st)).length,
+      pct:os.length?Math.round(withC/os.length*100):0,orders:os.length,blockers:new Set(PB().filter(b=>b.s===s).map(b=>b.cid)).size}; },
+  client(cid){ const n=CMs().filter(c=>c.cid===cid).length; const orders=cid===ME?state.orders.filter(o=>deliveredAt(o)).length:((CLI()[cid]||{}).orders||0);
+    const ord=new Set(CMs().filter(c=>c.cid===cid).map(c=>c.oid)).size;
+    return {n,orders,pct:orders?Math.round(ord/orders*100):0,often:n>=3&&orders>0&&ord/orders>=.5}; },
+  autoCheck(s){ const S=state.sellers[s]; if(!S||S.review) return false; const st=ADM.settings, since=Math.max(now()-st.arDays*864e5,S.reviewOff||0);
+    const conf=CMs().filter(c=>c.s===s&&c.st==='confirmed'&&['expired','rotten'].includes(c.r)&&(c.adm?c.adm.t:c.t)>=since).length;
+    const blk=new Set(PB().filter(b=>b.s===s&&b.t>=since).map(b=>b.cid)).size;
+    if(conf>=st.arCmpl||blk>=st.arBlk){ const why=conf>=st.arCmpl?`${conf} подтв. жалоб на просрочку/порчу за ${st.arDays} дн`:`${blk} клиентов не берут у него за ${st.arDays} дн`;
+      S.review={t:now(),why}; S.verWas=!!S.verified; S.verified=false; save(); admLog('auto_review',`${S.n}: ${why}`,true); return true; }
+    return false; },
+  reviewOff(s){ const S=state.sellers[s]; if(!S||!S.review) return {ok:false}; const why=S.review.why; S.review=null; S.reviewOff=now(); if(S.verWas) S.verified=true; save(); admLog('review_off',`${S.n} (было: ${why})`); return {ok:true}; },
+  list(f='all'){ return CMs().filter(c=>f==='all'||(f==='open'?['open','disputed'].includes(c.st):c.st===f)); }
+};
+// после блокировки: снять закрепление и ручной выбор, сказать, кого подобрали вместо
+function repickAfterBlock(s,k){ const S=state.sellers[s], note=[];
+  if(!k) Object.entries(state.pins||{}).forEach(([c,v])=>{ if(v===s){ delete state.pins[c]; note.push(`«${CATS[c]?CATS[c].t:c}»: закреплённый ${S.n} снят`); } });
+  if(state.sel) Object.entries(state.sel).forEach(([pk,v])=>{ if(v===s&&(!k||k===pk)) delete state.sel[pk]; });
+  Object.entries(state.cart||{}).forEach(([pk,q])=>{ if(k&&pk!==k) return; if(!state.offers.some(o=>o.p===pk&&o.s===s)) return;
+    const r=pickFor(pk,q,chosen); note.push(r.none?`${PRODUCTS[pk].n}: других продавцов нет — можно «Найти на рынке»`:`${PRODUCTS[pk].n} → ${state.sellers[r.o.s].n}`); });
+  (state.templates||[]).forEach(t=>{ if(Object.keys(t.cart||{}).some(pk=>(!k||pk===k)&&state.offers.some(o=>o.p===pk&&o.s===s))) note.push(`Шаблон «${t.name}»: подберём других продавцов`); });
+  return note; }
+
+/* ---------- обёртки: личная блокировка исключает продавца везде ---------- */
+function available(o,qty){ if(myBlk(o.s,o.p)) return false; return availableV6(o,qty); }
+function pickFor(k,q,kind,auto){ const r=pickForBase(k,q,kind,auto); if(r.none||r.manual||kind!=='best') return r; const S=state.sellers[r.o.s]; if(!S||!S.review) return r;
+  const alt=state.offers.filter(o=>o.p===k&&available(o,q)&&!(state.sellers[o.s]||{}).review).sort((a,b)=>rankPrice(a)-rankPrice(b)||a.price-b.price); return alt.length?{...r,o:alt[0]}:r; }
+function noneHTML(k){ const bl=[...new Set(state.offers.filter(o=>o.p===k&&myBlk(o.s,k)&&availableV6(o,0)).map(o=>o.s))];
+  if(!bl.length) return '<span class="warnt">Нет в наличии</span>';
+  return `<div class="nbw"><span class="warnt" data-noother="${k}">Других продавцов нет</span><small class="nbm">вы не берёте у: ${bl.map(s=>esc(state.sellers[s].n)).join(', ')}</small><button class="btn sm secondary findm" data-findm="${k}" onclick="event.stopPropagation();findOnMarket('${k}')">Найти на рынке</button></div>`; }
+function findOnMarket(k){ const P=PRODUCTS[k], q=state.cart[k]; if(!P||!q) return; state.custom=state.custom||[]; const id='u'+(++state.seq), text=`${P.n} ${fq(q,P.u)}`.slice(0,80);
+  state.custom.push({id,text}); admAsIs(id,text); delete state.cart[k]; save(); hap('ok'); toast('Сборщик поищет у других продавцов'); render(); }
+const noBuyOf=o=>o.noBuy||myBlocks().map(b=>({s:b.s,k:b.k}));
+const noBuyTxt=o=>noBuyOf(o).map(b=>`${state.sellers[b.s]?state.sellers[b.s].n:b.s}${b.k?` (${PRODUCTS[b.k]?PRODUCTS[b.k].n:b.k})`:''}`).join(', ');
+function placeOrder(){ const n=state.orders.length; placeOrderV6(); if(state.orders.length>n){ const o=state.orders[0]; if(!o.noBuy){ o.noBuy=myBlocks().map(b=>({s:b.s,k:b.k})); o.cid=ME; save(); } } }
+function vRoute(){ let h=vRouteV6(); const o=openOrder&&findO(openOrder); if(!o) return h; const t=noBuyTxt(o); if(!t) return h;
+  return h.replace(/(<div class="ptop">[\s\S]*?<\/div>)/,`$1<div class="regmsg" id="noBuyCol"><b>Клиент не берёт у:</b> ${esc(t)}</div>`); }
+// «Найти на рынке»: в выборе продавца у сборщика нет тех, у кого клиент не берёт
+function extraSellerOk(o,s){ return !noBuyOf(o).some(b=>b.s===s&&!b.k); }
+
+/* ---------- клиент: «Проблема с товаром» в доставленном заказе ---------- */
+function itemCmpl(o,n){ const i=o.items[n]; if(!i||['removed','dropped','missing'].includes(i.state)) return ''; const c=cmplOf(o.id,n);
+  if(c) return `<small class="cmst ${cmplCls(c)}" data-cmst="${n}">Жалоба: ${esc(CRL[c.r])} · ${esc(cmplStatusText(c))}</small>`;
+  if(!deliveredAt(o)) return '';
+  if(!cmplOpenFor(o)) return `<small class="cmst" data-cmlate="${n}">Окно жалобы ${ADM.settings.cmplH} ч прошло</small>`;
+  return `<button class="cmbtn" data-cmp-item="${n}" onclick="event.stopPropagation();openCmpl(${o.id},${n})">Проблема с товаром</button>`; }
+let cmF=null;
+function openCmpl(oid,n){ const o=findO(oid), i=o&&o.items[n]; if(!i) return; const P=PRODUCTS[i.k], S=state.sellers[i.s], max=itemSum(i);
+  cmF={oid,n,r:'',photo:null,want:'full'};
+  modal(`<h3>Проблема с товаром</h3><div class="fine" style="margin:-6px 0 10px">${P.e} ${esc(P.n)} · ${esc(S.n)} · ${fmt(max)}</div>
+   <label class="fl">Что не так</label><div class="chips wrap" id="cpR">${CR.map(([k,t])=>`<button class="chip" data-cr="${k}" onclick="cmSet('r','${k}')">${t}</button>`).join('')}</div>
+   <label class="fl">Фото <span id="cpPhReq" class="hint"></span></label>
+   <label class="cpph" id="cpPh"><input type="file" id="cpPhoto" accept="image/*" capture="environment" onchange="cmplPhoto(this)"><span id="cpPhT">📷 Сфотографировать товар</span></label>
+   <label class="fl">Что хотите</label><div class="seg3" id="cpW">
+    <button class="on" data-cw="full" onclick="cmSet('want','full')">Вернуть всё<small>${fmt(max)}</small></button><button data-cw="part" onclick="cmSet('want','part')">Вернуть часть</button><button data-cw="none" onclick="cmSet('want','none')">Просто отметить</button></div>
+   <input class="inp hid" id="cpAmt" type="number" inputmode="numeric" placeholder="Сумма, ₸ (до ${fmt(max)})">
+   <textarea class="inp" id="cpText" rows="2" maxlength="300" placeholder="Комментарий продавцу (для «Другое» — обязательно)"></textarea>
+   <div class="regmsg bad hid" id="cpErr"></div>
+   <button class="btn" id="cpGo" onclick="cmplSubmit()">Отправить продавцу</button><button class="btn gray" onclick="closeModal()">Отмена</button>
+   <div class="fine">Деньги возвращает сам продавец на ваш Kaspi — общего счёта нет. Если продавец не согласен, решит поддержка.</div>`); }
+function cmSet(f,v){ if(!cmF) return; cmF[f]=v; hap(); cmErrOff();
+  if(f==='r'){ document.querySelectorAll('#cpR .chip').forEach(b=>b.classList.toggle('active',b.dataset.cr===v)); $('cpPhReq').textContent=CR_PHOTO(v)?'· обязательно':'· по желанию'; }
+  if(f==='want'){ document.querySelectorAll('#cpW button').forEach(b=>b.classList.toggle('on',b.dataset.cw===v)); $('cpAmt').classList.toggle('hid',v!=='part'); if(v==='part') $('cpAmt').focus(); } }
+function cmErrOff(){ const e=$('cpErr'); if(e) e.classList.add('hid'); }
+function cmplPhoto(el){ const f=el.files&&el.files[0]; if(!f||!cmF) return; cmErrOff();
+  if(!/^image\//.test(f.type)){ toast('Нужна фотография'); hap('err'); el.value=''; return; }
+  if(f.size>DOC_LIMIT.file){ toast('Файл больше 10 МБ'); hap('err'); el.value=''; return; }
+  const rd=new FileReader(); rd.onload=()=>{ const img=new Image(); img.onload=()=>{ try{ const sc=Math.min(1,320/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.max(1,Math.round(img.width*sc)); c.height=Math.max(1,Math.round(img.height*sc));
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); let q=.6, u=c.toDataURL('image/jpeg',q); while(u.length>DOC_LIMIT.thumb&&q>.2){ q-=.15; u=c.toDataURL('image/jpeg',q); }
+      if(u.length>DOC_LIMIT.thumb){ toast('Фото слишком тяжёлое'); return; }
+      cmF.photo={name:f.name.slice(0,60),size:f.size,thumb:u}; const b=$('cpPh'); b.classList.add('on'); b.style.backgroundImage=`url(${u})`; $('cpPhT').textContent='Фото добавлено · заменить'; hap('ok'); }catch(e){ toast('Не удалось обработать фото'); } };
+    img.onerror=()=>toast('Не удалось открыть фото'); img.src=rd.result; }; rd.readAsDataURL(f); }
+function cmplSubmit(){ if(!cmF) return; const d={...cmF,amt:($('cpAmt')||{}).value,text:($('cpText')||{}).value}; const r=cmplApi.create(d);
+  if(!r.ok){ const e=$('cpErr'); e.textContent=r.err; e.classList.remove('hid'); hap('err'); return; }
+  cmF=null; hap('ok'); openBlockChoice(r.c); }
+function openBlockChoice(c){ const S=state.sellers[c.s], P=PRODUCTS[c.k], n=myCmplOn(c.s);
+  if(myBlk(c.s)){ modal(`<h3>Жалоба отправлена</h3><div class="fine">${esc(S.n)} уже у вас в списке «Не беру».</div><button class="btn" onclick="openOrderSheet(${c.oid})">К заказу</button>`); return; }
+  const all=`<button class="btn ${n>=2?'danger':'gray'}" id="bkAll" onclick="cmplBlock('${c.id}',0)">Больше не брать у ${esc(S.n)}</button>`,
+    item=`<button class="btn secondary" id="bkItem" onclick="cmplBlock('${c.id}',1)">Не брать у ${esc(S.n)} только «${esc(P.n)}»</button>`,
+    ch=`<button class="btn ${n>=2?'gray':''}" id="bkChance" onclick="cmplChance('${c.id}')">Дать ещё шанс</button>`;
+  modal(`<h3>Жалоба отправлена</h3><div class="fine" style="margin:-6px 0 10px">${esc(S.n)} увидит её и ответит: вернёт деньги или напишет, почему не согласен.</div>
+   ${n>=2?`<div class="regmsg bad" id="bkWarn"><b>Уже ${n} ${pl(n,['жалоба','жалобы','жалоб'])} на этого продавца</b> от вас. Может, хватит?</div>${all}${item}${ch}`
+     :`<div class="regmsg" id="bkSoft">Первый раз мог быть случайностью. Можно дать продавцу ещё шанс — или больше у него не брать.</div>${ch}${item}${all}`}
+   <div class="fine">Продавец не узнает, кто его заблокировал. Вернуть — Профиль → «Не беру у этих продавцов».</div>`); }
+function cmplChance(id){ const c=cmplApi.get(id); hap(); toast('Хорошо, дадим ещё шанс'); openOrderSheet(c.oid); }
+function cmplBlock(id,onlyItem){ const c=cmplApi.get(id), S=state.sellers[c.s]; const r=cmplApi.block(c.s,onlyItem?c.k:null,CRL[c.r]); hap('ok'); render();
+  modal(`<h3>Готово</h3><div class="regmsg ok" id="bkDone"><b>${esc(S.n)}${onlyItem?` · «${esc(PRODUCTS[c.k].n)}»`:''}</b> — больше не подбираем вам ни в «Выгодно», ни в «Мои продавцы», ни на замену.</div>
+   ${r.note&&r.note.length?`<div class="card kvs" id="bkNote"><div class="fine" style="margin:0 0 4px">Переподобрали:</div>${r.note.map(x=>`<div class="kv"><span>${esc(x)}</span></div>`).join('')}</div>`:''}
+   <button class="btn" onclick="openOrderSheet(${c.oid})">К заказу</button>`); }
+
+/* ---------- профиль: «Не беру у этих продавцов» ---------- */
+function vProfile(){ let h=vProfileV6(); const n=myBlocks().length;
+  const row=`<div class="glist"><button class="grow" id="noBuyRow" onclick="openNoBuy()"><span class="gi">🚫</span><span class="gl">Не беру у этих продавцов</span><span class="gv">${n||'нет'}</span>${IC.chev}</button></div>`;
+  const z=h.indexOf('<h2 class="sec">Для партнёров'); return z>=0?h.slice(0,z)+row+h.slice(z):h+row; }
+function openNoBuy(){ const L=myBlocks();
+  modal(`<h3>Не беру у этих продавцов</h3><div class="fine" style="margin:-6px 0 10px">Их товары вам не подбираются. Продавец не знает, что он в этом списке. На общий рейтинг влияют только жалобы.</div>
+   ${L.length?`<div class="glist" id="noBuyList">${L.map(b=>{ const S=state.sellers[b.s]||{n:b.s}, cn=myCmplOn(b.s,b.k);
+     return `<div class="grow" data-nb="${b.s}${b.k?':'+b.k:''}"><span class="gi">${S.emoji||'🏪'}</span><span class="gl">${esc(S.n)}<small>${b.k?`только «${esc(PRODUCTS[b.k]?PRODUCTS[b.k].n:b.k)}»`:'весь продавец'}${b.why?' · '+esc(b.why):''} · жалоб от вас: ${cn} · с ${tA(b.t).split(' ')[0]}</small></span><button class="btn sm secondary" data-unblk="${b.s}${b.k?':'+b.k:''}" onclick="noBuyOff('${b.s}','${b.k||''}')">Разблокировать</button></div>`; }).join('')}</div>`
+     :'<div class="card admempty" id="noBuyList">Список пуст</div>'}
+   <button class="btn gray" onclick="closeModal()">Закрыть</button>`); }
+function noBuyOff(s,k){ cmplApi.unblock(s,k||null); hap('ok'); toast(`${state.sellers[s].n} снова в подборе`); openNoBuy(); render(); }
+const myCmplTag=(s,k)=>{ const n=myCmplOn(s); return (myBlk(s,k)?' · <span class="nbt">вы не берёте</span>':'')+(n?` · <span class="cmt" data-mycmp="${s}">жалоб от вас: ${n}</span>`:''); };
+
+/* ---------- продавец: свои жалобы ---------- */
+function sellerCmplBlock(me){ const L=CMs().filter(c=>c.s===me&&(['open','disputed'].includes(c.st)||(c.st==='confirmed'&&c.amt&&!c.returned)||now()-c.t<7*864e5)); if(!L.length) return '';
+  return `<div class="ttl" style="font-size:24px">Жалобы клиентов</div>`+L.map(c=>{ const o=findO(c.oid), P=PRODUCTS[c.k];
+    const acts=c.st==='open'?`<div class="ri-a">${c.amt?`<button class="btn ok" data-sret="${c.id}" onclick="selCmplRet('${c.id}')">✓ Вернул на Kaspi</button>`:`<button class="btn ok" data-sack="${c.id}" onclick="selCmplAck('${c.id}')">Принято</button>`}<button class="btn gray" data-sdis="${c.id}" onclick="selCmplDis('${c.id}')">Не согласен</button></div>`
+      :c.st==='confirmed'&&c.amt&&!c.returned?`<div class="regmsg bad">Поддержка подтвердила: верните клиенту ${fmt(c.amt)}</div><div class="ri-a"><button class="btn ok" data-sret="${c.id}" onclick="selCmplRet('${c.id}')">✓ Вернул на Kaspi</button></div>`:'';
+    return `<div class="ri cmcard" data-scmp="${c.id}"><div class="ri-h"><div style="min-width:0"><div class="meta" style="margin:0 0 2px">Заказ №${c.oid} · ${tA(c.t)}</div><b>${P.e} ${esc(P.n)}: ${esc(CRL[c.r])}</b>
+      <div class="meta">${c.amt?`Клиент просит вернуть ${fmt(c.amt)} · Kaspi ${esc((o&&o.phone)||'клиента')}`:'Клиент просто отметил проблему'}${c.text?` · «${esc(c.text)}»`:''}</div>
+      <div class="meta"><b class="cmst ${cmplCls(c)}">${esc(cmplStatusText(c))}</b>${c.reply?` · ваш ответ: «${esc(c.reply)}»`:''}</div></div>
+      ${c.photo&&c.photo.thumb?`<img class="cmth" src="${c.photo.thumb}" alt="" onclick="openCmpPhoto('${c.id}')">`:''}</div>${acts}</div>`; }).join(''); }
+function selCmplRet(id){ const c=cmplApi.get(id); confirmBox(`Вернули клиенту ${fmt(c.amt)} на Kaspi?`,()=>{ cmplApi.sellerReturned(id); hap('ok'); toast('Отмечено: вернул'); render(); }); }
+function selCmplAck(id){ cmplApi.sellerNoted(id,''); hap('ok'); toast('Клиент увидит, что вы приняли'); render(); }
+function selCmplDis(id){ modal(`<h3>Не согласны с жалобой</h3><div class="fine" style="margin:-6px 0 10px">Ответ увидят клиент и поддержка. Поддержка посмотрит фото и решит.</div>
+  <textarea class="inp" id="srText" rows="3" maxlength="300" placeholder="Например: товар был свежий, фото при выдаче есть"></textarea><button class="btn" id="srGo" onclick="selCmplDisGo('${id}')">Отправить в поддержку</button><button class="btn gray" onclick="closeModal()">Отмена</button>`); }
+function selCmplDisGo(id){ const r=cmplApi.sellerDisagree(id,$('srText').value); if(!r.ok){ toast(r.err||'Ошибка'); hap('err'); return; } closeModal(); hap('ok'); toast('Отправлено в поддержку'); render(); }
+function openCmpPhoto(id){ const c=cmplApi.get(id); if(!c||!c.photo) return; modal(`<h3>Фото клиента</h3><img id="cmBig" class="docbig" src="${c.photo.thumb}" alt=""><div class="fine">${esc(c.photo.name||'')} · на устройстве хранится только уменьшенная копия</div><button class="btn gray" onclick="closeModal()">Закрыть</button>`); }
+function vSeller(){ let h=vSellerV6(); if(sellerTab!=='issue') return h; const b=sellerCmplBlock(state.me); if(!b) return h;
+  const m='<div class="ttl" style="font-size:24px">К выдаче</div>'; return h.includes(m)?h.replace(m,b+m):h+b; }
+
+/* ---------- админка ---------- */
+ORD_F.splice(5,0,['cmpl','Жалобы']);
+let admCmF='all';
+function admOrdList(){ if(admOrdF!=='cmpl') return admOrdListV6();
+  const q=admOQ.trim().toLowerCase(); const L=cmplApi.list(admCmF).filter(c=>!q||String(c.oid)===q.replace(/^№/,'')||state.sellers[c.s].n.toLowerCase().includes(q)||PRODUCTS[c.k].n.toLowerCase().includes(q));
+  const F=[['all','все'],['open','ждут решения'],['confirmed','подтверждены'],['rejected','отклонены']];
+  return `<div class="grow"><span class="gl">Статус</span><select class="gsel" id="admCmF" onchange="admCmF=this.value;$('admOList').innerHTML=admOrdList()">${F.map(([k,t])=>`<option value="${k}" ${admCmF===k?'selected':''}>${t}</option>`).join('')}</select></div>`+
+   (L.length?L.map(c=>{ const cl=cmplApi.client(c.cid); return `<button class="grow" data-cmp="${c.id}" onclick="openAdmCmpl('${c.id}')">${c.photo&&c.photo.thumb?`<img class="cmth sm" src="${c.photo.thumb}" alt="">`:'<span class="gi">📝</span>'}<span class="gl">${esc(PRODUCTS[c.k].n)}: ${esc(CRL[c.r])} ${c.st==='disputed'?'<span class="tagr">спор</span>':['confirmed'].includes(c.st)?'<span class="tagg">подтв.</span>':c.st==='rejected'?'<span class="tago">отклонена</span>':''}${cl.often?' <span class="tago">жалуется часто</span>':''}
+     <small>№${c.oid} · ${esc(state.sellers[c.s].n)} · ${c.amt?fmt(c.amt):'без возврата'} · ${esc(cmplStatusText(c))} · ${tA(c.t)}</small></span>${IC.chev}</button>`; }).join(''):'<div class="grow"><span class="gl">Жалоб нет</span></div>'); }
+const cliName=cid=>{ if(cid!==ME) return (CLI()[cid]||{}).n||('Клиент '+cid); const o=state.orders.find(o=>o.phone); return 'Клиент '+((o&&o.phone)||'этого устройства'); };
+function openAdmCmpl(id){ const c=cmplApi.get(id); if(!c) return; const S=state.sellers[c.s], P=PRODUCTS[c.k], cl=cmplApi.client(c.cid), fin=['confirmed','rejected'].includes(c.st);
+  modal(`<h3>Жалоба · ${esc(P.n)}</h3><div class="fine" style="margin:-6px 0 10px">${tA(c.t)} · ${esc(cmplStatusText(c))}</div>
+   ${c.photo&&c.photo.thumb?`<img id="cmPhoto" class="docbig" src="${c.photo.thumb}" alt="">`:'<div class="card admempty" id="cmPhoto">Без фото</div>'}
+   <div class="card kvs"><div class="kv"><span>Заказ</span><b><button class="link" onclick="openAdmOrder(${c.oid})">№${c.oid}</button></b></div>
+    <div class="kv"><span>Продавец</span><b><button class="link" onclick="admPartner('seller','${c.s}')">${esc(S.n)}</button></b></div>
+    <div class="kv"><span>Причина</span><b>${esc(CRL[c.r])}</b></div><div class="kv"><span>Требование</span><b>${c.amt?`вернуть ${fmt(c.amt)}${c.want==='part'?' (часть)':''}`:'просто отметить'}${c.returned?' · ✓ вернул':''}</b></div>
+    ${c.text?`<div class="kv"><span>Клиент пишет</span><b>${esc(c.text)}</b></div>`:''}${c.reply?`<div class="kv"><span>Ответ продавца</span><b>${esc(c.reply)}</b></div>`:''}
+    <div class="kv"><span>Клиент</span><b>${esc(cliName(c.cid))}<small> · жалоб ${cl.n} на ${cl.orders} ${pl(cl.orders,['заказ','заказа','заказов'])}</small></b></div></div>
+   ${cl.often?`<div class="regmsg bad" id="cmOften"><b>Клиент жалуется часто:</b> жалобы в ${cl.pct}% заказов. Проверьте фото внимательнее.</div>`:''}
+   ${fin?`<div class="regmsg ${c.st==='confirmed'?'ok':''}" id="cmRes"><b>${c.st==='confirmed'?'Подтверждена':'Отклонена как необоснованная'}</b> ${tA(c.adm.t)}${c.adm.comment?` — ${esc(c.adm.comment)}`:''}</div>`
+    :`<textarea class="inp" id="cmCom" rows="2" maxlength="300" placeholder="Комментарий (для отклонения — обязательно)"></textarea>
+     <div class="f2"><button class="btn ok" id="cmConfirm" onclick="admCmDecide('${c.id}','confirm')">Подтвердить</button><button class="btn danger" id="cmReject" onclick="admCmDecide('${c.id}','reject')">Отклонить</button></div>
+     <div class="fine">Подтверждённая жалоба сильнее снижает рейтинг продавца и считается в автоправиле. Деньги админка не двигает: возврат делает продавец${c.amt&&!c.returned?`, требование ${fmt(c.amt)} увидит у себя`:''}.</div>`}
+   <button class="btn gray" onclick="closeModal()">Закрыть</button>`); }
+function admCmDecide(id,act){ const com=$('cmCom').value; if(act==='reject'&&com.trim().length<3){ toast('Напишите, почему жалоба необоснованна'); hap('err'); $('cmCom').classList.add('err'); return; }
+  confirmBox(act==='confirm'?'Подтвердить жалобу?':'Отклонить жалобу как необоснованную?',()=>{ const r=cmplApi.decide(id,act,com); if(!r.ok){ toast(r.err); hap('err'); return; } hap('ok'); toast('Решение записано'); render(); openAdmCmpl(id); }); }
+function admPartner(kind,id){ admPartnerV6(kind,id); if(kind!=='seller') return; const S=state.sellers[id], st=cmplApi.stats(id), at=$('pNote'); if(!at) return;
+  const rs=Object.entries(st.by).sort((a,b)=>b[1]-a[1]);
+  at.insertAdjacentHTML('beforebegin',`${S.review?`<div class="regmsg bad" id="pReview"><b>На проверке</b> с ${tA(S.review.t)} — ${esc(S.review.why)}. Не попадает в «Выгодно», «Проверен ✓» снят. Блокировать или нет — решаете вы.<button class="btn sm secondary" id="pReviewOff" onclick="admReviewOff('${id}')">Снять проверку</button></div>`:''}
+   <h2 class="sec">Жалобы клиентов</h2><div class="kpis" id="pCmpl">${kpi(st.n,'жалоб на товар')}${kpi(st.pct+'%','заказов с жалобой')}${kpi(st.confirmed,'подтверждено')}${kpi(st.blockers,'клиентов не берут у него')}</div>
+   ${rs.length?`<div class="card kvs" id="pCmplBy">${rs.map(([r,n])=>`<div class="kv"><span>${esc(CRL[r])}</span><b>${n}</b></div>`).join('')}</div>`:''}
+   ${st.n?`<button class="btn gray" onclick="admOrdF='cmpl';admCmF='all';admOQ='${esc(S.n)}';admGo('ord')">Все жалобы на продавца</button>`:''}`); }
+function admReviewOff(id){ confirmBox(`Снять проверку с ${state.sellers[id].n}?`,()=>{ cmplApi.reviewOff(id); hap('ok'); toast('Проверка снята'); admPartner('seller',id); }); }
+function admSum(){ let h=admSumV6(); const rv=Object.entries(state.sellers).filter(([,S])=>S.review), op=cmplApi.list('open');
+  if(!rv.length&&!op.length) return h;
+  const b=`<h2 class="sec">Жалобы на товар</h2><div class="glist" id="admCmplSum">${rv.map(([id,S])=>`<button class="grow" data-review="${id}" onclick="admPartner('seller','${id}')"><span class="gi">🔍</span><span class="gl">${esc(S.n)}: на проверке<small>${esc(S.review.why)}</small></span>${IC.chev}</button>`).join('')}
+    ${op.length?`<button class="grow" id="admCmplOpen" onclick="admOrdF='cmpl';admCmF='open';admOQ='';admGo('ord')"><span class="gi">📝</span><span class="gl">Жалобы ждут решения<small>в т. ч. споры «продавец не согласен»</small></span><span class="badge">${op.length}</span>${IC.chev}</button>`:''}</div>`;
+  const m='<h2 class="sec">Открытые проблемы</h2>'; return h.includes(m)?h.replace(m,b+m):h+b; }
+function sellerStats(id){ const s=sellerStatsV6(id); s.complaints+=CMs().filter(c=>c.s===id).length; return s; }
 
 render();
 </script></body></html>
