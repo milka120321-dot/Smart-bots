@@ -359,6 +359,54 @@ html.dark .sh .card,html.dark .sh .glist{background:rgba(118,118,128,.18)}
 .paycard .btn{margin-top:8px}.paycard .f2 .btn{font-size:14px;padding-left:6px;padding-right:6px}
 .sh .paycard{background:var(--fill)}html.dark .sh .paycard{background:rgba(118,118,128,.18)}.paycard .kaspi{background:rgba(127,127,127,.14)}
 .ci-s{font-size:12px;color:var(--accent);margin-top:2px}.ci-b{cursor:pointer}
+/* v5 */
+label.fl{margin:0}label.fl>span{display:block;margin:0 0 4px 2px}
+.inp.err{box-shadow:0 0 0 2px var(--red) inset}
+.inrow{display:flex;gap:8px;align-items:flex-start}.inrow .inp{flex:1}.inrow .btn{width:auto;flex-shrink:0;min-height:46px}
+.unk2{padding:10px 0;border-top:.5px solid var(--sep)}.unk2:first-child{border-top:none}
+.unk-h{display:flex;align-items:center;gap:8px}.unk-h b{flex:1;min-width:0;font-size:15px}
+.unk2 .x,.ci .x{width:30px;height:30px;border-radius:15px;background:var(--fill);color:var(--hint);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}
+.unk-s{font-size:13px;color:var(--hint);margin:2px 0 6px}
+.sugs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.chip.sug{height:32px;background:var(--tint);color:var(--accent);font-size:13px;padding:0 12px}
+.unk-a{display:flex;gap:8px}.unk-a .btn{flex:1;margin:0;width:auto}.unk-a .inp.sm{flex:1;margin:0;height:38px;font-size:14px;padding:0 26px 0 10px;background-position:right 9px center;min-width:0}
+.tplrow{display:flex;justify-content:flex-end;margin:8px 2px 0}.tplrow .link{font-size:14px}
+.rowbtn.plan .ri{background:var(--tint-orange)}
+.docpill{width:100%;margin:0 0 10px;justify-content:space-between}
+.days{display:flex;gap:6px;flex-wrap:wrap}.days .chip{height:36px;padding:0 12px}.days .chip.active{background:var(--accent);color:var(--accent-text)}
+.vtag{display:inline-block;font-size:11px;font-weight:600;color:var(--green);background:var(--tint-green);border-radius:8px;padding:1px 6px;margin-left:2px}.vtag.no{color:var(--orange);background:var(--tint-orange)}
+.link.tiny{font-size:12px;color:var(--hint)}
+/* онбординг */
+.onb{min-height:100vh;display:flex;flex-direction:column;padding:max(20px,env(safe-area-inset-top)) 16px calc(20px + var(--safe-b));background:var(--bg)}
+.onb h1{font-size:28px;font-weight:700;letter-spacing:-.5px;margin:8px 0 4px}
+.onb-p{font-size:15px;color:var(--hint);margin:0 0 16px}
+.onb-dots{display:flex;gap:6px;margin:4px 0 14px}.onb-dots i{height:4px;flex:1;border-radius:2px;background:var(--fill)}.onb-dots i.on{background:var(--accent)}
+.onb-back{display:inline-flex;align-items:center;gap:4px;color:var(--accent);font-size:16px;align-self:flex-start;margin-bottom:2px}
+.roles{display:flex;flex-direction:column;gap:10px;margin-bottom:auto;padding-bottom:16px}
+.role{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;background:var(--card);text-align:left;box-shadow:0 0 0 2px transparent inset}
+.role.on{box-shadow:0 0 0 2px var(--accent) inset}
+.role .re{width:46px;height:46px;border-radius:14px;background:var(--tint);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.role .rt{flex:1}.role .rt b{display:block;font-size:17px}.role .rt span{font-size:14px;color:var(--hint)}
+.role .rc{width:22px;height:22px;border-radius:11px;box-shadow:0 0 0 2px var(--sep) inset;flex-shrink:0}.role.on .rc{background:var(--accent);box-shadow:0 0 0 5px var(--card) inset,0 0 0 2px var(--accent)}
+.onb-f{margin-top:8px}.onb-ck{border-radius:12px;margin:0 0 10px;background:var(--fill)}
+.doc{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--card);margin-bottom:8px;cursor:pointer}
+.doc .dthumb{width:48px;height:48px;border-radius:10px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;flex-shrink:0}
+.doc .dthumb img{width:100%;height:100%;object-fit:cover}.doc .dl{flex:1;min-width:0}.doc .dl b{display:block;font-size:15px;font-weight:600}.doc .dl small{font-size:13px;color:var(--hint);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc .dx{color:var(--accent);font-size:15px;font-weight:500}.doc.on .dl small{color:var(--green)}
+.onb-honest{margin:6px 0 16px}.onb .btn{margin-top:8px}
+.onb-st{margin:auto 0;text-align:center}.onb-st .ee{font-size:60px;display:block;margin-bottom:6px}.onb-st .glist{text-align:left;margin:8px 0}
+.gate{padding-top:28px}.gate-demo{text-align:center;margin:14px 0;font-size:12px;color:var(--hint)}.gate-demo .link{font-size:12px;color:var(--hint)}
+/* накладная */
+#invoice{font-size:14px;color:var(--text)}
+.inv-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}.inv-h b{font-size:18px}.inv-h span{color:var(--hint);font-size:13px}
+.inv-c{font-size:13px;color:var(--hint);margin-bottom:12px;line-height:1.45}
+.inv-s{background:var(--card);border-radius:12px;padding:10px 12px;margin-bottom:8px;line-height:1.4}.inv-s small{color:var(--hint)}
+.inv-s table{width:100%;border-collapse:collapse;margin-top:6px;font-size:13px;font-variant-numeric:tabular-nums}
+.inv-s th{color:var(--hint);font-weight:500;text-align:right;padding:3px 2px;font-size:12px}.inv-s td{text-align:right;padding:4px 2px;border-top:.5px solid var(--sep)}
+.inv-s th:first-child,.inv-s td:first-child{text-align:left}.inv-s tr.st td{font-weight:600}
+.inv-t{display:flex;justify-content:space-between;font-size:18px;padding:8px 2px}
+.inv-n{font-size:12px;color:var(--hint);margin:4px 2px 14px;line-height:1.4}
+@media print{ body *{visibility:hidden!important} #invoice,#invoice *{visibility:visible!important;color:#000!important}
+ #invoice{position:absolute;left:0;top:0;width:100%;background:#fff} .inv-s{background:#fff!important;border:1px solid #ccc} .modal{position:static!important;background:none!important} }
 </style>
 </head>
 <body>
@@ -370,7 +418,7 @@ const tg = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.i
 const inTG = !!(tg && tg.platform && tg.platform !== 'unknown');
 const hap = t => { try { inTG && tg.HapticFeedback && (t==='ok'||t==='err' ? tg.HapticFeedback.notificationOccurred(t==='ok'?'success':'error') : tg.HapticFeedback.impactOccurred('light')); } catch(e){} };
 const fmt = n => Math.round(n).toLocaleString('ru-RU') + '\u00a0₸';
-const fq = (q,u) => (u==='kg' ? (+q.toFixed(2)).toString().replace('.',',')+'\u00a0кг' : q+'\u00a0шт');
+const fq = (q,u) => (u==='kg' ? (+q.toFixed(2)).toString().replace('.',',')+'\u00a0кг' : u==='l' ? (+(+q).toFixed(2)).toString().replace('.',',')+'\u00a0л' : q+'\u00a0шт');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const $ = id => document.getElementById(id);
 const pl = (n,f) => f[(n%10===1&&n%100!==11)?0:(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?1:2];
@@ -378,8 +426,10 @@ const pl = (n,f) => f[(n%10===1&&n%100!==11)?0:(n%10>=2&&n%10<=4&&(n%100<10||n%1
 /* ---------- Справочники ---------- */
 // h — оттенок пастельного фона плитки
 const CATS = {
- veg:{t:'Овощи',e:'🥕',h:28}, fruit:{t:'Фрукты',e:'🍎',h:350}, meat:{t:'Мясо',e:'🥩',h:8}, fish:{t:'Рыба',e:'🐟',h:200},
- dairy:{t:'Молочка',e:'🥛',h:215}, herbs:{t:'Зелень',e:'🌿',h:110}, grocery:{t:'Крупы',e:'🌾',h:42}, spice:{t:'Специи',e:'🌶️',h:275}
+ veg:{t:'Овощи',e:'🥕',h:28}, meat:{t:'Мясо',e:'🥩',h:8}, bird:{t:'Птица',e:'🍗',h:35}, dairy:{t:'Молочка и сыры',e:'🧀',h:215},
+ sauce:{t:'Соусы',e:'🫙',h:15}, grocery:{t:'Бакалея',e:'🌾',h:42}, fruit:{t:'Фрукты',e:'🍎',h:350}, herbs:{t:'Зелень',e:'🌿',h:110},
+ fish:{t:'Рыба',e:'🐟',h:200}, canned:{t:'Консервы',e:'🥫',h:0}, spice:{t:'Специи',e:'🌶️',h:275}, nuts:{t:'Орехи, сухофрукты',e:'🥜',h:30},
+ bread:{t:'Хлеб',e:'🍞',h:38}, drinks:{t:'Напитки',e:'🧃',h:190}, household:{t:'Упаковка',e:'📦',h:230}
 };
 // store/src заполняются из реальных цен (PRICES), step = шаг для +/-
 const PRODUCTS = {
@@ -443,6 +493,255 @@ const OFFERS0 = [ // [seller, product, price, stock, freshness]
  ['s9','carp',1950,40,'сегодня'],['s9','pikeperch',2800,20,'вчера'],
  ['s8','pepper',450,80,'—'],['s8','zira',500,60,'—'],['s8','paprika',420,60,'—'],['s8','rice',580,150,'—'],['s8','buckwheat',520,120,'—']
 ];
+/* ================= v5: расширенный каталог (цены ОЦЕНОЧНЫЕ, estimated:true) ================= */
+// Оценка по рынкам Астаны (Шапагат, Артём, Шахар, Алтын Орда, Евразия) на ноябрь 2026, без источника — не сравниваем с магазином.
+// [ключ, название, эмодзи, категория, ед., цена за ед. ₸, шаг, синонимы, доп.]
+const CAT5 = [
+ // Овощи
+ ['potato_net','Картофель, сетка 25 кг','🥔','veg','pcs',4500,1,'картошка сетка,картофель сетка,картошка мешок',{pack:{w:'сетк',sz:25,base:'potato'}}],
+ ['onion_net','Лук репчатый, сетка 20 кг','🧅','veg','pcs',2600,1,'лук сетка,лук мешок',{pack:{w:'сетк',sz:20,base:'onion'}}],
+ ['carrot_net','Морковь, сетка 20 кг','🥕','veg','pcs',3400,1,'морковь сетка,морковь мешок',{pack:{w:'сетк',sz:20,base:'carrot'}}],
+ ['onion_red','Лук красный','🧅','veg','kg',380,.5,'лук красный,красный лук,ялтинский лук'],
+ ['bell_pepper','Перец болгарский','🫑','veg','kg',950,.5,'перец болгарский,болгарский перец,сладкий перец,болгарка'],
+ ['chili','Перец острый','🌶️','veg','kg',1600,.1,'перец острый,острый перец,чили,перец чили'],
+ ['eggplant','Баклажаны','🍆','veg','kg',750,.5,'баклажан,баклажаны,синенькие'],
+ ['zucchini','Кабачки','🥒','veg','kg',480,.5,'кабачок,кабачки,цуккини'],
+ ['pumpkin','Тыква','🎃','veg','kg',260,1,'тыква,асқабақ'],
+ ['radish','Редис','🔴','veg','kg',850,.5,'редис,редиска'],
+ ['daikon','Редька / дайкон','🥕','veg','kg',320,.5,'редька,дайкон,редька зеленая,маргеланская редька'],
+ ['cauliflower','Капуста цветная','🥦','veg','kg',950,.5,'цветная капуста,капуста цветная'],
+ ['broccoli','Брокколи','🥦','veg','kg',1600,.5,'брокколи,броколи'],
+ ['chinese_cab','Капуста пекинская','🥬','veg','kg',520,.5,'пекинская капуста,капуста пекинская,пекинка'],
+ ['red_cab','Капуста красная','🥬','veg','kg',420,.5,'красная капуста,капуста красная,краснокочанная'],
+ ['mushroom','Шампиньоны','🍄','veg','kg',1700,.5,'шампиньоны,грибы,шампиньон'],
+ ['ginger','Имбирь','🫚','veg','kg',2600,.1,'имбирь,имбирь корень'],
+ ['cherry','Помидоры черри','🍅','veg','kg',1900,.5,'черри,помидоры черри,томаты черри'],
+ ['corn','Кукуруза (початок)','🌽','veg','pcs',250,1,'кукуруза,початок,кукурузу'],
+ ['tomato_box','Помидоры, ящик 10 кг','🍅','veg','pcs',8200,1,'помидоры ящик,томаты ящик',{pack:{w:'ящик',sz:10,base:'tomato'}}],
+ ['cucumber_box','Огурцы, ящик 10 кг','🥒','veg','pcs',6400,1,'огурцы ящик',{pack:{w:'ящик',sz:10,base:'cucumber'}}],
+ // Фрукты
+ ['lemon','Лимоны','🍋','fruit','kg',1250,.5,'лимон,лимоны,лемон'],
+ ['orange','Апельсины','🍊','fruit','kg',1050,.5,'апельсин,апельсины'],
+ ['mandarin','Мандарины','🍊','fruit','kg',1150,.5,'мандарин,мандарины'],
+ ['pear','Груши','🍐','fruit','kg',950,.5,'груша,груши,алмурт'],
+ ['persimmon','Хурма','🟠','fruit','kg',1250,.5,'хурма'],
+ ['pomegranate','Гранат','🔴','fruit','kg',1600,.5,'гранат,гранаты,анар'],
+ ['kiwi','Киви','🥝','fruit','kg',1450,.5,'киви'],
+ ['melon','Дыня','🍈','fruit','kg',420,1,'дыня,кауын',{approx:3}],
+ ['avocado','Авокадо','🥑','fruit','pcs',450,1,'авокадо'],
+ ['pineapple','Ананас','🍍','fruit','pcs',1900,1,'ананас'],
+ ['lime','Лайм','🍋','fruit','kg',2400,.1,'лайм'],
+ // Зелень
+ ['dill','Укроп (пучок)','🌿','herbs','pcs',200,1,'укроп,укропа,аскөк'],
+ ['parsley','Петрушка (пучок)','🌿','herbs','pcs',200,1,'петрушка,петрушку,петрушки'],
+ ['cilantro','Кинза (пучок)','🌿','herbs','pcs',200,1,'кинза,кинзы,кориандр зелень,кинзу'],
+ ['basil','Базилик (пучок)','🌿','herbs','pcs',320,1,'базилик,райхан'],
+ ['mint','Мята (пучок)','🌱','herbs','pcs',260,1,'мята,мяту'],
+ ['spinach','Шпинат','🥬','herbs','kg',1800,.1,'шпинат'],
+ ['arugula','Руккола','🥬','herbs','kg',3200,.1,'руккола,рукола'],
+ ['dill_kg','Укроп весовой','🌿','herbs','kg',2400,.5,'укроп кг,укроп весовой'],
+ // Мясо
+ ['beef_soft','Говядина мякоть','🥩','meat','kg',5200,.5,'мякоть,говядина мякоть,говядина без кости,мякоть говядины'],
+ ['beef_ribs','Рёбра говяжьи','🥩','meat','kg',3300,.5,'ребра говяжьи,говяжьи ребра,ребрышки говяжьи'],
+ ['beef_tend','Вырезка говяжья','🥩','meat','kg',7200,.5,'вырезка,говяжья вырезка,вырезка говяжья'],
+ ['beef_liver','Печень говяжья','🫀','meat','kg',2300,.5,'печень,печень говяжья,бауыр'],
+ ['beef_q','Говядина, четверть туши','🥩','meat','kg',3500,1,'четверть туши,говядина четверть,туша говяжья,говядина тушей',{approx:45}],
+ ['lamb_ribs','Рёбра бараньи','🍖','meat','kg',4700,.5,'ребра бараньи,бараньи ребра'],
+ ['lamb_carc','Баранина, тушка','🍖','meat','kg',4100,1,'туша баранья,баранина туша,тушка баранья,баран целиком',{approx:16}],
+ ['horse','Конина','🥩','meat','kg',4600,.5,'конина,жылқы еті'],
+ ['kazy','Казы','🌭','meat','kg',9500,.5,'казы,қазы'],
+ ['mince_mix','Фарш смешанный','🥩','meat','kg',3300,.5,'фарш смешанный,фарш микс,фарш говядина баранина'],
+ ['lamb_fat','Курдюк','🥓','meat','kg',2600,.5,'курдюк,курдючный жир'],
+ // Птица
+ ['chick_leg','Окорочка куриные','🍗','bird','kg',1550,.5,'окорочка,окорочок,окорочка куриные,ножки'],
+ ['chick_fil','Филе куриное','🍗','bird','kg',2300,.5,'филе,филе куриное,куриное филе,грудка,куриная грудка'],
+ ['chick_wing','Крылья куриные','🍗','bird','kg',1700,.5,'крылья,крылышки,крылья куриные'],
+ ['chick_thigh','Бедро куриное','🍗','bird','kg',1800,.5,'бедро,бедра куриные,бедрышки'],
+ ['chick_fil_box','Филе куриное, коробка 10 кг','📦','bird','pcs',21500,1,'филе коробка,филе куриное коробка',{pack:{w:'короб',sz:10,base:'chick_fil'}}],
+ ['chick_leg_box','Окорочка, коробка 10 кг','📦','bird','pcs',14500,1,'окорочка коробка',{pack:{w:'короб',sz:10,base:'chick_leg'}}],
+ ['turkey','Филе индейки','🦃','bird','kg',3900,.5,'индейка,филе индейки,индюшка'],
+ ['duck','Утка (тушка)','🦆','bird','kg',2700,1,'утка,утку',{approx:2}],
+ ['chick_mince','Фарш куриный','🍗','bird','kg',1900,.5,'фарш куриный,куриный фарш'],
+ // Рыба
+ ['pollock','Минтай с/м','🐟','fish','kg',1300,.5,'минтай'],
+ ['mackerel','Скумбрия','🐟','fish','kg',1900,.5,'скумбрия,скумбрию'],
+ ['herring','Сельдь солёная','🐟','fish','kg',1500,.5,'сельдь,селедка,селёдка'],
+ ['salmon','Лосось (сёмга)','🐠','fish','kg',7600,.5,'лосось,семга,сёмга'],
+ ['hake','Хек','🐟','fish','kg',1700,.5,'хек'],
+ ['pike','Щука','🐟','fish','kg',1800,.5,'щука,щуку'],
+ ['shrimp','Креветки с/м','🦐','fish','kg',4600,.5,'креветки,креветка'],
+ ['squid','Кальмар','🦑','fish','kg',2700,.5,'кальмар,кальмары'],
+ // Молочка и сыры
+ ['eggs_tray','Яйца С1, лоток 30 шт','🥚','dairy','pcs',1900,1,'яйца лоток,лоток яиц,яйца 30',{pack:{w:'лот',sz:3,base:'eggs'}}],
+ ['eggs_c0','Яйца С0 (10 шт)','🥚','dairy','pcs',800,1,'яйца с0,крупные яйца'],
+ ['quail_eggs','Яйца перепелиные (20 шт)','🥚','dairy','pcs',750,1,'перепелиные яйца,яйца перепелиные'],
+ ['smetana','Сметана 20%','🥛','dairy','kg',1700,.5,'сметана,сметану,сметаны,каймак'],
+ ['smetana_jar','Сметана 20%, банка 0,5 кг','🫙','dairy','pcs',900,1,'сметана банка',{pack:{w:'банк',sz:.5,base:'smetana'}}],
+ ['smetana_b5','Сметана 20%, ведро 5 кг','🪣','dairy','pcs',7900,1,'сметана ведро',{pack:{w:'ведр',sz:5,base:'smetana'}}],
+ ['tvorog_b5','Творог 5%, ведро 5 кг','🪣','dairy','pcs',7600,1,'творог ведро',{pack:{w:'ведр',sz:5,base:'tvorog'}}],
+ ['butter','Масло сливочное 72,5%','🧈','dairy','kg',4600,.5,'масло сливочное,сливочное масло,масла сливочного'],
+ ['butter_blk','Масло сливочное, блок 5 кг','🧈','dairy','pcs',21500,1,'масло сливочное блок,масло блок',{pack:{w:'блок',sz:5,base:'butter'}}],
+ ['cheese_ru','Сыр российский','🧀','dairy','kg',4300,.5,'сыр,сыр российский,российский сыр,сыра,сыры'],
+ ['cheese_head','Сыр российский, голова ≈5 кг','🧀','dairy','pcs',20000,1,'сыр голова,головка сыра,сыр головой',{pack:{w:'голов',sz:5,base:'cheese_ru'}}],
+ ['cheese_nl','Сыр голландский','🧀','dairy','kg',4600,.5,'сыр голландский,голландский сыр,голландский'],
+ ['mozz','Сыр моцарелла','🧀','dairy','kg',3900,.5,'моцарелла,сыр моцарелла,моцарела,моцареллу'],
+ ['mozz_pizza','Моцарелла для пиццы, брусок 2 кг','🍕','dairy','pcs',7200,1,'моцарелла для пиццы,сыр для пиццы,пицца сыр,моцарелла брусок',{pack:{w:'брус',sz:2,base:'mozz'}}],
+ ['suluguni','Сыр сулугуни','🧀','dairy','kg',4100,.5,'сулугуни'],
+ ['brynza','Брынза','🧀','dairy','kg',3300,.5,'брынза,брынзу,фета'],
+ ['parmesan','Сыр пармезан','🧀','dairy','kg',9200,.1,'пармезан'],
+ ['cheese_slice','Сыр плавленый ломтики, 1 кг','🧀','dairy','pcs',3600,1,'сыр ломтики,сыр для бургеров,плавленый сыр,чеддер ломтики'],
+ ['cream_cheese','Сыр сливочный, 1 кг','🧀','dairy','pcs',4700,1,'сливочный сыр,креметте,сыр сливочный,филадельфия'],
+ ['cream','Сливки 33%, 1 л','🥛','dairy','pcs',2700,1,'сливки,сливки 33'],
+ ['ayran','Айран 1 л','🥛','dairy','pcs',520,1,'айран'],
+ ['kumys','Кумыс 1 л','🥛','dairy','pcs',1600,1,'кумыс,қымыз'],
+ ['ryazhenka','Ряженка 1 л','🥛','dairy','pcs',560,1,'ряженка'],
+ ['milk5','Молоко 2,5%, 5 л','🥛','dairy','pcs',1950,1,'молоко 5 л,молоко канистра',{pack:{w:'канистр',sz:5,base:'milk'}}],
+ // Соусы
+ ['mayo','Майонез провансаль 67%','🫙','sauce','kg',1300,.5,'майонез,майонез провансаль,провансаль,майонеза,майонез 67,майонез оливковый'],
+ ['mayo_b3','Майонез провансаль, ведро 3 кг','🪣','sauce','pcs',3700,1,'майонез ведро 3',{pack:{w:'ведр',sz:3,base:'mayo'}}],
+ ['mayo_b5','Майонез провансаль, ведро 5 кг','🪣','sauce','pcs',6000,1,'майонез ведро 5',{pack:{w:'ведр',sz:5,base:'mayo',def:true}}],
+ ['mayo_b10','Майонез провансаль, ведро 10 кг','🪣','sauce','pcs',11500,1,'майонез ведро 10',{pack:{w:'ведр',sz:10,base:'mayo'}}],
+ ['ketchup','Кетчуп томатный','🍅','sauce','kg',1250,.5,'кетчуп,кетчупа,кетчуп томатный,кечуп,кетчап'],
+ ['ketchup_b3','Кетчуп, ведро 3 кг','🪣','sauce','pcs',3500,1,'кетчуп ведро 3',{pack:{w:'ведр',sz:3,base:'ketchup'}}],
+ ['ketchup_b5','Кетчуп, ведро 5 кг','🪣','sauce','pcs',5700,1,'кетчуп ведро 5',{pack:{w:'ведр',sz:5,base:'ketchup',def:true}}],
+ ['ketchup_b10','Кетчуп, ведро 10 кг','🪣','sauce','pcs',10900,1,'кетчуп ведро 10',{pack:{w:'ведр',sz:10,base:'ketchup'}}],
+ ['tpaste','Томатная паста','🥫','sauce','kg',1450,.5,'томатная паста,паста томатная,томат паста,томатной пасты'],
+ ['tpaste_b','Томатная паста, банка 3 кг','🥫','sauce','pcs',4100,1,'томатная паста банка',{pack:{w:'банк',sz:3,base:'tpaste'}}],
+ ['soy','Соус соевый, 1 л','🍶','sauce','pcs',1500,1,'соевый соус,соус соевый,соевый,соевого соуса'],
+ ['soy5','Соус соевый, канистра 5 л','🍶','sauce','pcs',6500,1,'соевый соус канистра',{pack:{w:'канистр',sz:5,base:'soy'}}],
+ ['mustard','Горчица','🟡','sauce','kg',1500,.5,'горчица,горчицу'],
+ ['bbq','Соус барбекю, 1 кг','🍖','sauce','pcs',1900,1,'барбекю,соус барбекю'],
+ ['cheese_sauce','Соус сырный, 1 кг','🧀','sauce','pcs',2300,1,'сырный соус,соус сырный'],
+ ['garlic_sauce','Соус чесночный, 1 кг','🧄','sauce','pcs',1900,1,'чесночный соус,соус чесночный'],
+ ['adjika','Аджика','🌶️','sauce','kg',1700,.5,'аджика'],
+ ['vinegar','Уксус 9%, 1 л','🍶','sauce','pcs',380,1,'уксус,уксус 9'],
+ // Бакалея
+ ['flour10','Мука в/с, мешок 10 кг','🌾','grocery','pcs',3100,1,'мука мешок 10',{pack:{w:'меш',sz:10,base:'flour'}}],
+ ['flour25','Мука в/с, мешок 25 кг','🌾','grocery','pcs',7300,1,'мука мешок 25',{pack:{w:'меш',sz:25,base:'flour',def:true}}],
+ ['flour50','Мука в/с, мешок 50 кг','🌾','grocery','pcs',14000,1,'мука мешок 50',{pack:{w:'меш',sz:50,base:'flour'}}],
+ ['sugar','Сахар','🍬','grocery','kg',450,1,'сахар,сахара,сахарок,кант'],
+ ['sugar50','Сахар, мешок 50 кг','🍬','grocery','pcs',20500,1,'сахар мешок',{pack:{w:'меш',sz:50,base:'sugar'}}],
+ ['salt','Соль','🧂','grocery','kg',110,1,'соль,соли,тұз'],
+ ['salt25','Соль, мешок 25 кг','🧂','grocery','pcs',2400,1,'соль мешок',{pack:{w:'меш',sz:25,base:'salt'}}],
+ ['rice_r','Рис круглый','🍚','grocery','kg',460,1,'рис круглый,круглый рис,рис кубань,рис для каши'],
+ ['rice25','Рис девзира, мешок 25 кг','🍚','grocery','pcs',15500,1,'рис мешок,девзира мешок',{pack:{w:'меш',sz:25,base:'rice'}}],
+ ['pasta','Макароны','🍝','grocery','kg',420,1,'макароны,макарон,рожки,спагетти,паста'],
+ ['pasta5','Макароны, коробка 5 кг','🍝','grocery','pcs',1950,1,'макароны коробка',{pack:{w:'короб',sz:5,base:'pasta'}}],
+ ['lagman','Лапша для лагмана','🍜','grocery','kg',950,1,'лапша,лагман,лапша для лагмана,лапша лагман'],
+ ['oil','Масло подсолнечное, 1 л','🌻','grocery','l',920,1,'масло подсолнечное,подсолнечное масло,растительное масло,масло растительное,подсолнечное'],
+ ['oil5','Масло подсолнечное, канистра 5 л','🌻','grocery','pcs',4400,1,'масло подсолнечное канистра,масло 5 л',{pack:{w:'канистр',sz:5,base:'oil'}}],
+ ['fry_oil','Масло фритюрное, 10 л','🍟','grocery','pcs',10500,1,'фритюр,масло фритюрное,фритюрное масло,масло для фритюра'],
+ ['olive_oil','Масло оливковое, 1 л','🫒','grocery','pcs',5600,1,'оливковое масло,масло оливковое'],
+ ['millet','Пшено','🌾','grocery','kg',420,1,'пшено,тары'],
+ ['oats','Овсяные хлопья','🥣','grocery','kg',520,1,'овсянка,овсяные хлопья,геркулес'],
+ ['semolina','Манка','🥣','grocery','kg',460,1,'манка,манная крупа'],
+ ['peas','Горох колотый','🫛','grocery','kg',420,1,'горох,гороха'],
+ ['chickpea','Нут','🫘','grocery','kg',950,1,'нут'],
+ ['mung','Маш','🫘','grocery','kg',950,1,'маш'],
+ ['lentil','Чечевица','🫘','grocery','kg',1000,1,'чечевица'],
+ ['beans','Фасоль','🫘','grocery','kg',1150,1,'фасоль'],
+ ['bulgur','Булгур','🌾','grocery','kg',900,1,'булгур'],
+ ['starch','Крахмал','🌾','grocery','kg',1200,.5,'крахмал'],
+ ['yeast','Дрожжи сухие, 100 г','🍞','grocery','pcs',650,1,'дрожжи'],
+ ['soda','Сода пищевая, 500 г','🧂','grocery','pcs',350,1,'сода'],
+ ['breadcrumbs','Сухари панировочные','🍞','grocery','kg',950,.5,'сухари,панировка,панировочные сухари'],
+ // Консервы
+ ['peas_can','Горошек зелёный, 400 г','🥫','canned','pcs',520,1,'горошек,зеленый горошек'],
+ ['corn_can','Кукуруза консерв., 400 г','🥫','canned','pcs',560,1,'кукуруза консервированная,кукуруза банка'],
+ ['stew','Тушёнка говяжья, 325 г','🥫','canned','pcs',2100,1,'тушенка,тушёнка'],
+ ['condmilk','Сгущёнка, 380 г','🥫','canned','pcs',820,1,'сгущенка,сгущёнка,сгущенное молоко'],
+ ['olives','Оливки, 300 г','🫒','canned','pcs',1250,1,'оливки'],
+ ['blackolives','Маслины, 300 г','🫒','canned','pcs',1350,1,'маслины'],
+ ['pickles','Огурцы маринованные, 3 л','🫙','canned','pcs',2300,1,'маринованные огурцы,огурцы маринованные,соленые огурцы,корнишоны'],
+ ['tomato_can','Томаты в соку, 800 г','🥫','canned','pcs',950,1,'томаты в соку,помидоры консервированные'],
+ ['tuna','Тунец консерв., 185 г','🐟','canned','pcs',1250,1,'тунец'],
+ ['sprats','Шпроты, 160 г','🐟','canned','pcs',950,1,'шпроты'],
+ ['pine_can','Ананасы консерв., 580 г','🍍','canned','pcs',1150,1,'ананасы консервированные,ананас банка'],
+ // Специи
+ ['bay','Лавровый лист, 50 г','🍃','spice','pcs',300,1,'лавровый лист,лавр,лаврушка'],
+ ['coriander','Кориандр, 100 г','🌰','spice','pcs',480,1,'кориандр'],
+ ['turmeric','Куркума, 100 г','🟡','spice','pcs',520,1,'куркума'],
+ ['plov_mix','Приправа для плова, 100 г','🍛','spice','pcs',550,1,'приправа для плова,специи для плова'],
+ ['barberry','Барбарис, 100 г','🔴','spice','pcs',950,1,'барбарис'],
+ ['red_pepper','Перец красный молотый, 100 г','🌶️','spice','pcs',480,1,'красный перец,перец красный'],
+ ['pepper_kg','Перец чёрный молотый, 1 кг','🌶️','spice','pcs',5200,1,'перец черный кг,перец черный 1 кг'],
+ ['cinnamon','Корица, 100 г','🟤','spice','pcs',700,1,'корица'],
+ ['msg','Хмели-сунели, 100 г','🌿','spice','pcs',520,1,'хмели сунели,хмели-сунели'],
+ // Орехи и сухофрукты
+ ['raisin','Изюм','🍇','nuts','kg',2100,.5,'изюм,кишмиш'],
+ ['apricot_d','Курага','🟠','nuts','kg',2900,.5,'курага'],
+ ['prune','Чернослив','🟣','nuts','kg',2700,.5,'чернослив'],
+ ['dates','Финики','🟤','nuts','kg',2300,.5,'финики'],
+ ['walnut','Грецкий орех','🌰','nuts','kg',4600,.5,'грецкий орех,грецкие орехи,орехи грецкие'],
+ ['almond','Миндаль','🌰','nuts','kg',7100,.5,'миндаль'],
+ ['hazelnut','Фундук','🌰','nuts','kg',7600,.5,'фундук'],
+ ['peanut','Арахис','🥜','nuts','kg',1900,.5,'арахис'],
+ ['cashew','Кешью','🥜','nuts','kg',9200,.5,'кешью'],
+ ['seeds','Семечки подсолнечные','🌻','nuts','kg',1500,.5,'семечки'],
+ // Хлеб
+ ['bread_w','Хлеб белый, 450 г','🍞','bread','pcs',230,1,'хлеб,хлеб белый,хлеба,нан'],
+ ['bread_b','Хлеб чёрный, 450 г','🍞','bread','pcs',260,1,'хлеб черный,черный хлеб,бородинский'],
+ ['baton','Батон','🥖','bread','pcs',240,1,'батон'],
+ ['lepeshka','Лепёшка тандырная','🫓','bread','pcs',220,1,'лепешка,лепешки,лепёшка,тандыр нан'],
+ ['lavash','Лаваш','🫓','bread','pcs',260,1,'лаваш'],
+ ['burger_bun','Булочки для бургеров, 6 шт','🍔','bread','pcs',950,1,'булочки для бургеров,булки для бургеров'],
+ ['tortilla','Тортилья, 10 шт','🌯','bread','pcs',1600,1,'тортилья,лепешки для шаурмы'],
+ // Напитки
+ ['water5','Вода питьевая, 5 л','💧','drinks','pcs',520,1,'вода,вода 5 л,питьевая вода'],
+ ['water15','Вода, 1,5 л × 6','💧','drinks','pcs',1450,1,'вода 1.5,вода упаковка'],
+ ['juice','Сок, 1 л','🧃','drinks','pcs',850,1,'сок'],
+ ['cola','Газировка кола, 1,5 л','🥤','drinks','pcs',780,1,'кола,газировка,лимонад'],
+ ['tea','Чай чёрный, 250 г','🍵','drinks','pcs',1600,1,'чай,чай черный'],
+ ['tea_bag','Чай в пакетиках, 100 шт','🍵','drinks','pcs',1900,1,'чай пакетики,чай в пакетиках'],
+ ['coffee','Кофе молотый, 1 кг','☕','drinks','pcs',9500,1,'кофе,кофе молотый,кофе в зернах'],
+ // Упаковка и хозтовары
+ ['bags','Пакеты-майка, 100 шт','🛍️','household','pcs',1300,1,'пакеты,пакет майка,пакеты майка'],
+ ['gloves','Перчатки нитриловые, 100 шт','🧤','household','pcs',3600,1,'перчатки,перчатки нитриловые'],
+ ['film','Плёнка пищевая, 300 м','🎞️','household','pcs',4600,1,'пленка,плёнка,пищевая пленка,стрейч'],
+ ['foil','Фольга, 100 м','🥡','household','pcs',5600,1,'фольга'],
+ ['containers','Контейнеры одноразовые, 50 шт','🥡','household','pcs',2600,1,'контейнеры,контейнер,ланчбокс,ланч бокс'],
+ ['cups','Стаканы бумажные, 50 шт','🥤','household','pcs',1850,1,'стаканы,стаканчики,стаканы бумажные'],
+ ['lids','Крышки для стаканов, 50 шт','🥤','household','pcs',950,1,'крышки,крышки для стаканов'],
+ ['forks','Вилки одноразовые, 100 шт','🍴','household','pcs',950,1,'вилки,вилки одноразовые,приборы одноразовые'],
+ ['napkins','Салфетки, 100 шт','🧻','household','pcs',320,1,'салфетки'],
+ ['trash','Мешки для мусора 120 л, 10 шт','🗑️','household','pcs',1250,1,'мешки для мусора,мусорные пакеты'],
+ ['sponge','Губки, 10 шт','🧽','household','pcs',650,1,'губки,губка'],
+ ['detergent','Средство для посуды, 5 л','🧴','household','pcs',3600,1,'средство для посуды,моющее,фейри'],
+ ['towels','Полотенца бумажные, 2 рулона','🧻','household','pcs',850,1,'полотенца бумажные,бумажные полотенца']
+];
+const SELLERS5 = {
+ s10:{n:'Сабина',m:'Алтын Орда',pt:'Павильон бакалеи, ряд 2, место 6',cats:['sauce','grocery','canned'],rating:4.8,done:260,disputes:3,ontime:95,months:36,online:true,emoji:'🫙'},
+ s11:{n:'Ольга',m:'Евразия',pt:'Молочный ряд, место 12',cats:['dairy'],rating:4.7,done:140,disputes:2,ontime:93,months:22,online:true,emoji:'🧀'},
+ s12:{n:'Руслан',m:'Шахар',pt:'Мясной ряд, место 4',cats:['meat','bird'],rating:4.6,done:90,disputes:2,ontime:91,months:15,online:true,emoji:'🍗'},
+ s13:{n:'Канат',m:'Алтын Орда',pt:'Хозтовары и упаковка, место 31',cats:['household','drinks'],rating:4.8,done:120,disputes:1,ontime:96,months:28,online:true,emoji:'📦'},
+ s14:{n:'Зарина',m:'Шахар',pt:'Ряд сухофруктов, место 9',cats:['nuts','spice'],rating:4.9,done:210,disputes:2,ontime:97,months:48,online:true,emoji:'🥜'},
+ s15:{n:'Тимур',m:'Евразия',pt:'Хлеб и напитки, место 3',cats:['bread','drinks','canned'],rating:4.5,done:40,disputes:1,ontime:90,months:8,online:true,emoji:'🍞'},
+ s16:{n:'Асель',m:'Алтын Орда',pt:'Овощной опт, ряд 1, место 15',cats:['veg','fruit','herbs'],rating:4.7,done:170,disputes:3,ontime:92,months:30,online:true,emoji:'🥬'},
+ s17:{n:'Бекзат',m:'Шахар',pt:'Рыбный ряд, место 2',cats:['fish'],rating:4.6,done:55,disputes:1,ontime:90,months:10,online:true,emoji:'🐠'},
+ s18:{n:'Алия',m:'Евразия',pt:'Ряд 5, место 18',cats:['sauce','grocery','dairy','household'],rating:4.4,done:30,disputes:1,ontime:88,months:5,online:true,emoji:'🛒'}
+};
+Object.assign(SELLERS0, SELLERS5);
+SELLERS0.s1.cats.push('bird'); SELLERS0.s3.cats.push('bird'); SELLERS0.s6.cats.push('bread');
+// Проверенные продавцы (документы подтверждены). Новички — на проверке.
+Object.entries(SELLERS0).forEach(([id,s])=>{ s.verified = !['s6','s9','s18'].includes(id); s.kaspi=null; });
+// Старые зелень/курица — в новые категории
+PRODUCTS.chicken.cat='bird'; PRODUCTS.greens.n='Зелень ассорти (пучок)'; PRODUCTS.greens.syn=['зелень','зелени','зелень ассорти'];
+PRODUCTS.kefir.syn.push('кефира'); PRODUCTS.chicken.syn.push('кур','курицу','курицы','куры','цыпленок','цыплята');
+PRODUCTS.milk.syn.push('молока'); PRODUCTS.tvorog.syn.push('творога'); PRODUCTS.flour.syn.push('муки','мука высший сорт','мука в с');
+PRODUCTS.rice.syn.push('риса'); PRODUCTS.eggs.syn.push('яиц'); PRODUCTS.beef_sh.syn.push('говядины','мясо');
+PRODUCTS.potato.syn.push('картофеля','картошки'); PRODUCTS.onion.syn.push('лука','луковица'); PRODUCTS.tomato.syn.push('помидоров','помидорки');
+(function addCat5(){
+  const hash=s=>[...s].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);
+  for(const [k,n,e,cat,u,price,step,syn,x] of CAT5){
+    PRODUCTS[k]={n,e,cat,u,store:0,step,syn:syn.split(','),estimated:true,est:price,...(x||{})};
+    // 2–3 продавца из подходящих рядов; цены вокруг оценки
+    const ss=Object.keys(SELLERS0).filter(id=>SELLERS0[id].cats.includes(cat)); const h=hash(k);
+    const pick=[...ss].sort((a,b)=>((hash(a+k)%97)-(hash(b+k)%97))).slice(0,Math.min(ss.length,2+(h%2)));
+    const f=[1,1.06,.95], rnd=v=>v>=1000?Math.round(v/10)*10:Math.round(v/5)*5;
+    pick.forEach((s,i)=>OFFERS0.push([s,k,rnd(price*f[i]),u==='pcs'?(price>5000?20:80):(price>3000?40:150),cat==='veg'||cat==='herbs'||cat==='fish'||cat==='meat'||cat==='bird'?'сегодня':'—']));
+  }
+  for(const [k,P] of Object.entries(PRODUCTS)) if(P.pack){ const B=PRODUCTS[P.pack.base]; (B.packs=B.packs||[]).push(k); }
+})();
 /* ---------- Реальные цены Астаны (prices-astana.json, встроено) ---------- */
 const PRICES = [{"name":"Картофель","unit":"кг","store_price":194,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":130,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: картофель 1 сорт. Ярмарка 130–150 ₸. Arbuz Астана «Дисконт» 129 ₸."},{"name":"Лук репчатый","unit":"кг","store_price":101,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":120,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: 1 сорт. Ярмарка 120 ₸ (дороже магазина). Arbuz «Дисконт» 85 ₸."},{"name":"Морковь","unit":"кг","store_price":193,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":150,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Ярмарка 150 ₸ (морковь/свёкла).","sauran_bazar_wolt_price":519},{"name":"Капуста белокочанная","unit":"кг","store_price":166,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: «Капуста», 166 ₸/кг. Рыночной цены по Астане не нашли."},{"name":"Помидоры","unit":"кг","store_price":962,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":600,"bazaar_source":"Ярмарка «Дала дәмі» в Астане, 13.10.2026 (vechastana.kz/news/ceny-nize-cem-na-rynke)","bazaar_date":"2026-10-13","date":"2026-11-03","note":"Small: тепличные, Казахстан. На ярмарке ~600 ₸ со слов покупательницы. Arbuz «Дисконт» 525 ₸.","sauran_bazar_wolt_price":2223},{"name":"Огурцы","unit":"кг","store_price":506,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":600,"bazaar_source":"Ярмарка «Дала дәмі» в Астане, 13.10.2026 (vechastana.kz/news/ceny-nize-cem-na-rynke)","bazaar_date":"2026-10-13","date":"2026-11-03","note":"Small: сорт Рава. Ярмарка ~600 ₸ со слов покупательницы. Arbuz «Дисконт» 225 ₸.","sauran_bazar_wolt_price":2223},{"name":"Яблоки","unit":"кг","store_price":386,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Гала 1 сорт. Свежей рыночной цены по Астане нет.","sauran_bazar_wolt_price":2223},{"name":"Бананы","unit":"кг","store_price":825,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Рыночной цены по Астане нет."},{"name":"Говядина (на кости)","unit":"кг","store_price":3990,"store_name":"Супермаркет Астаны (сеть не названа), inbusiness","store_source_url":"https://inbusiness.kz/ru/news/chto-tvoritsya-s-cenami-na-edu-v-stolice-kazahstana","bazaar_price":3900,"bazaar_source":"Рынок «Шапагат», брифинг Минсельхоза 29.09.2026 (ulysmedia.kz/news/81795-chego-kazakhstantsam-zhdat-ot-tsen-na-miaso/)","bazaar_date":"2026-09-29","date":"2026-10-18","note":"Магазин: супермаркет Астаны, сеть не названа, мониторинг inbusiness 18.10.2026; мякоть там 5900 ₸. В Small на Wolt свежей говядины нет. Рынок «Артём» ~4400 ₸; ярмарка 24–25.10 — 3300–3500 ₸."},{"name":"Баранина","unit":"кг","store_price":6890,"store_name":"Супермаркет Астаны (сеть не названа), inbusiness","store_source_url":"https://inbusiness.kz/ru","bazaar_price":4500,"bazaar_source":"Рынок «Шапагат», 23.07.2026 (digitalbusiness.kz/2026-07-23/tseni-deystvitelno-rastut-...-astani-i-almati/)","bazaar_date":"2026-07-23","date":"2026-09-04","note":"Магазин: супермаркет Астаны, сеть не названа, inbusiness 04.09.2026; 18.10 её не было в продаже. На Шапагате рёбра 4650–4700 ₸. На ярмарке 24–25.10 — 3500–3800 ₸. Обе цены устарели.","sauran_bazar_wolt_price":8892},{"name":"Курица (тушка)","unit":"кг","store_price":1746,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":1300,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: цыплёнок-бройлер замороженный. Тушка охлаждённая у inbusiness 18.10 — 1799 ₸. Ярмарка: «птица» 1300–1500 ₸."},{"name":"Окорочка куриные","unit":"кг","store_price":1459,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Курочка Ряба, замороженные. Охлаждённые у inbusiness 18.10 — 1749 ₸."},{"name":"Рыба (минтай с/м)","unit":"кг","store_price":4325,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":1000,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: минтай «Ас» свежемороженый весовой — единственная свежемороженая рыба в выдаче. Ярмарка: «рыба» 1000–2000 ₸/кг, вид не указан, так что сравнение условное."},{"name":"Яйца С1","unit":"10 шт","store_price":673,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":700,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: Акколь Кус С1. Упаковка 30 шт — 1949 ₸ (650 ₸ за 10). Ярмарка 700–800 ₸.","sauran_bazar_wolt_price":1260},{"name":"Молоко 2,5%","unit":"л","store_price":399,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Гормолзавод 2,5% или Новый День 3,2%. У inbusiness 18.10 — 385 ₸."},{"name":"Кефир 2,5%","unit":"л","store_price":428,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":450,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Ярмарка 450–500 ₸; объём в источнике не указан, считаем за литр."},{"name":"Творог 5%","unit":"кг","store_price":1936,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Молочный Бидончик 5%, 500 г за 968 ₸. На ярмарке 470–500 ₸, но единица не указана, поэтому не использовано."},{"name":"Сметана 15%","unit":"кг","store_price":1576,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: 380 г за 599 ₸. President 10% — 380 г за 505 ₸ (1329 ₸/кг)."},{"name":"Масло сливочное 72,5%","unit":"кг","store_price":4902,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Гормолзавод Крестьянское, весовое. На ярмарках 1500–1800 ₸ (24–25.10) и ~5000 ₸ (13.10), но единица не указана, поэтому не использовано."},{"name":"Сыр","unit":"кг","store_price":6575,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":3900,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Small: Чечил весовой (самый дешёвый весовой). Ярмарка 3900–5500 ₸, вид сыра не указан."},{"name":"Укроп","unit":"кг","store_price":3390,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Рыночной цены нет."},{"name":"Петрушка","unit":"кг","store_price":3590,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Рыночной цены нет."},{"name":"Рис","unit":"кг","store_price":325,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Лидер, весовой."},{"name":"Гречка","unit":"кг","store_price":410,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: весовая. Средняя по Астане (статистика, 28.10.2026) — 552 ₸.","sauran_bazar_wolt_price":445},{"name":"Мука в/с","unit":"кг","store_price":307.5,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Снежинка, 10 кг за 3075 ₸. Пакет 2 кг — 695 ₸ (347,5 ₸/кг)."},{"name":"Сахар","unit":"кг","store_price":405,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: весовой.","sauran_bazar_wolt_price":741},{"name":"Масло подсолнечное","unit":"л","store_price":874,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Маслодел Дельное. У inbusiness 18.10 — 841 ₸."},{"name":"Макароны","unit":"кг","store_price":288,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: весовые."},{"name":"Хлеб","unit":"450 г","store_price":275,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Домашний. Inbusiness 18.10: социальный хлеб 99 ₸."},{"name":"Соль","unit":"кг","store_price":83,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Аралтуз Славяночка."},{"name":"Свёкла","unit":"кг","store_price":289,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":150,"bazaar_source":"Сельхозярмарка у ипподрома «Қазанат», 24–25.10.2026 (vechastana.kz/news/v-stolice-proxodit-selxoziarmarka)","bazaar_date":"2026-10-24","date":"2026-11-03","note":"Ярмарка 150 ₸."},{"name":"Чеснок","unit":"кг","store_price":499,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: молодой."},{"name":"Фарш говяжий","unit":"кг","store_price":3172,"store_name":"Small (Wolt, ул. Субханбердина 2)","store_source_url":"https://wolt.com/ru/kaz/nur-sultan/venue/small-ast01","bazaar_price":null,"bazaar_source":null,"date":"2026-11-03","note":"Small: Максимальный Размах, 900 г за 2855 ₸. Средняя по Астане (статистика) — 5042 ₸."}];
 // товар приложения → позиция в данных. Рыба и баранина в сравнении не участвуют (условно/не проверено), рис девзира и зелень пучком — другой товар/единица.
@@ -501,42 +800,6 @@ function available(o, qty){ const s=state.sellers[o.s]; return o.on && s.online 
 function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; const d=Array.from({length:m+1},(_,i)=>[i]); for(let j=1;j<=n;j++) d[0][j]=j;
   for(let i=1;i<=m;i++) for(let j=1;j<=n;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[m][n]; }
 function normName(name){ return name.toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-яәіңғүұқөһ\s]/gi,' ').replace(/\s+/g,' ').trim(); }
-function matchProduct(name){
-  name=normName(name);
-  if(!name) return null; let best=null,bs=99;
-  for(const [k,p] of Object.entries(PRODUCTS)) for(const s of p.syn){
-    if(name===s) return k;
-    if(name.startsWith(s+' ')||name.includes(' '+s)||(s.length>3&&name.startsWith(s))) { if(1<bs){bs=1;best=k;} continue; }
-    const words=name.split(' '); for(const w of [name,...words]){ const d=lev(w,s); const lim=s.length<=4?1:2; if(d<=lim && d+1<bs){bs=d+1;best=k;} }
-  }
-  return best;
-}
-function parseToCart(){
-  const ta=$('clientList'); if(!ta) return;
-  const lines=ta.value.split(/\n|;/).map(s=>s.trim()).filter(Boolean);
-  if(!lines.length){ toast('Напишите хотя бы одну позицию'); hap('err'); return; }
-  let added=0; unknownLines=[];
-  for(const ln of lines){ const r=parseLine(ln); if(!r) continue; if(!r.key||!(r.qty>0)){unknownLines.push(r.raw);continue;}
-    state.cart[r.key]=+((state.cart[r.key]||0)+r.qty).toFixed(2); added++; }
-  ta.value = unknownLines.join('\n');
-  save(); render(); hap(added?'ok':'err');
-  if(added && !unknownLines.length){ closeModal(); toast(`В корзине +${added} ${pl(added,['товар','товара','товаров'])}`); return; }
-  renderUnknown();
-  toast(added?`Добавлено: ${added}. Уточните ${unknownLines.length}`:'Не узнали — выберите товар');
-}
-function renderUnknown(){
-  const el=$('unknown'); if(!el) return;
-  el.innerHTML = unknownLines.length?`<div class="card" style="margin:0 0 12px">${unknownLines.map((u,i)=>`<div class="unk"><div class="unk-q"><b>${esc(u)}</b><span>Что это?</span></div>
-   <select class="inp" onchange="fixUnknown(${i},this.value)"><option value="">Выбрать</option>${Object.entries(CATS).map(([c,x])=>`<optgroup label="${x.t}">${Object.entries(PRODUCTS).filter(([,p])=>p.cat===c).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join('')}</optgroup>`).join('')}</select>
-   <button class="x" onclick="dropUnknown(${i})" aria-label="Убрать">✕</button></div>`).join('')}</div>`:'';
-}
-function fixUnknown(i,k){ if(!k) return; const r=parseLine(unknownLines[i]); const q=(r&&r.qty)||1; state.cart[k]=+((state.cart[k]||0)+(q||1)).toFixed(2);
-  // запоминаем как синоним для следующих раз
-  const word=unknownLines[i].toLowerCase().replace(/[\d.,]+|кг|шт|г\b/g,'').trim(); if(word && !PRODUCTS[k].syn.includes(word)) PRODUCTS[k].syn.push(word);
-  unknownLines.splice(i,1); const ta=$('clientList'); if(ta) ta.value=unknownLines.join('\n'); save(); renderUnknown(); render(); hap('ok');
-  if(!unknownLines.length){ closeModal(); toast('Готово, всё в корзине'); } }
-function dropUnknown(i){ unknownLines.splice(i,1); const ta=$('clientList'); if(ta) ta.value=unknownLines.join('\n'); renderUnknown(); if(!unknownLines.length) closeModal(); }
-
 /* ---------- Каталог ---------- */
 function chg(k,d){ const p=PRODUCTS[k]; const step=state.mode==='biz'&&p.u==='kg'?Math.max(p.step,1):p.step; let q=+((state.cart[k]||0)+d*step).toFixed(2); if(q<=0){ delete state.cart[k]; if(state.sel) delete state.sel[k]; } else state.cart[k]=q; hap(); save();
   if(app==='shop'&&tab==='cart') render(); else { refreshPC(k); chrome(); } }
@@ -563,8 +826,6 @@ function openDispute(id){ const o=state.orders.find(x=>x.id===id);
 function submitDispute(id){ const o=state.orders.find(x=>x.id===id); const i=o.items[+$('dItem').value]; const r=$('dReason').value;
   o.dispute=`${PRODUCTS[i.k].n}: ${r}. ${$('dText').value}`; state.sellers[i.s].disputes++; closeModal(); setStatus(o,'dispute',o.dispute); toast('Претензия отправлена'); }
 function repeatOrder(id){ const o=state.orders.find(x=>x.id===id); state.cart={...o.cart}; save(); closeModal(); app='shop'; tab='cart'; catOpen=null; window.scrollTo(0,0); render(); toast('Корзина собрана по текущим ценам'); }
-function saveTpl(id){ const o=state.orders.find(x=>x.id===id); const name=`Заказ №${id}`; state.templates.push({name,cart:{...o.cart}}); save(); toast('Сохранено в шаблоны'); render(); }
-function useTpl(i){ state.cart={...state.templates[i].cart}; save(); closeModal(); app='shop'; tab='cart'; render(); toast('Шаблон в корзине'); }
 function pin(c,v){ if(v) state.pins[c]=v; else delete state.pins[c]; save(); hap(); render(); }
 
 /* ---------- Сборщик ---------- */
@@ -619,34 +880,12 @@ function shareContact(){ try{ tg.requestContact((ok,res)=>{ const p=ok&&res&&res
 function savePhone(){ const v=$('phoneIn').value; if(!phoneOk(v)){ toast('Номер: +7 и 10 цифр'); hap('err'); return; } opts.phone=fmtPhone(v); save(); closeModal(); hap('ok'); render(); }
 
 /* ---------- Парсер (яйца — штуками или десятками) ---------- */
-function parseLine(line){
-  let l=line.trim().toLowerCase().replace(',', '.'); if(!l) return null;
-  l=l.replace(/^[-•*]\s*/,'').replace(/^\d+[.)]\s+/,'');
-  let qty=null,unit='';
-  const re=/(\d+(?:\.\d+)?|пол|половин[ау])\s*(кг|килограмм\w*|кило|гр|грамм\w*|г|шт|штук\w*|десят\w*|пуч\w*|литр\w*|л)?(?![а-яё])\.?/i;
-  const m=l.match(re);
-  if(m){ qty=/пол/.test(m[1])?0.5:parseFloat(m[1]); unit=(m[2]||'').toLowerCase(); l=(l.slice(0,m.index)+' '+l.slice(m.index+m[0].length)).trim(); }
-  else if(/пол ?кило/.test(l)){ qty=.5; unit='кг'; l=l.replace(/пол ?кило/,''); }
-  else if(/десят/.test(l)){ qty=1; unit='десяток'; }
-  l=l.replace(/\bдесят\w*\b/g,'').trim();
-  const key=matchProduct(l);
-  if(!key) return {raw:line.trim(), key:null};
-  const p=PRODUCTS[key];
-  if(qty==null) qty=1;
-  if(/^г(р|рамм\w*)?$/.test(unit)) qty=qty/1000;
-  if(key==='eggs'){ // упаковка = 10 шт: «10 шт» → 1 уп., «15 шт» → 2 уп., «2 десятка» → 2 уп., «30» без единиц → 3 уп.
-    if(/^шт|^штук/.test(unit) || (!unit && qty>=10)) qty=Math.max(1,Math.ceil(qty/10));
-    else qty=Math.max(1,Math.round(qty));
-  } else if(p.approx && /кг|кило/.test(unit)) qty=Math.max(1,Math.round(qty/p.approx));
-  else if(p.u==='pcs') qty=Math.max(1,Math.round(qty));
-  return {raw:line.trim(), key, qty:+qty.toFixed(2)};
-}
 
 /* ---------- Подбор продавцов: «Выгодно» никогда не дороже ---------- */
 function calc(kind){ const r=calcRaw(kind); if(kind==='best'){ const g=calcRaw('regular'); if(g.total<r.total) return {...g,kind:'best'}; } return r; }
 
 /* ---------- Оформление ---------- */
-function placeOrder(){
+function placeOrderBase(){
   if(busy) return; offers={best:calc('best'),regular:calc('regular')}; const o=offers[chosen], home=isHome();
   if(!Object.keys(state.cart).length){ toast('Корзина пуста'); hap('err'); return; }
   const ok=o.lines.filter(l=>!l.none); if(!ok.length){ toast('Ни одной позиции нет в наличии'); hap('err'); return; }
@@ -710,7 +949,7 @@ function vHome(){ const home=isHome(), sl=curSlot();
    <label class="search">${IC.search}<input id="q" type="search" enterkeyhint="search" placeholder="Найти продукты" value="${esc(query)}" oninput="onSearch(this.value)"></label>
    <div id="homeBody">${homeBody()}</div>`; }
 function onDeliv(v){ opts.deliv=v.replace(/\D/g,''); save(); updateMain(); chrome(); }
-function vCart(){
+function vCartBase(){
   const keys=Object.keys(state.cart);
   if(!keys.length) return `<div class="ttl">Корзина</div><div class="empty"><div class="ee">🛒</div><b>Корзина пуста</b><span>Добавьте продукты из каталога или напишите списком</span>
     <button class="btn" onclick="setTab('home')">В каталог</button><button class="btn secondary" onclick="openList()">📝 Написать списком</button></div>`;
@@ -768,7 +1007,7 @@ function timeline(o){ const ph=phaseOf(o), phases=o.mode==='biz'?PHASES.slice(1)
   if(o.status==='dispute') h+=`<div class="on cur">Спор<small>${lastT(['dispute'])}</small></div>`;
   return `<div class="tl">${h}</div>`; }
 /* ---------- Профиль ---------- */
-function vProfile(){ const home=isHome(), m=M();
+function vProfileBase(){ const home=isHome(), m=M();
   const colN=state.orders.filter(o=>['deliv_agree','new'].includes(o.status)).length, selN=sellerTodo()+sellerPayTodo(state.me);
   return `<div class="ttl">Профиль</div>
    <div class="card"><div class="seg2"><button class="${home?'on':''}" onclick="setMode('home')">🏠 Для дома</button><button class="${home?'':'on'}" onclick="setMode('biz')">🏢 Для бизнеса</button></div>
@@ -785,7 +1024,7 @@ function vProfile(){ const home=isHome(), m=M();
    <div class="fine" style="justify-content:center;margin:8px 0 0">Вход по коду партнёра · демо</div>
    <div class="fine" style="justify-content:center;margin:16px 0"><button class="link" style="font-size:13px;color:var(--hint)" onclick="confirmBox('Сбросить демо-данные?',()=>resetDemo())">Сбросить демо</button></div>`; }
 const ROLE_T={collector:'Вход для сборщика',seller:'Вход для продавца'};
-function openPartner(a){ if(!unlocked[a]){ modal(`<h3>${ROLE_T[a]}</h3><input class="inp" id="codeIn" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Код партнёра" maxlength="6" onkeydown="if(event.key==='Enter')checkCode('${a}')">
+function openPartnerBase(a){ if(!unlocked[a]){ modal(`<h3>${ROLE_T[a]}</h3><input class="inp" id="codeIn" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Код партнёра" maxlength="6" onkeydown="if(event.key==='Enter')checkCode('${a}')">
     <div class="fine" style="margin:-2px 0 14px">Демо-доступ · код выдаёт администратор</div><button class="btn" onclick="checkCode('${a}')">Войти</button>`); setTimeout(()=>{const i=$('codeIn'); i&&i.focus();},250); return; }
   app=a; openOrder=null; hap(); window.scrollTo(0,0); render(); }
 function checkCode(a){ const v=($('codeIn')||{}).value; if(v!==CONFIG.codes[a]){ toast('Неверный код'); hap('err'); const i=$('codeIn'); if(i){i.value='';i.focus();} return; } unlocked[a]=true; closeModal(); openPartner(a); }
@@ -821,19 +1060,7 @@ function vCollector(){
 /* ---------- Продавец: подтверждение оплаты ---------- */
 /* ---------- Оператор ---------- */
 /* ---------- Приветствие, режим, рендер, таббар ---------- */
-function vWelcome(){ const r=savingStat(), pct=Math.round(r.avg*100); return `<div class="welcome"><div class="wl">🧺</div><h1>Закупщик</h1><p>Продукты с базара Астаны с доставкой</p>
-  <div class="wlist">${pct>0?`<div><span>💰</span>В среднем дешевле магазина на ~${pct}%</div>`:''}<div><span>🚚</span>Цену доставки предлагаете вы</div><div><span>⚖️</span>Не больше заказанного веса — без доплат</div><div><span>⭐</span>Проверенные продавцы</div></div>
-  <button class="btn" onclick="setMode('home')">Начать</button></div>`; }
 function setMode(m){ state.mode=m; opts.slot=0; if(m==='home'&&opts.pay==='invoice') opts.pay='kaspi'; save(); closeModal(); hap('ok'); render(); }
-function render(){
-  const v=$('view'); checkTimers();
-  if(!state.mode){ v.innerHTML=vWelcome(); chrome(); return; }
-  if(app!=='shop'&&!unlocked[app]) app='shop';
-  if(app==='shop') v.innerHTML = tab==='home'?(catOpen?vCat():vHome()) : tab==='cart'?vCart() : tab==='orders'?vOrders() : vProfile();
-  else if(app==='collector') v.innerHTML=vCollector();
-  else v.innerHTML=vSeller();
-  chrome();
-}
 function tabbarHTML(){
   const b=(on,fn,ic,label,badge)=>`<button class="tb ${on?'on':''}" onclick="${fn}"><span class="tb-i">${ic}${badge?`<i class="tb-b">${badge}</i>`:''}</span><span class="tb-l">${label}</span></button>`;
   if(app==='shop'){ const n=Object.keys(state.cart).length, tot=n?calc(chosen).total:0;
@@ -881,13 +1108,13 @@ function missing(n){ const o=findO(openOrder); const it=o.items[n]; if(o.status=
    <button class="btn danger" onclick="removeItem(${n})">Убрать · продавец вернёт ${fmt(it.q*it.price)}</button><button class="btn gray" onclick="closeModal()">Назад</button>`); }
 function replace(n,k,price){ const o=findO(openOrder); const it=o.items[n]; it.k=k; it.price=price; it.state='pending'; it.replacedFrom=true; o.log.push({s:'replace',t:now()}); save(); closeModal(); toast('Замена — соберите позицию'); renderAll(); }
 function removeItem(n){ const o=findO(openOrder); o.items[n].state='removed'; save(); closeModal(); renderAll(); }
-function finishCollect(id){ /* removed→возврат по позициям */ const o=findO(id); if(o.items.some(i=>i.state==='pending')){toast('Есть несобранные позиции');return;}
+function finishCollectBase(id){ /* removed→возврат по позициям */ const o=findO(id); if(o.items.some(i=>i.state==='pending')){toast('Есть несобранные позиции');return;}
   if(o.items.filter(i=>i.state!=='dropped').every(i=>i.state==='removed')){ const dc=o.pay&&o.pay.cards.find(c=>c.s==='deliv'&&c.st!=='dropped'); if(dc){ dc.refund=dc.amt; dc.st='dropped'; } setStatus(o,'cancelled','нечего везти'); return; }
   const ri=refundInfo(o); setStatus(o,'collected'); toast(ri.sum?`Итог ${fmt(orderTotal(o).total)} · продавцы вернут ${fmt(ri.sum)}`:`Собрано точно по заказу`); }
 function startDeliver(id){ setStatus(findO(id),'delivering'); }
 function refundPill(o){ const ri=refundInfo(o); if(o.refund) return `<div class="pillmsg g" style="margin:10px 0 0">Возврат ${fmt(o.refund)}</div>`;
   if(!ri.sum) return ''; return ri.left?`<div class="pillmsg o" style="margin:10px 0 0">Возврат ${fmt(ri.left)} от продавца</div>`:`<div class="pillmsg g" style="margin:10px 0 0">Продавцы вернули ${fmt(ri.sum)}</div>`; }
-function openOrderSheet(id){ const o=findO(id); if(!o) return; const t=orderTotal(o), ri=refundInfo(o);
+function openOrderSheetBase(id){ const o=findO(id); if(!o) return; const t=orderTotal(o), ri=refundInfo(o);
   const items=o.items.map(i=>{const P=PRODUCTS[i.k], rf=o.pay?itemRefund(i):0; const st=i.state==='missing'?'не было при заказе':i.state==='dropped'?'убрано при оплате':i.state==='removed'?'не было у продавца':'';
     return `<div class="li" style="align-items:flex-start"><span>${i.photo?'📷 ':''}${P.n}${i.replacedFrom?' · замена':''}<small style="display:block;color:var(--hint);font-size:12px">${st||`заказ ${fq(i.q,P.u)}${P.approx?` ≈${fq(P.approx*i.q,'kg')}`:''}${i.fact!=null?` · факт ${fq(i.fact,P.u)}`:''}`}</small></span><span style="text-align:right">${fmt(billQ(i)*i.price)}${rf?`<small style="display:block;color:var(--orange);font-size:12px">возврат ${fmt(rf)}</small>`:''}</span></div>`}).join('');
   const acts=clientActions(o,true);
@@ -908,7 +1135,7 @@ function openOrderSheet(id){ const o=findO(id); if(!o) return; const t=orderTota
 
 /* ================= v4.3: оплата напрямую каждому продавцу (без общего счёта) ================= */
 const COLLECTOR = {n:'Сборщик', kaspi:'+7 (705) 555-12-12'};
-function kaspiOf(s){ if(s==='deliv') return COLLECTOR.kaspi; const n=String(s).replace(/\D/g,'').padStart(2,'0'); return `+7 (707) 10${n[0]}-${n}-${n}`.replace('(707) 10'+n[0],'(707) 1'+n.padStart(2,'0')); }
+function kaspiOfBase(s){ if(s==='deliv') return COLLECTOR.kaspi; const n=String(s).replace(/\D/g,'').padStart(2,'0'); return `+7 (707) 10${n[0]}-${n}-${n}`.replace('(707) 10'+n[0],'(707) 1'+n.padStart(2,'0')); }
 function pickFor(k,q,kind,auto){
   const cands=state.offers.filter(o=>o.p===k && available(o,q));
   if(!cands.length) return {k,q,none:true};
@@ -928,7 +1155,7 @@ function sellerSheet(k){ const P=PRODUCTS[k], q=state.cart[k]; const cur=pickFor
   const L=state.offers.filter(o=>o.p===k).sort((a,b)=>a.price-b.price);
   modal(`<h3>${P.e} ${P.n} · ${fq(q,P.u)}</h3><div class="fine" style="margin:-6px 0 10px">Выберите продавца · цена за 1 ${uL(P)}</div>
    <div class="glist">${L.map(o=>{ const S=state.sellers[o.s], av=available(o,q), on=!cur.none&&cur.o.s===o.s;
-     return `<button class="grow" data-sel="${o.s}" ${av?`onclick="pickSeller('${k}','${o.s}')"`:'disabled style="opacity:.45"'}><span class="gi">${S.emoji}</span><span class="gl">${S.n}${isRegular(o.s)?' <span class="ptag">постоянный</span>':''}<small>${S.m} · ${S.pt} · ★${S.rating||'новый'}</small></span><span class="gv" style="text-align:right">${av?`<b style="color:var(--text)">${fmt(o.price)}</b><small style="display:block">${fmt(o.price*q)}</small>`:'нет'}</span>${on?'<span style="color:var(--accent);font-size:18px">✓</span>':''}</button>`; }).join('')}</div>
+     return `<button class="grow" data-sel="${o.s}" ${av?`onclick="pickSeller('${k}','${o.s}')"`:'disabled style="opacity:.45"'}><span class="gi">${S.emoji}</span><span class="gl">${S.n}${S.verified?' <span class="vtag">Проверен ✓</span>':''}${isRegular(o.s)?' <span class="ptag">постоянный</span>':''}<small>${S.m} · ${S.pt} · ★${S.rating||'новый'}</small></span><span class="gv" style="text-align:right">${av?`<b style="color:var(--text)">${fmt(o.price)}</b><small style="display:block">${fmt(o.price*q)}</small>`:'нет'}</span>${on?'<span style="color:var(--accent);font-size:18px">✓</span>':''}</button>`; }).join('')}</div>
    ${state.sel&&state.sel[k]?`<button class="btn gray" onclick="pickSeller('${k}','')">Автовыбор</button>`:''}`); }
 function pickSeller(k,s){ state.sel=state.sel||{}; if(s) state.sel[k]=s; else delete state.sel[k]; save(); hap(); closeModal(); render(); }
 function setVariant(k){ chosen=k; state.sel={}; save(); hap(); render(); }
@@ -995,7 +1222,7 @@ function startPay(id){ const o=findO(id); if(!['unpaid','pay_check','pay_expired
    <div id="payCards">${o.pay.cards.map(c=>cardHTML(o,c)).join('')}</div>
    ${hasKg?`<div class="pillmsg g" style="margin:0 0 8px">Больше заказанного не положим · недовес больше 5% вернём</div>`:''}
    <div class="fine" style="justify-content:center">Сборка начнётся, когда все подтвердят оплату ${qBtn('pay')}</div>`); }
-function checkTimers(){ let ch=false; const t=now();
+function checkTimersBase(){ let ch=false; const t=now();
   for(const o of state.orders){
     if(['deliv_agree','deliv_counter'].includes(o.status)&&o.agreeDeadline&&t>o.agreeDeadline){ o.status='deliv_fail'; o.log.push({s:'deliv_fail',t}); ch=true; }
     if(o.pay&&['unpaid','pay_check','pay_expired'].includes(o.status)){ let f=false; o.pay.cards.forEach(c=>{ if(c.st==='check'&&t>c.deadline){ c.st='fail'; c.why='timeout'; f=true; } });
@@ -1007,17 +1234,15 @@ function cancelOrder(id){ const o=findO(id); if(!o||!PRE_COLLECT.includes(o.stat
     setStatus(o,'cancelled'); if(paid) toast(`Возврат ${fmt(paid)} от продавцов`); }); }
 /* ---------- продавец/сборщик: подтверждение переводов ---------- */
 function payQueue(s){ return state.orders.flatMap(o=>o.pay&&['unpaid','pay_check','pay_expired'].includes(o.status)?o.pay.cards.filter(c=>c.s===s&&c.st==='check').map(c=>[o,c]):[]); }
-function sellerPayTodo(me){ return payQueue(me).length; }
 function payQueueHTML(s,title){ const L=payQueue(s); if(!L.length) return '';
-  return `<div class="ttl" style="font-size:24px">${title}</div>${L.map(([o,c])=>`<div class="ri" data-q="${c.id}"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · Kaspi от ${esc(o.phone||'клиента')}</div><div class="ri-q">${fmt(c.amt)}</div>
+  return `<div class="ttl" style="font-size:24px">${title}</div>${L.map(([o,c])=>`<div class="ri" data-q="${c.id}"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · Kaspi от ${esc(o.phone||'клиента')}${clientTag(o)}</div><div class="ri-q">${fmt(c.amt)}</div>
     <div class="meta">${s==='deliv'?'Доставка'+(o.pay.service?' и сервис':''):o.items.filter(i=>i.card===c.id).map(i=>PRODUCTS[i.k].n).join(', ')} · ⏱ <span data-cd="${c.deadline}">${cd(c.deadline)}</span></div></div></div>
     <div class="ri-a"><button class="btn gray" style="white-space:nowrap" onclick="rejectCard(${o.id},'${c.id}')">Не пришло</button><button class="btn ok" onclick="confirmCard(${o.id},'${c.id}')">✓ Получил</button></div></div>`).join('')}`; }
-function sellerPayBlock(me){ return payQueueHTML(me,'Подтвердите оплату'); }
 /* ---------- возвраты: недовес + отменённые/заменённые карточки ---------- */
 function billQ(i){ if(['removed','missing','dropped'].includes(i.state)) return 0; if(i.fact==null) return i.q; const P=PRODUCTS[i.k];
   if(P.u==='kg' && i.fact>=i.q*(1-UNDER_FREE)) return i.q; return Math.min(i.q,i.fact); }
 function itemRefund(i){ if(['missing','dropped'].includes(i.state)) return 0; return Math.round((i.q-billQ(i))*i.price); }
-function orderTotal(o){ const g=o.items.reduce((s,i)=>s+billQ(i)*i.price,0); const sv=o.pay?o.pay.service:Math.round(g*o.serviceRate); return {g,service:sv,total:Math.round(g+delivOf(o)+sv)}; }
+function orderTotalBase(o){ const g=o.items.reduce((s,i)=>s+billQ(i)*i.price,0); const sv=o.pay?o.pay.service:Math.round(g*o.serviceRate); return {g,service:sv,total:Math.round(g+delivOf(o)+sv)}; }
 function sellerRefunds(o){ const r={}; if(!o.pay) return r; const paidC=new Set(o.pay.cards.filter(c=>c.paidAt).map(c=>c.id));
   o.items.forEach(i=>{ const v=paidC.has(i.card)||!i.card?itemRefund(i):0; if(v>0) r[i.s]=(r[i.s]||0)+v; });
   o.pay.cards.forEach(c=>{ if(c.refund) r[c.s]=(r[c.s]||0)+c.refund; }); return r; }
@@ -1030,7 +1255,7 @@ function sellerRefundBlock(me){ const L=sellerRefundList(me); if(!L.length) retu
     return `<div class="ri"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · Kaspi ${esc(o.phone||'')}</div><div class="ri-q">${fmt(sellerRefunds(o)[me])}</div>
      <div class="meta">${why}</div></div></div>
      <div class="ri-a"><button class="btn ok" onclick="markReturned(${o.id},'${me}')">✓ Вернул</button></div></div>`; }).join('')}`; }
-function clientActions(o,sheet){ const b=(cls,fn,t)=>`<button class="btn ${sheet?'':'sm'} ${cls}" onclick="event.stopPropagation();${fn}">${t}</button>`; let h='';
+function clientActionsBase(o,sheet){ const b=(cls,fn,t)=>`<button class="btn ${sheet?'':'sm'} ${cls}" onclick="event.stopPropagation();${fn}">${t}</button>`; let h='';
   if(o.status==='deliv_counter') h+=b('',`agreeCounter(${o.id})`,`Ок · ${fmt(o.counter)}`)+b('gray',`cancelOrder(${o.id})`,'Отменить');
   if(o.status==='deliv_fail') h+=b('',`reofferSheet(${o.id})`,'Предложить другую цену')+b('gray',`cancelOrder(${o.id})`,'Отменить');
   if(o.status==='unpaid') h+=b('',`startPay(${o.id})`,`Оплатить ${fmt(prepayParts(o).amount-paidSum(o))}`);
@@ -1038,7 +1263,7 @@ function clientActions(o,sheet){ const b=(cls,fn,t)=>`<button class="btn ${sheet
   if(o.status==='pay_expired') h+=b('danger',`startPay(${o.id})`,'Выбрать, что сделать')+b('gray',`cancelOrder(${o.id})`,'Отменить и вернуть деньги')+b('gray',`support(${o.id})`,'Написать в поддержку');
   if(o.status==='delivered'&&!o.rated) h+=b('',`rateOrder(${o.id})`,'Оценить');
   return h; }
-function subLine(o){ if(o.status==='deliv_agree') return `Ваша цена ${fmt(o.delivOffer)} · ответ <span data-cd="${o.agreeDeadline}">${cd(o.agreeDeadline)}</span>`;
+function subLineBase(o){ if(o.status==='deliv_agree') return `Ваша цена ${fmt(o.delivOffer)} · ответ <span data-cd="${o.agreeDeadline}">${cd(o.agreeDeadline)}</span>`;
   if(o.status==='deliv_counter') return `Сборщик просит ${fmt(o.counter)} вместо ${fmt(o.delivOffer)} · <span data-cd="${o.agreeDeadline}">${cd(o.agreeDeadline)}</span>`;
   if(['unpaid','pay_check'].includes(o.status)&&o.pay){ const d=nearestDeadline(o); return `${payProgress(o).text}${d?` · <span data-cd="${d}">${cd(d)}</span>`:''}`; }
   if(o.status==='pay_expired'&&o.pay){ const f=o.pay.cards.filter(c=>c.st==='fail').map(c=>c.s==='deliv'?'сборщик':state.sellers[c.s].n); return `Не подтвердил: ${f.join(', ')}`; }
@@ -1070,23 +1295,14 @@ const HINTS = {
 function hint(k){ hap(); modal(HINTS[k]()+`<button class="btn gray" onclick="closeModal()">Понятно</button>`); }
 const qBtn = k => `<button class="q" onclick="event.stopPropagation();hint('${k}')" aria-label="Подробнее">?</button>`;
 const hue = k => CATS[PRODUCTS[k].cat].h;
-const uL = P => P.u==='kg'?'кг':'шт';
+const uL = P => P.u==='kg'?'кг':P.u==='l'?'л':'шт';
 
 /* ---------- карточка товара ---------- */
-function pcard(k){
-  const P=PRODUCTS[k], pr=priceFor(k), q=state.cart[k]||0, pct=pr&&P.store&&P.store>pr?Math.round((1-pr/P.store)*100):0;
-  const ctl = q ? `<div class="step"><button onclick="chg('${k}',-1)" aria-label="Меньше">−</button><span>${fq(q,P.u)}</span><button onclick="chg('${k}',1)" ${pr?'':'disabled'} aria-label="Больше">+</button></div>`
-               : pr ? `<button class="pc-add" onclick="chg('${k}',1)" aria-label="В корзину">+</button>` : '';
-  return `<div class="pc" data-pc="${k}"><div class="pc-img" style="--h:${hue(k)}"><span>${P.e}</span>${pct>=10?`<i class="pc-off">−${pct}%</i>`:''}</div>
-   <div class="pc-b"><div class="pc-p">${pr?`<b>${fmt(pr)}</b>${pct>0?`<s>${fmt(P.store)}</s>`:''}`:'<span class="na">Нет сегодня</span>'}</div><div class="pc-n">${P.n}</div><div class="pc-u">за 1 ${uL(P)}${P.approx?` ≈${fq(P.approx,'kg')}`:''}${pct>0?` · <span class="src">${P.src.name}, ${P.src.date}</span>`:''}</div></div>${ctl}</div>`;
-}
 function refreshPC(k){ document.querySelectorAll(`[data-pc="${k}"]`).forEach(el=>{ el.outerHTML=pcard(k); }); }
-function searchProducts(q){ const n=normName(q); if(!n) return []; const fz=matchProduct(n);
-  return Object.keys(PRODUCTS).filter(k=>{ const P=PRODUCTS[k]; return normName(P.n).includes(n)||P.syn.some(s=>s.startsWith(n)||s.includes(' '+n))||CATS[P.cat].t.toLowerCase().startsWith(n)||k===fz; }); }
 function onSearch(v){ query=v; const b=$('homeBody'); if(b) b.innerHTML=homeBody(); }
 
 /* ---------- Главная ---------- */
-function homeBody(){
+function homeBodyBase(){
   if(query.trim()){ const r=searchProducts(query);
     return r.length?`<div class="pgrid" style="margin-top:4px">${r.map(pcard).join('')}</div>`
       :`<div class="empty" style="padding-top:24px"><div class="ee">🔍</div><b>Ничего не нашли</b><span>Напишите списком — подскажем</span><button class="btn secondary" onclick="openList()">📝 Написать списком</button></div>`; }
@@ -1125,8 +1341,6 @@ function openVariants(){
 
 /* ---------- Заказы ---------- */
 /* ---------- Профиль ---------- */
-function openTpls(){ modal(`<h3>Шаблоны</h3><div class="glist">${state.templates.map((t,i)=>`<button class="grow" onclick="useTpl(${i})"><span class="gl">⭐ ${esc(t.name)}<small>${Object.keys(t.cart).map(k=>PRODUCTS[k].n).join(', ')}</small></span>${IC.chev}</button>`).join('')}</div>
-  <button class="btn danger" onclick="state.templates=[];save();closeModal();render()">Удалить все</button>`); }
 function editAddr(){ modal(`<h3>Адрес доставки</h3><input class="inp" id="addrIn" placeholder="${state.mode==='biz'?'Заведение, адрес, вход для поставщиков':'Улица, дом, квартира'}" value="${esc(opts.addr)}" autocomplete="street-address">
   <button class="btn" onclick="saveAddr()">Сохранить</button>`); setTimeout(()=>{const i=$('addrIn'); i&&i.focus();},250); }
 function saveAddr(){ const v=$('addrIn').value.trim(); if(v.length<5){ toast('Укажите адрес полностью'); hap('err'); return; } opts.addr=v; save(); closeModal(); hap('ok'); render(); }
@@ -1137,7 +1351,7 @@ function openList(){ hap(); modal(`<h3>Написать списком</h3><text
 /* ---------- Партнёры: сборщик ---------- */
 function toShop(){ app='shop'; tab='profile'; openOrder=null; window.scrollTo(0,0); render(); }
 function ptop(title,backLbl,backFn,right=''){ return `<div class="ptop"><button class="bs" onclick="${backFn}">${IC.back}<span style="margin-left:4px">${backLbl}</span></button><b>${title}</b><span class="pr">${right}</span></div>`; }
-function vRoute(){
+function vRouteBase(){
   const o=state.orders.find(x=>x.id===openOrder); if(!o){ openOrder=null; return vCollector(); }
   const groups={}; o.items.forEach((it,n)=>{ if(it.state==='dropped') return; (groups[it.s]=groups[it.s]||[]).push([it,n]);});
   // маршрут: сначала по рынку, затем по ряду
@@ -1152,7 +1366,7 @@ function vRoute(){
         return `<div class="ri done"><span style="font-size:20px">${ic}</span><div class="rm">${P.n}<small>${itemLine(it,P)}</small></div>${it.photo?'<span>📷</span>':''}</div>`; }
       return `<div class="ri"><div class="ri-h"><div><b>${P.e} ${P.n}</b><div class="ri-q">${fq(it.q,P.u)}${P.approx?` <small style="font-size:14px;color:var(--hint)">≈${fq(P.approx*it.q,'kg')}</small>`:''}</div><div class="meta">${fmt(it.price)}/${uL(P)}${it.issued?' · <span class="ptag">продавец подготовил</span>':''}${it.replacedFrom?' · замена':''}</div></div>
         <button class="phb ${it.photo?'on':''}" onclick="photo(${n})">📷 ${it.photo?'Есть':'Фото'}</button></div>
-        <div class="ri-in f2"><label><span>${P.u==='kg'?'Вес на весах, кг':'Взял, шт'}</span><input class="inp" id="f${n}" type="number" inputmode="decimal" step="${P.u==='kg'?'0.01':'1'}" max="${it.q}" value="${it.q}" oninput="capInput(this,${it.q})"></label><div class="capnote">не больше заказанного<br>${P.u==='kg'?'недовес > 5% — фото и возврат':''}</div></div>
+        <div class="ri-in f2"><label><span>${P.u==='kg'?'Вес на весах, кг':'Взял, '+uL(P)}</span><input class="inp" id="f${n}" type="number" inputmode="decimal" step="${P.u==='kg'?'0.01':'1'}" max="${it.q}" value="${it.q}" oninput="capInput(this,${it.q})"></label><div class="capnote">не больше заказанного<br>${P.u==='kg'?'недовес > 5% — фото и возврат':''}</div></div>
         <div class="ri-a"><button class="btn gray" onclick="missing(${n})">Нет</button><button class="btn ok" onclick="collect(${n})">✓ Взял</button></div></div>`; }).join('');
   });
   let act='';
@@ -1172,7 +1386,7 @@ function vSeller(){
   if(sellerTab==='issue'){
     const inc=[]; state.orders.filter(o=>['accepted','collecting'].includes(o.status)).forEach(o=>o.items.forEach((it,n)=>{ if(it.s===me&&!['removed','dropped'].includes(it.state)) inc.push([o,it,n]); }));
     h+=sellerPayBlock(me)+sellerRefundBlock(me)+`<div class="ttl" style="font-size:24px">К выдаче</div>`;
-    h+=inc.length?inc.map(([o,it,n])=>{const P=PRODUCTS[it.k]; return `<div class="ri"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · ${o.slot}</div><b>${P.e} ${P.n}</b><div class="ri-q">${fq(it.q,P.u)}${P.approx?` <small style="font-size:14px;color:var(--hint)">≈${fq(P.approx*it.q,'kg')}</small>`:''}</div></div>${it.issued?'<span class="status done">Готово</span>':''}</div>
+    h+=inc.length?inc.map(([o,it,n])=>{const P=PRODUCTS[it.k]; return `<div class="ri"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · ${oSlot(o)}${clientTag(o)}</div><b>${P.e} ${P.n}</b><div class="ri-q">${fq(it.q,P.u)}${P.approx?` <small style="font-size:14px;color:var(--hint)">≈${fq(P.approx*it.q,'kg')}</small>`:''}</div></div>${it.issued?'<span class="status done">Готово</span>':''}</div>
       ${it.issued?'':`<div class="ri-a"><button class="btn ok" onclick="issue(${o.id},${n})">✓ Подготовил</button></div>`}</div>`}).join('')
       :`<div class="empty"><div class="ee">📦</div><b>Пока нечего выдавать</b><span>Когда сборщик примет заказ с вашими товарами — он появится здесь</span></div>`;
   } else if(sellerTab==='products'){
@@ -1212,7 +1426,7 @@ function sellerSetTab(t){ sellerTab=t; hap(); window.scrollTo(0,0); render(); }
 function switchRole(r){ if(r==='client'){ app='shop'; tab='home'; } else app=r; openOrder=null; render(); window.scrollTo(0,0); } // совместимость
 function renderAll(){ render(); }
 function chrome(){
-  const tb=$('tabbar'), h=state.mode?tabbarHTML():''; tb.innerHTML=h; tb.classList.toggle('hidden',!h);
+  const tb=$('tabbar'), h=state.mode&&!onb&&!gateOn?tabbarHTML():''; tb.innerHTML=h; tb.classList.toggle('hidden',!h);
   document.body.classList.toggle('no-tab',!h); document.body.classList.toggle('has-act',!!document.querySelector('.actbar'));
   updateMain(); updateBack();
 }
@@ -1243,8 +1457,390 @@ applyScheme(); try{ matchMedia('(prefers-color-scheme: dark)').addEventListener(
 if(inTG){ tg.ready(); tg.expand(); tg.MainButton.onClick(()=>mainAction&&mainAction()); tg.BackButton.onClick(back);
   const applyTheme=()=>{ applyScheme(); try{ tg.setHeaderColor('bg_color'); tg.setBackgroundColor('bg_color'); }catch(e){} };
   applyTheme(); tg.onEvent('themeChanged',applyTheme); }
-window.resetDemo=()=>{ localStorage.removeItem(KEY); location.reload(); };
+/* ================= v5: парсер с нечётким поиском, фасовки, литры ================= */
+const STOPW = new Set(['для','на','в','с','и','по','из','со','от','свежий','свежая','свежие','свежее','хороший','хорошая','хорошие','мытый','мытая','мытые','кг','шт','гр','г','л','мл','штук','штуки','килограмм','кило','литр','литра','литров','пожалуйста','еще','надо','нужно','купить','возьми','взять']);
+const ENDS = ['ами','ями','ого','его','ому','ему','ыми','ими','ая','яя','ое','ее','ые','ие','ый','ий','ой','ую','юю','ов','ев','ей','ах','ях','ам','ям','ом','ем','а','я','ы','и','у','ю','е','о','ь'];
+function stem(w){ for(const e of ENDS) if(w.endsWith(e)&&w.length-e.length>=3) return w.slice(0,-e.length); return w; }
+const toks = s => normName(s).split(' ').filter(w=>w.length>1&&!STOPW.has(w));
+let SYNIDX=null;
+function synIndex(){ if(SYNIDX&&SYNIDX.n===Object.keys(PRODUCTS).length) return SYNIDX.list;
+  const list=[]; for(const [k,p] of Object.entries(PRODUCTS)){ const all=[...new Set([...p.syn, normName(p.n)])]; for(const s of all){ const ns=normName(s); const T=toks(ns); if(T.length) list.push({k,s:ns,T,S:T.map(stem)}); } }
+  SYNIDX={n:Object.keys(PRODUCTS).length,list}; return list; }
+function tokScore(w,ws,t,ts){ if(w===t||ws===ts) return 1; const lim=ts.length<=3?0:ts.length<=5?1:2;
+  if(lim&&lev(ws,ts)<=lim) return .85; if(w.length>=4&&t.startsWith(w)) return .85; if(t.length>=4&&w.startsWith(t)) return .8; return 0; }
+// ранжированные совпадения: [{k,score}]
+function matchScores(name){ const nn=normName(name); if(!nn) return []; const W=toks(nn), WS=W.map(stem); const best={};
+  for(const e of synIndex()){ let sc;
+    if(nn===e.s) sc=100;
+    else { if(!W.length) continue; let sum=0; const used=new Set();
+      e.T.forEach((t,j)=>{ let m=0,mi=-1; W.forEach((w,i)=>{ const v=tokScore(w,WS[i],t,e.S[j]); if(v>m){m=v;mi=i;} }); sum+=m; if(mi>=0) used.add(mi); });
+      const frac=sum/e.T.length; if(frac<.5) continue; sc=100*frac*(.5+.5*used.size/W.length)+e.s.length*.01; }
+    if(!best[e.k]||sc>best[e.k]) best[e.k]=sc; }
+  return Object.entries(best).map(([k,score])=>({k,score})).sort((a,b)=>b.score-a.score); }
+function matchProduct(name){ const r=matchScores(name); return r.length&&r[0].score>=70?r[0].k:null; }
+function suggest(name,n=3){ return matchScores(name).filter(x=>x.score>=35).slice(0,n).map(x=>x.k); }
+// слово фасовки → основа
+function packW(t){ t=t.replace(/ё/g,'е'); const M=[['ведр','ведр'],['ведер','ведр'],['банок','банк'],['банк','банк'],['сеток','сетк'],['сетк','сетк'],['ящик','ящик'],['лоток','лот'],['лотк','лот'],['короб','короб'],['канистр','канистр'],['бидон','канистр'],['блок','блок'],['голов','голов'],['брусок','брус'],['бруск','брус'],['мешок','меш'],['мешк','меш'],['упак','*'],['пачк','*'],['пачек','*'],['бутыл','*']];
+  if(t==='уп') return '*'; for(const [p,s] of M) if(t.startsWith(p)) return s; return null; }
+function parseLine(line){
+  const raw=line.trim(); let l=raw.toLowerCase().replace(/ё/g,'е').replace(/(\d),(\d)/g,'$1.$2'); if(!l) return null;
+  l=l.replace(/^[-•*]\s*/,'').replace(/^\d+[.)]\s+/,'');
+  let qty=null,unit='';
+  const re=/(\d+(?:\.\d+)?|пол|половин[ау])\s*(кг|килограмм[а-я]*|кило|гр|грамм[а-я]*|г|шт|штук[а-я]*|десят[а-я]*|пуч[а-я]*|литр[а-я]*|л)?(?![а-я])\.?/i;
+  const m=l.match(re);
+  if(m){ qty=/пол/.test(m[1])?0.5:parseFloat(m[1]); unit=(m[2]||'').toLowerCase(); l=(l.slice(0,m.index)+' '+l.slice(m.index+m[0].length)).trim(); }
+  else if(/пол ?кило/.test(l)){ qty=.5; unit='кг'; l=l.replace(/пол ?кило/,''); }
+  else if(/десят/.test(l)){ qty=1; unit='десяток'; }
+  // «2 ведра по 5 кг» — размер фасовки вторым числом
+  let sz=null; const m2=l.match(/(\d+(?:\.\d+)?)\s*(кг|л)(?![а-я])/); if(m2){ sz=parseFloat(m2[1]); l=(l.slice(0,m2.index)+' '+l.slice(m2.index+m2[0].length)).trim(); }
+  let pw=null; l=l.split(/\s+/).filter(t=>{ const p=!pw&&packW(t); if(p){ pw=p; return false; } return true; }).join(' ');
+  const key=matchProduct(l);
+  if(!key) return {raw, key:null};
+  const P=PRODUCTS[key], base=P.pack?P.pack.base:key, B=PRODUCTS[base];
+  const isW=/кг|кило|^л$|литр/.test(unit);
+  if(pw&&B.packs){ let c=B.packs.filter(k=>pw==='*'||PRODUCTS[k].pack.w===pw); if(!c.length&&['меш','сетк','ящик','короб'].includes(pw)) c=B.packs.filter(k=>['меш','сетк','ящик','короб'].includes(PRODUCTS[k].pack.w));
+    if(c.length){ const want=sz!=null?sz:(isW?qty:null); const pk=c.find(k=>PRODUCTS[k].pack.sz===want)||(P.pack&&c.includes(key)?key:null)||c.find(k=>PRODUCTS[k].pack.def)||c[0];
+      const n=isW?1:(qty||1); return {raw,key:pk,qty:Math.max(1,Math.round(n))}; } }
+  if(qty==null) qty=1;
+  if(P.pack){ if(isW&&Math.abs(qty-P.pack.sz)<1e-9) qty=1; return {raw,key,qty:Math.max(1,Math.round(qty))}; }
+  if(/^г(р|рамм[а-я]*)?$/.test(unit)) qty=qty/1000;
+  if(key==='eggs'){ if(/^шт|^штук/.test(unit) || (!unit && qty>=10)) qty=Math.max(1,Math.ceil(qty/10)); else qty=Math.max(1,Math.round(qty)); }
+  else if(P.approx && /кг|кило/.test(unit)) qty=Math.max(1,Math.round(qty/P.approx));
+  else if(P.u==='pcs'||P.u==='l') qty=Math.max(1,Math.round(qty));
+  return {raw, key, qty:+qty.toFixed(2)};
+}
+function parseToCart(){
+  const ta=$('clientList'); if(!ta) return;
+  const lines=ta.value.split(/\n|;/).map(s=>s.trim()).filter(Boolean);
+  if(!lines.length){ toast('Напишите хотя бы одну позицию'); hap('err'); return; }
+  let added=0; unknownLines=[];
+  for(const ln of lines){ const r=parseLine(ln); if(!r) continue; if(!r.key||!(r.qty>0)){unknownLines.push(r.raw);continue;}
+    state.cart[r.key]=+((state.cart[r.key]||0)+r.qty).toFixed(2); added++; }
+  ta.value = unknownLines.join('\n');
+  save(); render(); hap(added?'ok':'err');
+  if(added && !unknownLines.length){ closeModal(); toast(`В корзине +${added} ${pl(added,['товар','товара','товаров'])}`); return; }
+  renderUnknown();
+  toast(added?`Добавлено: ${added}. Уточните ${unknownLines.length}`:'Уточните позиции');
+}
+function renderUnknown(){
+  const el=$('unknown'); if(!el) return;
+  el.innerHTML = unknownLines.length?`<div class="card" style="margin:0 0 12px">${unknownLines.map((u,i)=>{ const nm=u.replace(/[\d.,]+\s*(кг|г|гр|шт|л)?/gi,' '); const sg=suggest(nm);
+   return `<div class="unk2" data-unk="${i}"><div class="unk-h"><b>${esc(u)}</b><button class="x" onclick="dropUnknown(${i})" aria-label="Убрать">✕</button></div>
+   <div class="unk-s">${sg.length?'Похоже на:':'Нет в каталоге'}</div>
+   ${sg.length?`<div class="sugs">${sg.map(k=>`<button class="chip sug" data-sug="${k}" onclick="fixUnknown(${i},'${k}')">${PRODUCTS[k].e} ${PRODUCTS[k].n}</button>`).join('')}</div>`:''}
+   <div class="unk-a"><button class="btn sm secondary asis" onclick="addAsIs(${i})">🔎 Добавить как есть</button>
+   <select class="inp sm" onchange="fixUnknown(${i},this.value)"><option value="">Другой товар…</option>${Object.entries(CATS).map(([c,x])=>`<optgroup label="${x.t}">${Object.entries(PRODUCTS).filter(([,p])=>p.cat===c).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join('')}</optgroup>`).join('')}</select></div></div>`; }).join('')}
+   <div class="fine" style="margin:6px 0 0">«Как есть» — сборщик поищет на рынке и назовёт цену и продавца. Доплата — отдельно этому продавцу на Kaspi, только если согласитесь.</div></div>`:'';
+}
+function fixUnknown(i,k){ if(!k) return; const r=parseLine(unknownLines[i]); const q=(r&&r.qty)||1; const P=PRODUCTS[k];
+  const qq=P.u==='kg'?q:Math.max(1,Math.round(q)); state.cart[k]=+((state.cart[k]||0)+qq).toFixed(2);
+  const word=normName(unknownLines[i].replace(/[\d.,]+|кг|шт|г\b/g,'')); if(word && !P.syn.includes(word)) { P.syn.push(word); SYNIDX=null; }
+  unknownLines.splice(i,1); const ta=$('clientList'); if(ta) ta.value=unknownLines.join('\n'); save(); renderUnknown(); render(); hap('ok');
+  if(!unknownLines.length){ closeModal(); toast('Готово, всё в корзине'); } }
+function dropUnknown(i){ unknownLines.splice(i,1); const ta=$('clientList'); if(ta) ta.value=unknownLines.join('\n'); renderUnknown(); if(!unknownLines.length) closeModal(); }
+// «Добавить как есть» — позиция без каталога
+function addAsIs(i){ const t=unknownLines[i]; if(!t) return; state.custom=state.custom||[]; state.custom.push({id:'u'+(++state.seq),text:t.slice(0,80)});
+  unknownLines.splice(i,1); const ta=$('clientList'); if(ta) ta.value=unknownLines.join('\n'); save(); renderUnknown(); render(); hap('ok'); toast('Добавлено: найти на рынке');
+  if(!unknownLines.length) closeModal(); }
+function removeCustom(id){ state.custom=(state.custom||[]).filter(x=>x.id!==id); save(); render(); }
+
+/* ---------- карточка товара: фасовка и оценочная цена ---------- */
+function pcard(k){
+  const P=PRODUCTS[k], pr=priceFor(k), q=state.cart[k]||0, pct=pr&&P.store&&P.store>pr?Math.round((1-pr/P.store)*100):0;
+  const ctl = q ? `<div class="step"><button onclick="chg('${k}',-1)" aria-label="Меньше">−</button><span>${fq(q,P.u)}</span><button onclick="chg('${k}',1)" ${pr?'':'disabled'} aria-label="Больше">+</button></div>`
+               : pr ? `<button class="pc-add" onclick="chg('${k}',1)" aria-label="В корзину">+</button>` : '';
+  const B=P.pack&&PRODUCTS[P.pack.base];
+  const sub=P.pack&&pr?`≈${fmt(pr/P.pack.sz)}/${B.u==='kg'?'кг':B.u==='l'?'л':k.startsWith('eggs')?'10 шт':'шт'} · опт`:`за 1 ${uL(P)}${P.approx?` ≈${fq(P.approx,'kg')}`:''}${pct>0?` · <span class="src">${P.src.name}, ${P.src.date}</span>`:P.estimated?' · оценка':''}`;
+  return `<div class="pc" data-pc="${k}"><div class="pc-img" style="--h:${hue(k)}"><span>${P.e}</span>${pct>=10?`<i class="pc-off">−${pct}%</i>`:''}</div>
+   <div class="pc-b"><div class="pc-p">${pr?`<b>${fmt(pr)}</b>${pct>0?`<s>${fmt(P.store)}</s>`:''}`:'<span class="na">Нет сегодня</span>'}</div><div class="pc-n">${P.n}</div><div class="pc-u">${sub}</div></div>${ctl}</div>`;
+}
+function searchProducts(q){ const n=normName(q); if(!n) return []; const fz=matchScores(n).filter(x=>x.score>=60).slice(0,6).map(x=>x.k);
+  const r=Object.keys(PRODUCTS).filter(k=>{ const P=PRODUCTS[k]; return normName(P.n).includes(n)||P.syn.some(s=>s.startsWith(n)||s.includes(' '+n))||CATS[P.cat].t.toLowerCase().startsWith(n); });
+  return [...new Set([...r,...fz])].slice(0,40); }
+
+/* ================= v5: бизнес — шаблоны, профиль заведения, накладная, «найти на рынке» ================= */
+if(!state.custom) state.custom=[];
+if(!state.biz) state.biz={name:'',bin:'',addr:'',accept:'',cName:'',cPhone:''};
+state.templates.forEach(t=>{ if(!t.days) t.days=[]; if(!t.time) t.time='07:00'; });
+// БИН/ИИН: 12 цифр + контрольный разряд (алгоритм РК)
+function binOk(v){ const d=String(v||'').replace(/\D/g,''); if(d.length!==12) return false; const a=[...d].map(Number);
+  let s=0; for(let i=0;i<11;i++) s+=a[i]*(i+1); let c=s%11;
+  if(c===10){ s=0; for(let i=0;i<11;i++) s+=a[i]*(((i+2)%11)+1); c=s%11; if(c===10) return false; }
+  return c===a[11]; }
+const DAYS=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+function todayDow(){ const d=new Date(now()+5*3600e3).getUTCDay(); return (d+6)%7; } // 0 = Пн
+const tplSched = t => t.days&&t.days.length?`${t.days.slice().sort().map(d=>DAYS[d]).join(', ')} · ${t.time}`:'';
+/* ---------- Главная: бизнес ---------- */
+function homeBody(){ if(query.trim()||isHome()) return homeBodyBase();
+  const last=state.orders.find(o=>o.status!=='cancelled'), dow=todayDow(), r=state.reg, b=state.biz;
+  const docPill = r&&r.role==='venue'&&r.status!=='verified'?`<button class="pillmsg o docpill" onclick="openDocs()">📄 ${r.status==='pending'?'Документы на проверке':'Загрузите документы заведения'} ›</button>`:'';
+  const plan=state.templates.map((t,i)=>[t,i]).filter(([t])=>t.days.includes(dow));
+  return `${docPill}
+   ${plan.map(([t,i])=>`<button class="rowbtn plan" onclick="useTpl(${i})"><span class="ri">🗓</span><span class="rt"><b>Сегодня по плану: ${esc(t.name)}</b><span>${t.time} · собрать корзину-черновик</span></span>${IC.chev}</button>`).join('')}
+   ${last?`<button class="rowbtn" data-repeat="${last.id}" onclick="repeatOrder(${last.id})"><span class="ri">🔁</span><span class="rt"><b>Повторить прошлую закупку</b><span>№${last.id} · ${last.items.length} поз. · ${last.items.slice(0,4).map(i=>PRODUCTS[i.k].n).join(', ')}</span></span>${IC.chev}</button>`:''}
+   ${state.templates.map((t,i)=>`<button class="rowbtn" data-tpl="${i}" onclick="useTpl(${i})"><span class="ri">⭐</span><span class="rt"><b>${esc(t.name)}</b><span>${Object.keys(t.cart).length} поз.${tplSched(t)?' · '+tplSched(t):''}</span></span>${IC.chev}</button>`).join('')}
+   <button class="rowbtn" onclick="openList()"><span class="ri">📝</span><span class="rt"><b>Написать списком</b><span>Майонез 5 кг, сыр 4 кг… — разберём сами</span></span>${IC.chev}</button>
+   <h2 class="sec">Категории</h2>
+   <div class="tiles">${Object.entries(CATS).map(([k,c])=>`<button class="tile" style="--h:${c.h}" onclick="openCat('${k}')"><b>${c.t}</b><span class="te">${c.e}</span></button>`).join('')}</div>`; }
+/* ---------- Шаблоны и регулярная закупка (только напоминание) ---------- */
+function saveCartTpl(){ if(!Object.keys(state.cart).length){ toast('Корзина пуста'); return; }
+  modal(`<h3>Сохранить шаблон</h3><input class="inp" id="tplName" value="Закупка на неделю" maxlength="40"><button class="btn" onclick="doSaveTpl()">Сохранить</button>`); }
+function doSaveTpl(){ const n=($('tplName').value||'').trim()||'Закупка на неделю'; state.templates.push({name:n,cart:{...state.cart},days:[],time:'07:00'}); save(); closeModal(); hap('ok'); toast('Шаблон сохранён — повтор в один тап на главной'); render(); }
+function saveTpl(id){ const o=state.orders.find(x=>x.id===id); state.templates.push({name:`Закупка №${id}`,cart:{...o.cart},days:[],time:'07:00'}); save(); toast('Сохранено в шаблоны'); render(); }
+function useTpl(i){ const t=state.templates[i]; state.cart={...t.cart}; state.sel={}; save(); closeModal(); app='shop'; tab='cart'; catOpen=null; window.scrollTo(0,0); render(); toast(`«${t.name}» в корзине · проверьте и оформите`); }
+function openTpls(){ modal(`<h3>Шаблоны закупки</h3><div class="glist">${state.templates.map((t,i)=>`<button class="grow" data-tpledit="${i}" onclick="editTpl(${i})"><span class="gi">⭐</span><span class="gl">${esc(t.name)}<small>${tplSched(t)||'без расписания'} · ${Object.keys(t.cart).length} поз.</small></span>${IC.chev}</button>`).join('')||'<div class="grow"><span class="gl">Пока нет — сохраните корзину</span></div>'}</div>
+  <button class="btn gray" onclick="closeModal()">Закрыть</button>`); }
+let tplDraft=null;
+function editTpl(i){ const t=state.templates[i]; tplDraft={i,days:[...t.days],time:t.time}; drawTpl(); }
+function drawTpl(){ const t=state.templates[tplDraft.i];
+  modal(`<h3>${esc(t.name)}</h3><div class="fine" style="margin:-6px 0 10px">${Object.keys(t.cart).map(k=>`${PRODUCTS[k].n} ${fq(t.cart[k],PRODUCTS[k].u)}`).join(' · ')}</div>
+   <div class="sec" style="margin:4px 0 8px">Регулярная закупка</div>
+   <div class="days">${DAYS.map((d,j)=>`<button class="chip ${tplDraft.days.includes(j)?'active':''}" data-day="${j}" onclick="tplDay(${j})">${d}</button>`).join('')}</div>
+   <label class="grow" style="margin:10px 0;border-radius:12px"><span class="gl">Время</span><input class="ginp" id="tplTime" type="time" value="${tplDraft.time}" onchange="tplDraft.time=this.value"></label>
+   <div class="fine" style="margin:0 0 12px">Это напоминание: в эти дни на главной появится «Сегодня по плану», корзина соберётся черновиком. Ничего не оформляется и не списывается само.</div>
+   <button class="btn" id="tplSave" onclick="saveTplEdit()">Сохранить</button><button class="btn secondary" onclick="useTpl(${tplDraft.i})">В корзину сейчас</button>
+   <button class="btn danger" onclick="state.templates.splice(${tplDraft.i},1);save();closeModal();render()">Удалить шаблон</button>`); }
+function tplDay(j){ const d=tplDraft.days; const i=d.indexOf(j); if(i>=0) d.splice(i,1); else d.push(j); const tm=$('tplTime'); if(tm) tplDraft.time=tm.value; drawTpl(); }
+function saveTplEdit(){ const t=state.templates[tplDraft.i]; const tm=$('tplTime'); t.days=[...tplDraft.days].sort(); t.time=(tm&&tm.value)||t.time; save(); closeModal(); hap('ok'); toast(t.days.length?`Напомним: ${tplSched(t)}`:'Расписание снято'); render(); }
+/* ---------- Корзина: «найти на рынке» и шаблон ---------- */
+function customBlock(){ const C=state.custom||[]; if(!C.length) return '';
+  return `<h2 class="sec">Найти на рынке</h2><div class="card" style="padding:4px 14px" id="customList">${C.map(x=>`<div class="ci" data-cu="${x.id}"><div class="ci-img" style="--h:200">🔎</div><div class="ci-b"><div class="ci-n">${esc(x.text)}</div><div class="ci-s">цена уточнится · оплата продавцу отдельно</div></div><button class="x" onclick="removeCustom('${x.id}')" aria-label="Убрать">✕</button></div>`).join('')}
+   <div class="fine" style="margin:4px 0 10px">Сборщик найдёт товар и назовёт продавца и цену. Вы решите: оплатить этому продавцу на Kaspi отдельной карточкой или отказаться — без списаний.</div></div>`; }
+function vCart(){ let h=vCartBase(); const has=Object.keys(state.cart).length;
+  if(!has) return h+customBlock();
+  return h.replace('<h2 class="sec">Как собрать',`<div class="tplrow"><button class="link" id="saveTplBtn" onclick="saveCartTpl()">⭐ Сохранить как шаблон</button></div>${customBlock()}<h2 class="sec">Как собрать`); }
+/* ---------- Профиль заведения ---------- */
+function editBiz(){ const b=state.biz;
+  modal(`<h3>Профиль заведения</h3>
+   <label class="fl"><span>Название</span><input class="inp" id="bzName" value="${esc(b.name)}" placeholder="Кафе «Достар»"></label>
+   <label class="fl"><span>БИН / ИИН</span><input class="inp" id="bzBin" inputmode="numeric" maxlength="12" value="${esc(b.bin)}" placeholder="12 цифр" oninput="this.value=this.value.replace(/\\D/g,'').slice(0,12)"></label>
+   <label class="fl"><span>Адрес и вход для поставщиков</span><input class="inp" id="bzAddr" value="${esc(b.addr||opts.addr)}"></label>
+   <label class="fl"><span>Время приёмки товара</span><input class="inp" id="bzAcc" value="${esc(b.accept)}" placeholder="07:00–09:00"></label>
+   <div class="f2"><label class="fl"><span>Повар / завхоз</span><input class="inp" id="bzCN" value="${esc(b.cName)}" placeholder="Имя"></label><label class="fl"><span>Его телефон</span><input class="inp" id="bzCP" type="tel" value="${esc(b.cPhone)}" placeholder="+7" oninput="this.value=fmtPhone(this.value)"></label></div>
+   <button class="btn" id="bzSave" onclick="saveBiz()">Сохранить</button>`); }
+function saveBiz(){ const v=id=>($(id).value||'').trim(); const bin=v('bzBin').replace(/\D/g,'');
+  if(v('bzName').length<2){ toast('Укажите название заведения'); hap('err'); return; }
+  if(bin&&!binOk(bin)){ toast('БИН/ИИН: 12 цифр, проверьте номер'); hap('err'); $('bzBin').classList.add('err'); return; }
+  if(v('bzCP')&&!phoneOk(v('bzCP'))){ toast('Телефон контакта: +7 и 10 цифр'); hap('err'); return; }
+  Object.assign(state.biz,{name:v('bzName'),bin,addr:v('bzAddr'),accept:v('bzAcc'),cName:v('bzCN'),cPhone:v('bzCP')}); if(state.biz.addr.length>=5) opts.addr=state.biz.addr;
+  if(state.reg&&state.reg.role==='venue') Object.assign(state.reg.data,{name:state.biz.name,bin,addr:state.biz.addr});
+  save(); closeModal(); hap('ok'); toast('Профиль заведения сохранён'); render(); }
+/* ---------- Оформление: клиент и «найти на рынке» уходят в заказ ---------- */
+function clientInfo(){ const r=state.reg, b=state.biz; if(!isHome()) return {kind:'venue',name:b.name||(r&&r.data.name)||'Заведение',bin:b.bin||(r&&r.data.bin)||'',accept:b.accept,contact:b.cName?`${b.cName} ${b.cPhone}`:'',verified:!!(r&&r.role==='venue'&&r.status==='verified'),docs:r&&r.role==='venue'?r.status:'none'};
+  return {kind:'person',name:(r&&r.data.name)||'',verified:false}; }
+function placeOrder(){ const seq=state.seq, cu=[...(state.custom||[])]; placeOrderBase(); if(state.seq===seq) return; const o=state.orders[0];
+  o.client=clientInfo(); o.extra=cu.map(x=>({id:x.id,text:x.text,st:'search'})); if(cu.length){ state.custom=[]; } save(); render(); }
+const clientTag = o => o.client&&o.client.kind==='venue'?` · ${esc(o.client.name)} ${o.client.verified?'<span class="vtag">Проверено ✓</span>':'<span class="vtag no">документы на проверке</span>'}`:'';
+/* ---------- «Найти на рынке»: сборщик называет продавца и цену, клиент доплачивает этому продавцу ---------- */
+const XST={search:'Ищем на рынке',offer:'Ждём ответа клиента',check:'Продавец проверяет перевод',ok:'Оплачено ✓',taken:'Взял ✓',declined:'Клиент отказался',notfound:'Не нашли',fail:'Перевод не пришёл'};
+const xPending = o => (o.extra||[]).some(x=>['search','offer','check','ok','fail'].includes(x.st));
+function extraById(o,id){ return (o.extra||[]).find(x=>x.id===id); }
+function offerExtra(oid,xid){ const o=findO(oid), x=extraById(o,xid); const s=$('xs_'+xid).value, a=Math.round(+$('xa_'+xid).value);
+  if(!s){ toast('Выберите продавца'); hap('err'); return; } if(!(a>0)){ toast('Укажите цену'); hap('err'); return; }
+  if(o.status==='accepted'){ o.status='collecting'; o.log.push({s:'collecting',t:now()}); }
+  Object.assign(x,{st:'offer',s,amt:a,desc:($('xd_'+xid).value||'').trim().slice(0,60)}); o.log.push({s:'extra_offer',t:now()}); save(); hap('ok'); toast('Цена отправлена клиенту'); renderAll(); }
+function notFoundExtra(oid,xid){ const x=extraById(findO(oid),xid); x.st='notfound'; save(); renderAll(); }
+function takeExtra(oid,xid){ const x=extraById(findO(oid),xid); if(x.st!=='ok') return; x.st='taken'; save(); hap('ok'); renderAll(); }
+function payFound(oid,xid){ const x=extraById(findO(oid),xid); if(!['offer','fail'].includes(x.st)) return; x.st='check'; x.paidAt=now(); x.deadline=now()+CONFIG.paymentConfirmMinutes*60e3; save(); hap('ok'); toast('Ждём подтверждения продавца'); if($('xCards')) openExtra(oid); else renderAll(); }
+function declineExtra(oid,xid){ const x=extraById(findO(oid),xid); if(!['offer','fail'].includes(x.st)) return; x.st='declined'; save(); toast('Позиция убрана'); if($('xCards')) openExtra(oid); else renderAll(); }
+function confirmExtra(oid,xid){ const x=extraById(findO(oid),xid); if(x.st!=='check') return; x.st='ok'; save(); hap('ok'); toast('Оплата подтверждена'); renderAll(); }
+function rejectExtra(oid,xid){ const x=extraById(findO(oid),xid); if(x.st!=='check') return; x.st='fail'; x.why='no'; save(); renderAll(); }
+function extraCard(o,x){ const S=x.s&&state.sellers[x.s], num=x.s?kaspiOf(x.s):'';
+  const badge={offer:['Не оплачено','warn'],check:['Ждём подтверждения',''],ok:['Подтверждено','done'],taken:['Взято','done'],fail:[x.why==='timeout'?'Время вышло':'Не пришло','bad'],declined:['Отказались',''],notfound:['Не нашли',''],search:['Ищем','']}[x.st];
+  let body='';
+  if(['offer','fail'].includes(x.st)) body=`<div class="kaspi"><span>Kaspi<b>${num}</b></span><button class="link" onclick="copyKaspi('${num}')">Скопировать</button></div>
+    <div class="f2"><button class="btn secondary" style="margin:0" onclick="declineExtra(${o.id},'${x.id}')">Не нужно</button><button class="btn" style="margin:0" onclick="payFound(${o.id},'${x.id}')">${x.st==='fail'?'Оплатил ещё раз':'Оплатил'}</button></div>`;
+  if(x.st==='check') body=`<div class="fine" style="margin:6px 0 0">Продавец проверяет перевод · ⏱ <span data-cd="${x.deadline}">${cd(x.deadline)}</span></div>`;
+  return `<div class="paycard ${x.st==='fail'?'fail':x.st==='ok'||x.st==='taken'?'ok':['declined','notfound'].includes(x.st)?'off':''}" data-x="${x.id}"><div class="pk-h"><div><b>${S?`${S.emoji} ${S.n}`:'🔎 Найти на рынке'}</b><small>${S?`${S.m} · ${S.pt}${S.verified?' · Проверен ✓':''}`:''}</small></div><span class="status ${badge[1]}">${badge[0]}</span></div>
+   <div class="pk-it">Вы просили: «${esc(x.text)}»${x.desc?` · нашли: ${esc(x.desc)}`:''}</div>${x.amt?`<div class="pk-sum">${fmt(x.amt)}</div>`:''}${body}</div>`; }
+function openExtra(id){ const o=findO(id); modal(`<h3>Найдено на рынке · №${id}</h3><div class="fine" style="margin:-6px 0 10px">Цену назвал сборщик. Перевод — напрямую продавцу на Kaspi, отдельно от заказа.</div>
+  <div id="xCards">${(o.extra||[]).filter(x=>x.st!=='search').map(x=>extraCard(o,x)).join('')}</div><button class="btn gray" onclick="closeModal()">Закрыть</button>`); }
+function extraQueue(s){ return state.orders.flatMap(o=>(o.extra||[]).filter(x=>x.s===s&&x.st==='check').map(x=>[o,x])); }
+function sellerPayBlock(me){ const L=extraQueue(me); let h=payQueueHTML(me,'Подтвердите оплату');
+  if(L.length){ if(!h) h=`<div class="ttl" style="font-size:24px">Подтвердите оплату</div>`;
+    h+=L.map(([o,x])=>`<div class="ri" data-xq="${x.id}"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · найти на рынке · Kaspi от ${esc(o.phone||'клиента')}${clientTag(o)}</div><div class="ri-q">${fmt(x.amt)}</div><div class="meta">«${esc(x.text)}»${x.desc?' · '+esc(x.desc):''} · ⏱ <span data-cd="${x.deadline}">${cd(x.deadline)}</span></div></div></div>
+     <div class="ri-a"><button class="btn gray" style="white-space:nowrap" onclick="rejectExtra(${o.id},'${x.id}')">Не пришло</button><button class="btn ok" onclick="confirmExtra(${o.id},'${x.id}')">✓ Получил</button></div></div>`).join(''); }
+  return h; }
+function sellerPayTodo(me){ return payQueue(me).length+extraQueue(me).length; }
+function routeExtraHTML(o){ const X=o.extra||[]; if(!X.length) return ''; const ed=['accepted','collecting'].includes(o.status);
+  const sl=Object.entries(state.sellers).filter(([,s])=>s.online);
+  return `<div class="ptitle" style="text-transform:none;font-size:14px;color:var(--text);margin-top:16px">🔎 Найти на рынке<div class="meta" style="font-weight:400">Найдите, договоритесь с продавцом и отправьте клиенту цену</div></div>`+X.map(x=>{
+    if(x.st==='search'&&ed) return `<div class="ri" data-rx="${x.id}"><div class="ri-h"><div><b>«${esc(x.text)}»</b><div class="meta">клиент доплатит продавцу отдельно</div></div></div>
+      <label class="fl"><span>Что нашли</span><input class="inp" id="xd_${x.id}" placeholder="например, Майонез Махеев 3 кг"></label>
+      <div class="ri-in f2"><label><span>Продавец</span><select class="inp" id="xs_${x.id}"><option value="">Выбрать</option>${sl.map(([id,s])=>`<option value="${id}">${s.n} · ${s.m}</option>`).join('')}</select></label><label><span>Цена, ₸</span><input class="inp" id="xa_${x.id}" type="number" inputmode="numeric"></label></div>
+      <div class="ri-a"><button class="btn gray" onclick="notFoundExtra(${o.id},'${x.id}')">Не нашёл</button><button class="btn ok" onclick="offerExtra(${o.id},'${x.id}')">Отправить цену</button></div></div>`;
+    const S=x.s&&state.sellers[x.s]; const ic={offer:'⏳',check:'⏳',ok:'💳',taken:'✅',declined:'⛔',notfound:'⛔',fail:'⚠️',search:'⬜'}[x.st];
+    return `<div class="ri done" data-rx="${x.id}"><span style="font-size:20px">${ic}</span><div class="rm">«${esc(x.text)}»<small>${XST[x.st]}${S?` · ${S.n} · ${fmt(x.amt)}`:''}</small></div>${x.st==='ok'&&ed?`<button class="btn sm ok" onclick="takeExtra(${o.id},'${x.id}')">✓ Взял</button>`:''}</div>`; }).join(''); }
+function vRoute(){ const o=state.orders.find(x=>x.id===openOrder); let h=vRouteBase(); if(!o||!openOrder) return h;
+  const ex=routeExtraHTML(o); const i=h.indexOf('<div class="actbar">'); h=i>=0?h.slice(0,i)+ex+h.slice(i):h+ex;
+  if(xPending(o)) h=h.replace(/<button class="btn" (disabled )?onclick="finishCollect\((\d+)\)">[^<]*/,'<button class="btn" disabled onclick="finishCollect($2)">Ждём ответ по «найти на рынке»');
+  return h; }
+function finishCollect(id){ const o=findO(id); if(xPending(o)){ toast('Есть позиции «найти на рынке» без ответа'); hap('err'); return; } finishCollectBase(id); }
+function orderTotal(o){ const t=orderTotalBase(o); const x=(o.extra||[]).filter(e=>['ok','taken'].includes(e.st)).reduce((s,e)=>s+e.amt,0); return {...t,extra:x,total:t.total+x}; }
+function checkTimers(){ let ch=checkTimersBase(); const t=now();
+  state.orders.forEach(o=>(o.extra||[]).forEach(x=>{ if(x.st==='check'&&t>x.deadline){ x.st='fail'; x.why='timeout'; ch=true; } })); if(ch) save(); return ch; }
+function clientActions(o,sheet){ let h=clientActionsBase(o,sheet); const n=(o.extra||[]).filter(x=>['offer','fail'].includes(x.st)).length;
+  if(n) h=`<button class="btn ${sheet?'':'sm'}" data-xbtn="${o.id}" onclick="event.stopPropagation();openExtra(${o.id})">Найдено на рынке · доплатить</button>`+h; return h; }
+function subLine(o){ const x=(o.extra||[]).filter(e=>e.st==='offer'); if(x.length) return `Нашли «${esc(x[0].text)}» · ${fmt(x[0].amt)} продавцу ${state.sellers[x[0].s].n}`; return subLineBase(o); }
+function kaspiOf(s){ const S=state.sellers[s]; return S&&S.kaspi?S.kaspi:kaspiOfBase(s); }
+/* ---------- Накладная / сводка ---------- */
+function invoiceHTML(o){ const t=orderTotal(o), c=o.client||{}, by={}; const dt=new Date(o.created).toLocaleString('ru-RU',{timeZone:'Asia/Almaty',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  o.items.forEach(i=>{ if(['dropped','missing'].includes(i.state)) return; (by[i.s]=by[i.s]||{it:[],x:[]}).it.push(i); });
+  (o.extra||[]).forEach(x=>{ if(['ok','taken'].includes(x.st)) (by[x.s]=by[x.s]||{it:[],x:[]}).x.push(x); });
+  const rows=Object.entries(by).map(([s,g])=>{ const S=state.sellers[s]; let sum=0;
+    const tr=g.it.map(i=>{ const P=PRODUCTS[i.k], q=billQ(i), a=Math.round(q*i.price); sum+=a; return `<tr><td>${P.n}${i.state==='removed'?' (нет)':''}</td><td>${fq(i.q,P.u)}</td><td>${i.fact!=null?fq(i.fact,P.u):i.state==='removed'?'0':'—'}</td><td>${fmt(i.price)}</td><td>${fmt(a)}</td></tr>`; }).join('')
+      +g.x.map(x=>{ sum+=x.amt; return `<tr><td>${esc(x.desc||x.text)} (найдено)</td><td>—</td><td>—</td><td>—</td><td>${fmt(x.amt)}</td></tr>`; }).join('');
+    return `<div class="inv-s" data-inv="${s}"><b>${S.n}</b> · ${S.m}, ${S.pt}${S.verified?' · проверен ✓':''}<br><small>Kaspi ${kaspiOf(s)}</small>
+     <table><tr><th>Позиция</th><th>Заказ</th><th>Факт</th><th>Цена</th><th>Сумма</th></tr>${tr}<tr class="st"><td colspan="4">Итого продавцу</td><td>${fmt(sum)}</td></tr></table></div>`; }).join('');
+  return `<div id="invoice"><div class="inv-h"><b>Сводка закупки №${o.id}</b><span>${dt}</span></div>
+   <div class="inv-c">${c.kind==='venue'?`${esc(c.name)}${c.bin?` · БИН/ИИН ${c.bin}`:''}${c.verified?' · проверено ✓':''}<br>`:''}${esc(o.addr)} · ${esc(o.phone||'')}${c.accept?`<br>Приёмка: ${esc(c.accept)}`:''}<br>Доставка: ${oSlot(o)}</div>
+   ${rows}
+   <div class="inv-s"><b>Сборщик</b> · доставка ${fmt(delivOf(o))}${t.service?` · сервис ${fmt(t.service)}`:''}</div>
+   <div class="inv-t"><span>Всего${o.items.some(i=>i.fact!=null)?' по факту':''}</span><b>${fmt(t.total)}</b></div>
+   <div class="inv-n">Это сводка для учёта закупки, а не фискальный чек и не счёт-фактура. Фискальный чек может выдать только сам продавец. Оплата шла напрямую каждому продавцу на Kaspi.</div></div>`; }
+function openInvoice(id){ const o=findO(id); modal(`${invoiceHTML(o)}<button class="btn noprint" onclick="window.print()">🖨 Печать / PDF</button><button class="btn gray noprint" onclick="closeModal()">Закрыть</button>`); document.body.classList.add('printing'); }
+function openOrderSheet(id){ openOrderSheetBase(id); const o=findO(id), sh=document.querySelector('#modal .sh'); if(!o||!sh) return;
+  const rb=sh.querySelector('button[onclick^="repeatOrder"]'); if(rb) rb.insertAdjacentHTML('beforebegin',`<button class="btn secondary" id="invBtn" onclick="openInvoice(${o.id})">🧾 Накладная / чек</button>`);
+  const X=(o.extra||[]); if(X.length){ const cards=sh.querySelectorAll('.card'); const tgt=cards[1]||cards[0]; tgt&&tgt.insertAdjacentHTML('afterend',`<div class="card"><div class="sec" style="margin:0 0 6px">Найти на рынке</div>${X.map(x=>`<div class="li"><span>«${esc(x.text)}»<small style="display:block;color:var(--hint);font-size:12px">${XST[x.st]}${x.s?' · '+state.sellers[x.s].n:''}</small></span><span>${x.amt?fmt(x.amt):'—'}</span></div>`).join('')}</div>`); } }
+
+/* ================= v5: регистрация при первом входе и проверка документов ================= */
+const ONB_KEY='zakupshik_onb_v5';
+const ROLES={
+ venue:{t:'Заведение',s:'Кафе, ресторан, столовая',e:'🏢',title:'Данные заведения',
+   f:[['name','Название заведения','text','Кафе «Достар»'],['bin','БИН / ИИН','bin','12 цифр'],['addr','Адрес','text','Улица, дом, вход для поставщиков'],['phone','Телефон','phone','+7 (7__) ___-__-__']],
+   d:[['reg','Свидетельство ИП/ТОО или талон о регистрации',false]],
+   why:'Продавцы видят, что заказывает зарегистрированное заведение, а вам проще сверять закупки. Заказывать можно сразу, документ — позже.'},
+ person:{t:'Частное лицо',s:'Покупаю для дома',e:'🏠',title:'Немного о вас',
+   f:[['name','Имя','text','Как к вам обращаться'],['phone','Телефон','phone','+7 (7__) ___-__-__'],['addr','Адрес','text','Улица, дом, квартира']], d:[], why:''},
+ collector:{t:'Сборщик',s:'Собираю и вожу заказы',e:'🛵',title:'Данные сборщика',
+   f:[['fio','ФИО','text','Фамилия Имя'],['phone','Телефон','phone','+7 (7__) ___-__-__'],['iin','ИИН','bin','12 цифр'],['car','Есть автомобиль','check','']],
+   d:[['id','Удостоверение личности',true],['selfie','Селфи с удостоверением',true]],
+   why:'Сборщик забирает товар у продавцов и получает оплату доставки — поэтому личность проверяем до первого заказа.'},
+ seller:{t:'Продавец рынка',s:'Торгую на базаре',e:'🏪',title:'Данные продавца',
+   f:[['fio','ФИО или название ИП','text','ИП Ахметова'],['bin','ИИН / БИН','bin','12 цифр'],['market','Рынок','market',''],['pt','Ряд и номер точки','text','Ряд 3, место 21'],['kaspi','Номер Kaspi для оплат','phone','+7 (7__) ___-__-__']],
+   d:[['lease','Договор аренды места или регистрация ИП',true],['spot','Фото точки',true]],
+   why:'Клиенты переводят деньги прямо вам — проверяем, что точка и номер Kaspi ваши.'}
+};
+const MARKETS=['Шапагат','Артём','Шахар','Алтын Орда','Евразия'];
+const DOC_LIMIT={file:10*1024*1024, thumb:60000, total:400000}; // байты: файл, миниатюра, все миниатюры
+let onb=null, gateOn=false;
+if(!localStorage.getItem(ONB_KEY)) onb={step:1,role:'venue',data:{},docs:{},first:true};
+function onbRole(r){ onb.role=r; hap(); render(); }
+function onbGo(s){ onb.step=s; hap(); window.scrollTo(0,0); render(); }
+function onbSet(k,v){ onb.data[k]=v; }
+function onbDots(){ const n=onb.role==='person'?2:3; return `<div class="onb-dots">${Array.from({length:n},(_,i)=>`<i class="${i<onb.step?'on':''}"></i>`).join('')}</div>`; }
+function vOnb(){ const R=ROLES[onb.role];
+  if(onb.step===1) return `<div class="onb">${onbDots()}<h1>Кто вы?</h1><p class="onb-p">Покажем нужные разделы</p>
+   <div class="roles">${Object.entries(ROLES).map(([k,x])=>`<button class="role ${onb.role===k?'on':''}" data-role="${k}" onclick="onbRole('${k}')"><span class="re">${x.e}</span><span class="rt"><b>${x.t}</b><span>${x.s}</span></span><i class="rc"></i></button>`).join('')}</div>
+   <button class="btn" id="onbNext" onclick="onbGo(2)">Дальше</button>${onb.first?'':`<button class="btn gray" onclick="onb=null;render()">Отмена</button>`}</div>`;
+  if(onb.step===2){ const D=onb.data;
+    const fld=([k,l,t,ph])=>{ const v=esc(D[k]||'');
+      if(t==='check') return `<label class="grow onb-ck"><span class="gl">${l}</span><input type="checkbox" class="sw" id="of_${k}" ${D[k]?'checked':''} onchange="onbSet('${k}',this.checked)"></label>`;
+      if(t==='market') return `<label class="fl"><span>${l}</span><select class="inp" id="of_${k}" onchange="onbSet('${k}',this.value)"><option value="">Выбрать</option>${MARKETS.map(m=>`<option ${D[k]===m?'selected':''}>${m}</option>`).join('')}</select></label>`;
+      if(t==='phone') return `<label class="fl"><span>${l}</span><div class="inrow"><input class="inp" id="of_${k}" type="tel" inputmode="tel" placeholder="${ph}" value="${v}" oninput="this.value=fmtPhone(this.value);onbSet('${k}',this.value)">${k==='phone'&&inTG&&tg.requestContact?`<button class="btn sm secondary" onclick="onbContact()">📱 Из Telegram</button>`:''}</div></label>`;
+      if(t==='bin') return `<label class="fl"><span>${l}</span><input class="inp" id="of_${k}" inputmode="numeric" maxlength="12" placeholder="${ph}" value="${v}" oninput="this.value=this.value.replace(/\\D/g,'').slice(0,12);onbSet('${k}',this.value)"></label>`;
+      return `<label class="fl"><span>${l}</span><input class="inp" id="of_${k}" placeholder="${ph}" value="${v}" oninput="onbSet('${k}',this.value)"></label>`; };
+    const doc=([k,l,req])=>{ const d=onb.docs[k];
+      return `<label class="doc ${d?'on':''}" data-doc="${k}"><input type="file" accept="image/*,application/pdf" id="doc_${k}" onchange="onDoc('${k}',this)" hidden>
+       <span class="dthumb">${d&&d.thumb?`<img src="${d.thumb}" alt="">`:d?'📄':'📷'}</span><span class="dl"><b>${l}</b><small>${d?`${esc(d.name)} · ${Math.max(1,Math.round(d.size/1024))} КБ`:req?'Обязательно':'Можно загрузить позже'}</small></span><span class="dx">${d?'Заменить':'Загрузить'}</span></label>`; };
+    const person=onb.role==='person', later=onb.role!=='venue'&&!person;
+    return `<div class="onb">${onbDots()}<button class="onb-back" onclick="onbGo(1)">${IC.back}<span>Назад</span></button><h1>${R.title}</h1>
+     <div class="onb-f">${R.f.map(fld).join('')}</div>
+     ${R.d.length?`<h2 class="sec">Документы</h2><div class="fine" style="margin:-4px 0 10px;display:block">${R.why}</div>${R.d.map(doc).join('')}
+      <div class="fine onb-honest" style="display:block">В этой версии файлы не отправляются: сжатая копия хранится только на этом устройстве, пока не подключим сервер проверки. Можно удалить в профиле.</div>`:''}
+     ${person?`<button class="btn" id="onbDone" onclick="onbPerson(false)">Готово</button><button class="btn gray" id="onbSkip" onclick="onbPerson(true)">Пропустить</button>`
+       :`<button class="btn" id="onbSubmit" onclick="onbSubmit()">Отправить на проверку</button>${later?`<button class="btn gray" id="onbLater" onclick="onbDraft()">Заполню позже</button>`:''}`}</div>`; }
+  // шаг 3 — статус
+  const r=state.reg, work=onb.role==='collector'||onb.role==='seller';
+  return `<div class="onb">${onbDots()}<div class="onb-st"><span class="ee">🕓</span><h1>На проверке</h1>
+   <p class="onb-p">${work?'Рабочий экран откроется после проверки документов.':'Заказывать можно уже сейчас. Когда документы подтвердят, продавцы увидят «Проверено ✓».'}</p>
+   <div class="glist">${ROLES[onb.role].d.map(([k,l])=>`<div class="grow"><span class="gi">${r.docs[k]?'📎':'⏳'}</span><span class="gl">${l}</span><span class="gv">${r.docs[k]?'загружен':'позже'}</span></div>`).join('')}</div>
+   <div class="fine" style="justify-content:center">Демо: сервера проверки пока нет, данные остались на устройстве</div></div>
+   <button class="btn" id="onbFinish" onclick="onbDone()">${work?(onb.role==='collector'?'Открыть кабинет сборщика':'Открыть кабинет продавца'):'За покупками'}</button></div>`; }
+function onbContact(){ try{ tg.requestContact((ok,res)=>{ const p=ok&&res&&res.responseUnsafe&&res.responseUnsafe.contact&&res.responseUnsafe.contact.phone_number; if(p){ onb.data.phone=fmtPhone(p); render(); } }); }catch(e){ toast('Введите номер вручную'); } }
+// Фото → сжатая миниатюра (JPEG) в памяти устройства; PDF — только название и размер
+function onDoc(k,el){ const f=el.files&&el.files[0]; if(!f) return;
+  if(f.size>DOC_LIMIT.file){ toast('Файл больше 10 МБ'); hap('err'); el.value=''; return; }
+  const meta={name:f.name.slice(0,60),type:f.type||'',size:f.size,at:now(),thumb:null};
+  const done=()=>{ onb.docs[k]=meta; hap('ok'); render(); };
+  if(!/^image\//.test(f.type)){ done(); toast('Файл прикреплён'); return; }
+  const rd=new FileReader(); rd.onload=()=>{ const img=new Image(); img.onload=()=>{ try{ const sc=Math.min(1,320/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.max(1,Math.round(img.width*sc)); c.height=Math.max(1,Math.round(img.height*sc));
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); let q=.6, u=c.toDataURL('image/jpeg',q); while(u.length>DOC_LIMIT.thumb&&q>.2){ q-=.15; u=c.toDataURL('image/jpeg',q); }
+      const used=Object.entries(onb.docs).filter(([x])=>x!==k).reduce((s,[,d])=>s+(d.thumb?d.thumb.length:0),0);
+      if(u.length<=DOC_LIMIT.thumb&&used+u.length<=DOC_LIMIT.total) meta.thumb=u; else toast('Мало места — сохранили только название файла'); }catch(e){} done(); };
+    img.onerror=()=>{ done(); }; img.src=rd.result; }; rd.onerror=()=>{ toast('Не удалось прочитать файл'); }; rd.readAsDataURL(f); }
+// сохранение с проверкой переполнения localStorage
+function saveSafe(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); return true; }catch(e){
+    if(state.reg) Object.values(state.reg.docs||{}).forEach(d=>d.thumb=null); try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e2){} toast('Память устройства заполнена — миниатюры документов не сохранены'); return false; } }
+function onbValid(){ const R=ROLES[onb.role], D=onb.data; const bad=(k,m)=>{ toast(m); hap('err'); const i=$('of_'+k); if(i){ i.classList.add('err'); i.focus&&i.focus(); } return false; };
+  for(const [k,l,t] of R.f){ const v=String(D[k]||'').trim();
+    if(t==='check') continue;
+    if(t==='bin'&&!binOk(v)) return bad(k,`${l}: 12 цифр, проверьте номер`);
+    if(t==='phone'&&!phoneOk(v)) return bad(k,`${l}: +7 и 10 цифр`);
+    if(t==='market'&&!v) return bad(k,'Выберите рынок');
+    if(t==='text'&&v.length<(k==='addr'?5:2)) return bad(k,`Заполните: ${l}`);
+    if(k==='fio'&&onb.role==='collector'&&v.split(/\s+/).length<2) return bad(k,'ФИО: фамилия и имя'); }
+  const miss=R.d.filter(([k,,req])=>req&&!onb.docs[k]); if(miss.length){ toast(`Загрузите: ${miss[0][1]}`); hap('err'); return false; }
+  return true; }
+// Заглушка: здесь будет отправка на сервер проверки (multipart: role, data, файлы). Сейчас ничего не отправляет.
+function submitVerification(reg){ const payload={role:reg.role,data:{...reg.data},docs:Object.fromEntries(Object.entries(reg.docs).map(([k,d])=>[k,{name:d.name,type:d.type,size:d.size}])),at:reg.submittedAt};
+  reg.outbox=payload; return Promise.resolve({sent:false,reason:'сервер проверки ещё не подключён'}); }
+function onbSubmit(){ if(!onbValid()) return; state.reg={role:onb.role,status:'pending',data:{...onb.data},docs:{...onb.docs},submittedAt:now()};
+  submitVerification(state.reg); applyReg(); saveSafe(); onb.step=3; hap('ok'); window.scrollTo(0,0); render(); }
+function onbDraft(){ state.reg={role:onb.role,status:'draft',data:{...onb.data},docs:{...onb.docs}}; applyReg(); saveSafe(); onbDone(); toast('Документы можно дозагрузить в профиле'); }
+function onbPerson(skip){ const D=onb.data; if(!skip){ if(D.phone&&!phoneOk(D.phone)){ toast('Телефон: +7 и 10 цифр'); hap('err'); return; } }
+  state.reg={role:'person',status:'none',data:skip?{}:{...D},docs:{}}; applyReg(); saveSafe(); onbDone(); }
+function applyReg(){ const r=state.reg, D=r.data;
+  if(D.addr&&D.addr.trim().length>=5) opts.addr=D.addr.trim(); if(D.phone&&phoneOk(D.phone)) opts.phone=fmtPhone(D.phone);
+  if(r.role==='venue') Object.assign(state.biz,{name:D.name||state.biz.name,bin:D.bin||state.biz.bin,addr:D.addr||state.biz.addr}); }
+function onbDone(){ localStorage.setItem(ONB_KEY,'1'); const r=state.reg, role=r?r.role:'venue';
+  state.mode=role==='person'?'home':'biz'; opts.slot=0; if(state.mode==='home'&&opts.pay==='invoice') opts.pay='kaspi';
+  onb=null; app=role==='collector'||role==='seller'?role:'shop'; tab='home'; catOpen=null; openOrder=null; saveSafe(); window.scrollTo(0,0); render(); }
+function changeRole(){ const r=state.reg; onb={step:1,role:(r&&r.role)||'venue',data:{...(r?r.data:{})},docs:{...(r?r.docs:{})}}; window.scrollTo(0,0); render(); }
+function openDocs(){ const r=state.reg; if(!r){ changeRole(); return; } closeModal(); onb={step:2,role:r.role,data:{...r.data},docs:{...r.docs}}; window.scrollTo(0,0); render(); }
+function approveDemo(){ const r=state.reg; if(!r) return; r.status='verified'; r.verifiedAt=now();
+  if(r.role==='seller'){ const D=r.data; state.sellers.sU={n:D.fio||'Я',m:D.market||'Шапагат',pt:D.pt||'',cats:[],rating:0,done:0,disputes:0,ontime:0,months:0,online:true,emoji:'🏪',verified:true,kaspi:fmtPhone(D.kaspi)}; state.me='sU'; }
+  if(r.role==='collector'||r.role==='seller') unlocked[r.role]=true; saveSafe(); hap('ok'); toast('Демо: документы одобрены'); render(); }
+const RST = r => !r?'':r.status==='verified'?'<span class="status done">Проверено ✓</span>':r.status==='pending'?'<span class="status">На проверке</span>':r.status==='draft'?'<span class="status warn">Нет документов</span>':'';
+function vGate(a){ const r=state.reg, R=ROLES[a];
+  return ptop(a==='collector'?'Сборщик':'Продавец','Магазин','toShop()')+`<div class="empty gate"><div class="ee">🕓</div><b>${r.status==='draft'?'Загрузите документы':'Документы на проверке'}</b>
+   <span>${r.status==='draft'?'Рабочий экран откроется после проверки.':'Заказы и оплаты появятся здесь после проверки.'}</span></div>
+   <div class="glist">${R.d.map(([k,l])=>`<div class="grow"><span class="gi">${r.docs[k]?'📎':'⏳'}</span><span class="gl">${l}</span><span class="gv">${r.docs[k]?'загружен':'нет'}</span></div>`).join('')}</div>
+   <button class="btn secondary" onclick="openDocs()">${r.status==='draft'?'Загрузить документы':'Изменить данные'}</button>
+   <div class="gate-demo"><button class="link" id="approveDemo" onclick="approveDemo()">Одобрить (демо)</button> · <button class="link" onclick="openPartnerBase('${a}')">Код партнёра</button></div>`; }
+function openPartner(a){ const r=state.reg; if(r&&r.role===a&&r.status==='verified') unlocked[a]=true;
+  if(r&&r.role===a&&!unlocked[a]){ app=a; openOrder=null; window.scrollTo(0,0); render(); return; } openPartnerBase(a); }
+function vProfile(){ let h=vProfileBase(); const r=state.reg, R=r&&ROLES[r.role], b=state.biz;
+  const reg=r?`<div class="card regc" data-reg="${r.role}"><div class="hero"><span class="he">${R.e}</span><div style="flex:1;min-width:0"><b style="font-size:17px">${esc(r.data.name||r.data.fio||R.t)}</b><div class="meta">${R.t} ${RST(r)}</div></div></div>
+     <div class="f2" style="margin-top:12px">${R.d.length?`<button class="btn sm secondary" style="margin:0" onclick="openDocs()">Документы</button>`:`<button class="btn sm secondary" style="margin:0" onclick="openDocs()">Данные</button>`}<button class="btn sm gray" style="margin:0" onclick="changeRole()">Сменить роль</button></div>
+     ${r.status==='pending'||r.status==='draft'?`<div style="text-align:center;margin-top:8px"><button class="link tiny" onclick="approveDemo()">Одобрить (демо)</button></div>`:''}</div>`
+    :`<button class="rowbtn" onclick="changeRole()"><span class="ri">🪪</span><span class="rt"><b>Регистрация</b><span>Кто вы — заведение, частное лицо, сборщик или продавец</span></span>${IC.chev}</button>`;
+  const biz=isHome()?'':`<div class="glist"><button class="grow" id="bizRow" onclick="editBiz()"><span class="gi">🏢</span><span class="gl">${b.name?esc(b.name):'Профиль заведения'}<small>${b.bin?'БИН '+b.bin:'БИН не указан'}${b.accept?' · приёмка '+esc(b.accept):''}</small></span>${IC.chev}</button>
+     ${b.cName?`<div class="grow"><span class="gi">👨‍🍳</span><span class="gl">Повар / завхоз</span><span class="gv">${esc(b.cName)} ${esc(b.cPhone)}</span></div>`:''}
+     <button class="grow" id="tplRow" onclick="openTpls()"><span class="gi">⭐</span><span class="gl">Шаблоны закупки</span><span class="gv">${state.templates.length||''}</span>${IC.chev}</button></div>`;
+  h=h.replace('<div class="ttl">Профиль</div>',`<div class="ttl">Профиль</div>${reg}${biz}`);
+  if(!isHome()) h=h.replace(/<button class="grow" onclick="openTpls\(\)">.*?<\/button>/,'');
+  // «Мои продавцы» — одной строкой, список в шторке
+  const a=h.indexOf('<h2 class="sec">Мои продавцы'), z=h.indexOf('<h2 class="sec">Для партнёров');
+  if(a>=0&&z>a){ PINS_HTML=h.slice(a,z); const n=Object.keys(state.pins).length; h=h.slice(0,a)+`<div class="glist"><button class="grow" id="pinsRow" onclick="openPins()"><span class="gi">🤝</span><span class="gl">Мои продавцы</span><span class="gv">${n?n+' закреплено':'авто'}</span>${IC.chev}</button></div>`+h.slice(z); }
+  return h; }
+let PINS_HTML='';
+function openPins(){ modal(PINS_HTML.replace('<h2 class="sec">','<h3>').replace('</h2>','</h3>')+`<button class="btn gray" onclick="closeModal();render()">Готово</button>`); }
+function vWelcome(){ return `<div class="welcome"><div class="wl">🧺</div><h1>Закупщик</h1><p>Закупка на базарах Астаны для кафе и ресторанов</p>
+  <div class="wlist"><div><span>🏢</span>Опт: вёдра, мешки, коробки</div><div><span>💳</span>Оплата напрямую продавцам на Kaspi</div><div><span>⚖️</span>Не больше заказанного веса</div><div><span>🧾</span>Сводка по продавцам для учёта</div></div>
+  <button class="btn" onclick="setMode('biz')">Начать</button><button class="btn gray" onclick="setMode('home')">Покупаю для дома</button></div>`; }
+function render(){
+  const v=$('view'); checkTimers(); gateOn=false;
+  if(onb){ v.innerHTML=vOnb(); chrome(); return; }
+  if(!state.mode){ v.innerHTML=vWelcome(); chrome(); return; }
+  const r=state.reg; if(r&&r.status==='verified'&&(r.role==='collector'||r.role==='seller')) unlocked[r.role]=true;
+  if(app!=='shop'&&!unlocked[app]){ if(r&&r.role===app){ gateOn=true; v.innerHTML=vGate(app); chrome(); return; } app='shop'; }
+  if(app==='shop') v.innerHTML = tab==='home'?(catOpen?vCat():vHome()) : tab==='cart'?vCart() : tab==='orders'?vOrders() : vProfile();
+  else if(app==='collector') v.innerHTML=vCollector();
+  else v.innerHTML=vSeller();
+  chrome();
+}
+window.resetDemo=()=>{ localStorage.removeItem(KEY); localStorage.removeItem(ONB_KEY); location.reload(); };
+
 render();
-</script>
-</body>
-</html>
+</script></body></html>
