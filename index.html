@@ -407,6 +407,33 @@ label.fl{margin:0}label.fl>span{display:block;margin:0 0 4px 2px}
 .inv-n{font-size:12px;color:var(--hint);margin:4px 2px 14px;line-height:1.4}
 @media print{ body *{visibility:hidden!important} #invoice,#invoice *{visibility:visible!important;color:#000!important}
  #invoice{position:absolute;left:0;top:0;width:100%;background:#fff} .inv-s{background:#fff!important;border:1px solid #ccc} .modal{position:static!important;background:none!important} }
+/* v6 admin */
+.admbanner{font-size:13px;line-height:1.35;padding:9px 12px;border-radius:12px;background:var(--tint-orange);color:var(--orange);font-weight:600;margin:0 0 10px}
+.admtabs{margin-bottom:12px}.chip .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:var(--accent);color:var(--accent-text);font-size:11px;font-weight:700}
+.chip .cnt.o{background:var(--orange);color:#fff}.chip.active .cnt{background:var(--accent-text);color:var(--accent)}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.kpi{background:var(--card);border-radius:14px;padding:12px 14px;min-width:0}.kpi b{display:block;font-size:20px;font-weight:700;letter-spacing:-.3px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi span{display:block;font-size:12px;color:var(--hint);margin-top:2px}
+.modal .kpi{background:var(--fill)}
+.admempty{text-align:center;color:var(--hint);font-size:14px}
+.regmsg{margin:10px 0 0;padding:9px 12px;border-radius:12px;font-size:13px;line-height:1.4;background:var(--tint-orange);color:var(--text)}
+.regmsg b{color:var(--orange)}.regmsg small{display:block;color:var(--hint);margin-top:2px}
+.regmsg.bad{background:var(--tint-red)}.regmsg.bad b{color:var(--red)}.regmsg.ok{background:var(--tint-green)}.regmsg.ok b{color:var(--green)}
+.empty.gate+.regmsg{margin:0 0 12px}
+.kvs{padding:4px 14px}.kv{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--sep);font-size:14px}
+.kv:last-child{border-bottom:none}.kv>span{color:var(--hint);min-width:0}.kv>span small{display:block;font-size:12px}.kv>b{font-weight:600;text-align:right;min-width:0;overflow-wrap:anywhere}.kv>b small{font-weight:400;color:var(--hint)}
+.kv .inp.sm{margin:0;height:36px;text-align:right}.card .kvs,.areg .kvs{padding:0}
+.areg .hero b{font-size:16px}.areg .f3{margin-top:12px}.areg .f3 .btn{margin:0;padding:0 6px;font-size:14px}
+.adocs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.adoc{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px;border-radius:12px;background:var(--fill);text-align:left;min-width:0}
+.adoc:disabled{opacity:.55}.adoc small{font-size:12px;color:var(--hint);line-height:1.25}.adoc i{font-style:normal;font-size:12px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.athumb{width:100%;aspect-ratio:4/3;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden}.athumb img{width:100%;height:100%;object-fit:cover}
+.docbig{display:block;width:100%;max-height:60vh;object-fit:contain;border-radius:12px;background:var(--fill);margin-bottom:8px}
+.tagr{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:9px;font-size:11px;font-weight:600;background:var(--tint-red);color:var(--red)}
+.grow .gl small{display:block;font-size:12px;color:var(--hint);margin-top:1px;line-height:1.3}
+.admfloor{padding:14px}.admfloor .fine{display:block;text-align:left}.afrow{display:flex;align-items:center;gap:8px}.afrow .inp{width:80px;margin:0;height:40px;text-align:right}.afrow span{color:var(--hint);font-size:14px;flex:1}.afrow .btn{width:auto;margin:0;padding:0 16px;height:40px}
+#admSort{margin-left:auto;flex-shrink:0}
+.impErr{max-height:180px;overflow:auto}
 </style>
 </head>
 <body>
@@ -788,13 +815,13 @@ let opts = state.opts;
 let app='shop', tab='home', catOpen=null, query='', sellerTab='issue', chosen='best', offers=null, openOrder=null, unknownLines=[], busy=false, mainAction=null;
 
 /* ---------- Рейтинг / постоянный ---------- */
-function isRegular(id){ const s=state.sellers[id]; return s.done>=20 && s.rating>=4.6 && s.disputes/Math.max(1,s.done)<=.03 && s.ontime>=90 && s.months>=3; }
+function isRegularBase(id){ const s=state.sellers[id]; return s.done>=20 && s.rating>=4.6 && s.disputes/Math.max(1,s.done)<=.03 && s.ontime>=90 && s.months>=3; }
 function median(arr){ const a=[...arr].sort((x,y)=>x-y); if(!a.length) return 0; const m=Math.floor(a.length/2); return a.length%2?a[m]:(a[m-1]+a[m])/2; }
 function marketMedian(p, exceptSeller){ return median(state.offers.filter(o=>o.p===p && o.s!==exceptSeller).map(o=>o.price)); }
 function floorPrice(p, s){ const md=marketMedian(p,s); return md? Math.round(md*ANTI.floor):0; }
 // эффективная цена для ранжирования: демпинг ниже пола не даёт преимущества
 function rankPrice(o){ const f=floorPrice(o.p,o.s); return Math.max(o.price,f); }
-function available(o, qty){ const s=state.sellers[o.s]; return o.on && s.online && o.stock>=qty; }
+function availableBase(o, qty){ const s=state.sellers[o.s]; return o.on && s.online && o.stock>=qty; }
 
 /* ---------- Парсер свободного списка ---------- */
 function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m; const d=Array.from({length:m+1},(_,i)=>[i]); for(let j=1;j<=n;j++) d[0][j]=j;
@@ -823,13 +850,13 @@ function openDispute(id){ const o=state.orders.find(x=>x.id===id);
   <textarea id="dText" placeholder="Комментарий (необязательно)" style="min-height:80px"></textarea>
   <div class="fine" style="margin:-2px 0 14px">📷 Фото сравним с фото сборщика · возврат за 24 ч</div>
   <button class="btn" onclick="submitDispute(${id})">Отправить</button><button class="btn gray" onclick="closeModal()">Отмена</button>`); }
-function submitDispute(id){ const o=state.orders.find(x=>x.id===id); const i=o.items[+$('dItem').value]; const r=$('dReason').value;
+function submitDisputeBase(id){ const o=state.orders.find(x=>x.id===id); const i=o.items[+$('dItem').value]; const r=$('dReason').value;
   o.dispute=`${PRODUCTS[i.k].n}: ${r}. ${$('dText').value}`; state.sellers[i.s].disputes++; closeModal(); setStatus(o,'dispute',o.dispute); toast('Претензия отправлена'); }
 function repeatOrder(id){ const o=state.orders.find(x=>x.id===id); state.cart={...o.cart}; save(); closeModal(); app='shop'; tab='cart'; catOpen=null; window.scrollTo(0,0); render(); toast('Корзина собрана по текущим ценам'); }
 function pin(c,v){ if(v) state.pins[c]=v; else delete state.pins[c]; save(); hap(); render(); }
 
 /* ---------- Сборщик ---------- */
-function accept(id){ const o=state.orders.find(x=>x.id===id); if(o.status!=='new') return; setStatus(o,'accepted'); openRoute(id); }
+function acceptBase(id){ const o=state.orders.find(x=>x.id===id); if(o.status!=='new') return; setStatus(o,'accepted'); openRoute(id); }
 function openRoute(id){ app='collector'; openOrder=id; render(); window.scrollTo(0,0); }
 function photo(n){ const o=state.orders.find(x=>x.id===openOrder); o.items[n].photo=!o.items[n].photo; save(); hap(); render(); }
 /* ---------- Продавец ---------- */
@@ -977,11 +1004,11 @@ function vCartBase(){
    <div class="card" style="margin-top:12px">
     <div class="srow"><span>Товары</span><span>${fmt(o.goods)}</span></div>
     <div class="srow"><span>Доставка${home&&!o.delivSet?' (примерно)':''}</span><span>${o.delivery?fmt(o.delivery):'Бесплатно'}</span></div>
-    ${o.service?`<div class="srow"><span>Сервис 3%</span><span>${fmt(o.service)}</span></div>`:''}
+    ${o.service?`<div class="srow"><span>Сервис ${Math.round((o.serviceRate||0)*100)}%</span><span>${fmt(o.service)}</span></div>`:''}
     <div class="srow tot"><span>Итого</span><span>${fmt(o.total)}</span></div>
     ${home&&o.saving>0?`<div class="pillmsg g">💚 Дешевле магазина на ~${fmt(o.saving)} с учётом доставки</div>`:''}
     ${o.goods<m.minOrder?`<div class="pillmsg o">Ещё ${fmt(m.minOrder-o.goods)} до минимального заказа</div>`:''}
-    ${o.lines.some(l=>!l.none&&PRODUCTS[l.k].u==='kg')?`<div class="fine">⚖️ Платите за заказанный вес. Больше не положим, недовес больше 5% вернём на Kaspi ${qBtn('tol')}</div>`:''}
+    ${o.lines.some(l=>!l.none&&PRODUCTS[l.k].u==='kg')?`<div class="fine">⚖️ Платите за заказанный вес. Больше не положим, недовес больше ${UNP()}% вернём на Kaspi ${qBtn('tol')}</div>`:''}
     <div class="fine">${home?'Сначала сборщик подтвердит цену доставки, потом оплата':'Оплата сразу после оформления'} ${qBtn('pay')}</div>
    </div>`;
 }
@@ -1021,7 +1048,7 @@ function vProfileBase(){ const home=isHome(), m=M();
    <h2 class="sec">Для партнёров</h2>
    <div class="glist"><button class="grow" onclick="openPartner('collector')"><span class="gi">🛵</span><span class="gl">Я сборщик</span>${colN&&unlocked.collector?`<span class="badge">${colN}</span>`:''}${IC.chev}</button>
     <button class="grow" onclick="openPartner('seller')"><span class="gi">🏪</span><span class="gl">Я продавец</span>${selN&&unlocked.seller?`<span class="badge">${selN}</span>`:''}${IC.chev}</button></div>
-   <div class="fine" style="justify-content:center;margin:8px 0 0">Вход по коду партнёра · демо</div>
+   <div class="glist"><button class="grow" id="partnerCode" onclick="openAnyCode()"><span class="gi">🔑</span><span class="gl">Код партнёра<small>Для сборщиков, продавцов и администратора</small></span>${IC.chev}</button></div>
    <div class="fine" style="justify-content:center;margin:16px 0"><button class="link" style="font-size:13px;color:var(--hint)" onclick="confirmBox('Сбросить демо-данные?',()=>resetDemo())">Сбросить демо</button></div>`; }
 const ROLE_T={collector:'Вход для сборщика',seller:'Вход для продавца'};
 function openPartnerBase(a){ if(!unlocked[a]){ modal(`<h3>${ROLE_T[a]}</h3><input class="inp" id="codeIn" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Код партнёра" maxlength="6" onkeydown="if(event.key==='Enter')checkCode('${a}')">
@@ -1030,7 +1057,7 @@ function openPartnerBase(a){ if(!unlocked[a]){ modal(`<h3>${ROLE_T[a]}</h3><inpu
 function checkCode(a){ const v=($('codeIn')||{}).value; if(v!==CONFIG.codes[a]){ toast('Неверный код'); hap('err'); const i=$('codeIn'); if(i){i.value='';i.focus();} return; } unlocked[a]=true; closeModal(); openPartner(a); }
 
 /* ---------- Сборщик ---------- */
-function vCollector(){
+function vCollectorBase(){
   if(openOrder) return vRoute();
   const req=state.orders.filter(o=>o.status==='deliv_agree'), cnt=state.orders.filter(o=>o.status==='deliv_counter');
   const dpay=payQueue('deliv');
@@ -1071,7 +1098,7 @@ function tabbarHTML(){
 }
 
 /* ================= Весовой товар: «не больше заказанного» ================= */
-const UNDER_FREE = 0.05; // недовес до 5% входит в цену
+let UNDER_FREE = 0.05; // недовес до 5% входит в цену
 function calcRaw(kind){
   const lines=Object.entries(state.cart).map(([k,q])=>pickFor(k,q,kind)), ok=lines.filter(l=>!l.none);
   const goods=ok.reduce((s,l)=>s+l.o.price*l.q,0);
@@ -1095,7 +1122,7 @@ function collect(n){ const o=findO(openOrder); if(o.status==='accepted'){o.statu
   if(!(f>0)){ toast('Укажите вес/количество или нажмите «Нет»'); hap('err'); return; }
   if(f>it.q){ f=it.q; $('f'+n).value=it.q; toast('Не больше заказанного — записали '+fq(it.q,P.u)); }
   if(P.u!=='kg') f=Math.floor(f);
-  if(P.u==='kg' && f<it.q*(1-UNDER_FREE) && !it.photo){ toast('Недовес больше 5% — сфотографируйте весы'); hap('err'); return; }
+  if(P.u==='kg' && f<it.q*(1-UNDER_FREE) && !it.photo){ toast(`Недовес больше ${UNP()}% — сфотографируйте весы`); hap('err'); return; }
   it.fact=+f.toFixed(3); it.state='ok'; save(); hap('ok'); renderAll();
   const rf=itemRefund(it); if(rf) toast(`Продавец вернёт клиенту ${fmt(rf)}`); }
 function missing(n){ const o=findO(openOrder); const it=o.items[n]; if(o.status==='accepted'){o.status='collecting';o.log.push({s:'collecting',t:now()});}
@@ -1117,7 +1144,7 @@ function refundPill(o){ const ri=refundInfo(o); if(o.refund) return `<div class=
 function openOrderSheetBase(id){ const o=findO(id); if(!o) return; const t=orderTotal(o), ri=refundInfo(o);
   const items=o.items.map(i=>{const P=PRODUCTS[i.k], rf=o.pay?itemRefund(i):0; const st=i.state==='missing'?'не было при заказе':i.state==='dropped'?'убрано при оплате':i.state==='removed'?'не было у продавца':'';
     return `<div class="li" style="align-items:flex-start"><span>${i.photo?'📷 ':''}${P.n}${i.replacedFrom?' · замена':''}<small style="display:block;color:var(--hint);font-size:12px">${st||`заказ ${fq(i.q,P.u)}${P.approx?` ≈${fq(P.approx*i.q,'kg')}`:''}${i.fact!=null?` · факт ${fq(i.fact,P.u)}`:''}`}</small></span><span style="text-align:right">${fmt(billQ(i)*i.price)}${rf?`<small style="display:block;color:var(--orange);font-size:12px">возврат ${fmt(rf)}</small>`:''}</span></div>`}).join('');
-  const acts=clientActions(o,true);
+  const acts=clientActions(o,true)+resNote(o);
   modal(`<h3>Заказ №${o.id}<span class="status ${stCls(o.status)}">${ST[o.status]}</span></h3>
    <div class="card">${timeline(o)}<div class="fine" style="margin:8px 0 0">${subLine(o)}</div></div>
    ${acts}
@@ -1152,7 +1179,7 @@ function pickFor(k,q,kind,auto){
 }
 // шторка выбора продавца для позиции корзины
 function sellerSheet(k){ const P=PRODUCTS[k], q=state.cart[k]; const cur=pickFor(k,q,chosen);
-  const L=state.offers.filter(o=>o.p===k).sort((a,b)=>a.price-b.price);
+  const L=state.offers.filter(o=>o.p===k&&!(state.sellers[o.s]||{}).blocked).sort((a,b)=>a.price-b.price);
   modal(`<h3>${P.e} ${P.n} · ${fq(q,P.u)}</h3><div class="fine" style="margin:-6px 0 10px">Выберите продавца · цена за 1 ${uL(P)}</div>
    <div class="glist">${L.map(o=>{ const S=state.sellers[o.s], av=available(o,q), on=!cur.none&&cur.o.s===o.s;
      return `<button class="grow" data-sel="${o.s}" ${av?`onclick="pickSeller('${k}','${o.s}')"`:'disabled style="opacity:.45"'}><span class="gi">${S.emoji}</span><span class="gl">${S.n}${S.verified?' <span class="vtag">Проверен ✓</span>':''}${isRegular(o.s)?' <span class="ptag">постоянный</span>':''}<small>${S.m} · ${S.pt} · ★${S.rating||'новый'}</small></span><span class="gv" style="text-align:right">${av?`<b style="color:var(--text)">${fmt(o.price)}</b><small style="display:block">${fmt(o.price*q)}</small>`:'нет'}</span>${on?'<span style="color:var(--accent);font-size:18px">✓</span>':''}</button>`; }).join('')}</div>
@@ -1220,7 +1247,7 @@ function cardHTML(o,c){ const isD=c.s==='deliv', S=isD?null:state.sellers[c.s], 
 function startPay(id){ const o=findO(id); if(!['unpaid','pay_check','pay_expired'].includes(o.status)) return; initPay(o); const p=prepayParts(o), hasKg=o.items.some(i=>PRODUCTS[i.k].u==='kg'&&i.state!=='dropped');
   modal(`<h3>Оплата заказа №${id}</h3><div class="fine" style="margin:-6px 0 10px">Переводы напрямую продавцам на Kaspi · ${fmt(p.amount)} · ${payProgress(o).text}</div>
    <div id="payCards">${o.pay.cards.map(c=>cardHTML(o,c)).join('')}</div>
-   ${hasKg?`<div class="pillmsg g" style="margin:0 0 8px">Больше заказанного не положим · недовес больше 5% вернём</div>`:''}
+   ${hasKg?`<div class="pillmsg g" style="margin:0 0 8px">Больше заказанного не положим · недовес больше ${UNP()}% вернём</div>`:''}
    <div class="fine" style="justify-content:center">Сборка начнётся, когда все подтвердят оплату ${qBtn('pay')}</div>`); }
 function checkTimersBase(){ let ch=false; const t=now();
   for(const o of state.orders){
@@ -1243,13 +1270,13 @@ function billQ(i){ if(['removed','missing','dropped'].includes(i.state)) return 
   if(P.u==='kg' && i.fact>=i.q*(1-UNDER_FREE)) return i.q; return Math.min(i.q,i.fact); }
 function itemRefund(i){ if(['missing','dropped'].includes(i.state)) return 0; return Math.round((i.q-billQ(i))*i.price); }
 function orderTotalBase(o){ const g=o.items.reduce((s,i)=>s+billQ(i)*i.price,0); const sv=o.pay?o.pay.service:Math.round(g*o.serviceRate); return {g,service:sv,total:Math.round(g+delivOf(o)+sv)}; }
-function sellerRefunds(o){ const r={}; if(!o.pay) return r; const paidC=new Set(o.pay.cards.filter(c=>c.paidAt).map(c=>c.id));
+function sellerRefundsBase(o){ const r={}; if(!o.pay) return r; const paidC=new Set(o.pay.cards.filter(c=>c.paidAt).map(c=>c.id));
   o.items.forEach(i=>{ const v=paidC.has(i.card)||!i.card?itemRefund(i):0; if(v>0) r[i.s]=(r[i.s]||0)+v; });
   o.pay.cards.forEach(c=>{ if(c.refund) r[c.s]=(r[c.s]||0)+c.refund; }); return r; }
 function refundInfo(o){ const r=sellerRefunds(o), ids=Object.keys(r), done=o.returned||{}; const sum=ids.reduce((s,k)=>s+r[k],0), left=ids.filter(k=>!done[k]).reduce((s,k)=>s+r[k],0); return {r,sum,left}; }
 function markReturned(id,sid){ const o=findO(id); o.returned=o.returned||{}; o.returned[sid]=true; o.log.push({s:'refund_'+sid,t:now()}); save(); hap('ok'); toast('Отмечено: вернул'); renderAll(); }
 function sellerRefundList(me){ return state.orders.filter(o=>{ const r=sellerRefunds(o); return r[me]&&!(o.returned||{})[me]; }); }
-function sellerRefundBlock(me){ const L=sellerRefundList(me); if(!L.length) return '';
+function sellerRefundBlockBase(me){ const L=sellerRefundList(me); if(!L.length) return '';
   return `<div class="ttl" style="font-size:24px">Верните клиенту</div>${L.map(o=>{ const its=o.items.filter(i=>i.s===me&&itemRefund(i)>0), cs=o.pay.cards.filter(c=>c.s===me&&c.refund);
     const why=[...its.map(i=>`${PRODUCTS[i.k].n}: ${i.state==='removed'?'нет':`${fq(i.fact,PRODUCTS[i.k].u)} из ${fq(i.q,PRODUCTS[i.k].u)}`}${i.photo?' 📷':''}`), ...cs.map(c=>o.status==='cancelled'?'заказ отменён':c.replaced?'заказ передан другому продавцу':'позиции убраны')].join(' · ');
     return `<div class="ri"><div class="ri-h"><div><div class="meta" style="margin:0 0 2px">Заказ №${o.id} · Kaspi ${esc(o.phone||'')}</div><div class="ri-q">${fmt(sellerRefunds(o)[me])}</div>
@@ -1286,9 +1313,9 @@ const IC = {
 const HINTS = {
  save:()=>savingHint(),
  variants:()=>`<h3>Как собираем заказ</h3><p class="hint"><b>Выгодно</b> — самая низкая цена по каждой позиции. Итог никогда не дороже другого варианта.<br><br><b>Мои продавцы</b> — ваши закреплённые продавцы (Профиль → Мои продавцы), иначе постоянные с лучшим рейтингом.</p>`,
- tol:()=>`<h3>Весовой товар</h3><p class="hint">Вы платите за заказанный вес. Продавец кладёт не больше заказанного — доплат не бывает. Недовес до 5% входит в цену. Если недовес больше 5%, продавец вернёт разницу на Kaspi; сборщик фотографирует весы.<br><br>Тушки, куски мяса и арбузы продаются поштучно, вес примерный.</p>`,
+ tol:()=>`<h3>Весовой товар</h3><p class="hint">Вы платите за заказанный вес. Продавец кладёт не больше заказанного — доплат не бывает. Недовес до ${UNP()}% входит в цену. Если недовес больше ${UNP()}%, продавец вернёт разницу на Kaspi; сборщик фотографирует весы.<br><br>Тушки, куски мяса и арбузы продаются поштучно, вес примерный.</p>`,
  regular:()=>`<h3>Статус «постоянный»</h3><p class="hint">≥ 20 выполненных заказов, рейтинг ≥ 4.6, споры ≤ 3%, выдача вовремя ≥ 90%, на рынке ≥ 3 мес. Пересчитывается автоматически. Постоянный получает приоритет, если дороже не больше чем на 5%.</p>`,
- floor:()=>`<h3>Защита от демпинга</h3><p class="hint">Цена ниже 85% от средней по рынку не поднимает товар в выдаче. Слишком низкую цену сохранить нельзя — так рынок не превращается в войну цен.</p>`,
+ floor:()=>`<h3>Защита от демпинга</h3><p class="hint">Цена ниже ${Math.round(ANTI.floor*100)}% от средней по рынку не поднимает товар в выдаче. Слишком низкую цену сохранить нельзя — так рынок не превращается в войну цен.</p>`,
  pay:()=>`<h3>Как проходит оплата</h3><p class="hint">1. ${isHome()?'Сборщик подтверждает цену доставки.':'Доставка по тарифу для бизнеса.'}<br>2. Вы переводите каждому продавцу на Kaspi за его позиции и нажимаете «Оплатил». Доставку${isHome()?'':' и сервис 3%'} — сборщику.<br>3. Каждый получатель подтверждает перевод — до ${CONFIG.paymentConfirmMinutes} мин. Если перевод не дошёл, можно заменить продавца или убрать позиции.<br>4. Сборка начинается, когда подтвердили все. Общего счёта сервиса нет.</p>`,
  pins:()=>`<h3>Мои продавцы</h3><p class="hint">Закреплённый продавец используется в варианте «Мои продавцы». Если у него сегодня нет товара — подберём другого постоянного и предупредим.</p>`
 };
@@ -1314,10 +1341,10 @@ function homeBodyBase(){
    <h2 class="sec">Категории</h2>
    <div class="tiles">${Object.entries(CATS).map(([k,c])=>`<button class="tile" style="--h:${c.h}" onclick="openCat('${k}')"><b>${c.t}</b><span class="te">${c.e}</span></button>`).join('')}</div>
    <h2 class="sec">Популярное</h2>
-   <div class="hs">${pop.map(pcard).join('')}</div>`; }
+   <div class="hs">${pop.filter(k=>PRODUCTS[k]&&!PRODUCTS[k].hidden).map(pcard).join('')}</div>`; }
 function openCat(k){ catOpen=k; tab='home'; hap(); render(); window.scrollTo(0,0); const a=document.querySelector('.chips .chip.active'); a&&a.scrollIntoView({inline:'center',block:'nearest'}); }
 function closeCat(){ catOpen=null; render(); }
-function vCat(){ const c=CATS[catOpen]; const ks=Object.keys(PRODUCTS).filter(k=>PRODUCTS[k].cat===catOpen);
+function vCat(){ const c=CATS[catOpen]; const ks=Object.keys(PRODUCTS).filter(k=>PRODUCTS[k].cat===catOpen&&!PRODUCTS[k].hidden&&!PRODUCTS[k].findOnly);
   return `<div class="topbar"><button class="iconbtn" onclick="closeCat()" aria-label="Назад">${IC.back}</button><h1>${c.t}</h1><span style="width:36px"></span></div>
    <div class="chips hs">${Object.entries(CATS).map(([k,x])=>`<button class="chip ${k===catOpen?'active':''}" onclick="openCat('${k}')">${x.e} ${x.t}</button>`).join('')}</div>
    <div class="pgrid">${ks.map(pcard).join('')}</div>`; }
@@ -1379,7 +1406,7 @@ function vRouteBase(){
 
 /* ---------- Партнёры: продавец ---------- */
 function sellerTodo(){ return state.orders.filter(o=>['accepted','collecting'].includes(o.status)).flatMap(o=>o.items).filter(i=>i.s===state.me&&!i.issued&&i.state!=='removed').length; }
-function vSeller(){
+function vSellerBase(){
   const me=state.me, S=state.sellers[me];
   const selr=`<select class="gsel" style="max-width:120px;color:var(--accent)" onchange="state.me=this.value;save();render()">${Object.entries(state.sellers).map(([id,s])=>`<option value="${id}" ${me===id?'selected':''}>${s.n}</option>`).join('')}</select>`;
   let h=ptop(`${S.emoji} ${S.n}`,'Магазин','toShop()',selr);
@@ -1464,7 +1491,7 @@ function stem(w){ for(const e of ENDS) if(w.endsWith(e)&&w.length-e.length>=3) r
 const toks = s => normName(s).split(' ').filter(w=>w.length>1&&!STOPW.has(w));
 let SYNIDX=null;
 function synIndex(){ if(SYNIDX&&SYNIDX.n===Object.keys(PRODUCTS).length) return SYNIDX.list;
-  const list=[]; for(const [k,p] of Object.entries(PRODUCTS)){ const all=[...new Set([...p.syn, normName(p.n)])]; for(const s of all){ const ns=normName(s); const T=toks(ns); if(T.length) list.push({k,s:ns,T,S:T.map(stem)}); } }
+  const list=[]; for(const [k,p] of Object.entries(PRODUCTS)){ if(p.hidden) continue; const all=[...new Set([...p.syn, normName(p.n)])]; for(const s of all){ const ns=normName(s); const T=toks(ns); if(T.length) list.push({k,s:ns,T,S:T.map(stem)}); } }
   SYNIDX={n:Object.keys(PRODUCTS).length,list}; return list; }
 function tokScore(w,ws,t,ts){ if(w===t||ws===ts) return 1; const lim=ts.length<=3?0:ts.length<=5?1:2;
   if(lim&&lev(ws,ts)<=lim) return .85; if(w.length>=4&&t.startsWith(w)) return .85; if(t.length>=4&&w.startsWith(t)) return .8; return 0; }
@@ -1513,8 +1540,10 @@ function parseToCart(){
   const ta=$('clientList'); if(!ta) return;
   const lines=ta.value.split(/\n|;/).map(s=>s.trim()).filter(Boolean);
   if(!lines.length){ toast('Напишите хотя бы одну позицию'); hap('err'); return; }
-  let added=0; unknownLines=[];
+  let added=0, found=0; unknownLines=[];
   for(const ln of lines){ const r=parseLine(ln); if(!r) continue; if(!r.key||!(r.qty>0)){unknownLines.push(r.raw);continue;}
+    // товар есть в каталоге, но цены/продавца нет (импорт без цены) — сразу «найти на рынке»
+    if(!state.offers.some(o=>o.p===r.key&&available(o,0))){ state.custom=state.custom||[]; const id='u'+(++state.seq), text=r.raw.slice(0,80); state.custom.push({id,text}); admAsIs(id,text); found++; added++; continue; }
     state.cart[r.key]=+((state.cart[r.key]||0)+r.qty).toFixed(2); added++; }
   ta.value = unknownLines.join('\n');
   save(); render(); hap(added?'ok':'err');
@@ -1529,7 +1558,7 @@ function renderUnknown(){
    <div class="unk-s">${sg.length?'Похоже на:':'Нет в каталоге'}</div>
    ${sg.length?`<div class="sugs">${sg.map(k=>`<button class="chip sug" data-sug="${k}" onclick="fixUnknown(${i},'${k}')">${PRODUCTS[k].e} ${PRODUCTS[k].n}</button>`).join('')}</div>`:''}
    <div class="unk-a"><button class="btn sm secondary asis" onclick="addAsIs(${i})">🔎 Добавить как есть</button>
-   <select class="inp sm" onchange="fixUnknown(${i},this.value)"><option value="">Другой товар…</option>${Object.entries(CATS).map(([c,x])=>`<optgroup label="${x.t}">${Object.entries(PRODUCTS).filter(([,p])=>p.cat===c).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join('')}</optgroup>`).join('')}</select></div></div>`; }).join('')}
+   <select class="inp sm" onchange="fixUnknown(${i},this.value)"><option value="">Другой товар…</option>${Object.entries(CATS).map(([c,x])=>`<optgroup label="${x.t}">${Object.entries(PRODUCTS).filter(([,p])=>p.cat===c&&!p.hidden&&!p.findOnly).map(([k,p])=>`<option value="${k}">${p.n}</option>`).join('')}</optgroup>`).join('')}</select></div></div>`; }).join('')}
    <div class="fine" style="margin:6px 0 0">«Как есть» — сборщик поищет на рынке и назовёт цену и продавца. Доплата — отдельно этому продавцу на Kaspi, только если согласитесь.</div></div>`:'';
 }
 function fixUnknown(i,k){ if(!k) return; const r=parseLine(unknownLines[i]); const q=(r&&r.qty)||1; const P=PRODUCTS[k];
@@ -1539,7 +1568,7 @@ function fixUnknown(i,k){ if(!k) return; const r=parseLine(unknownLines[i]); con
   if(!unknownLines.length){ closeModal(); toast('Готово, всё в корзине'); } }
 function dropUnknown(i){ unknownLines.splice(i,1); const ta=$('clientList'); if(ta) ta.value=unknownLines.join('\n'); renderUnknown(); if(!unknownLines.length) closeModal(); }
 // «Добавить как есть» — позиция без каталога
-function addAsIs(i){ const t=unknownLines[i]; if(!t) return; state.custom=state.custom||[]; state.custom.push({id:'u'+(++state.seq),text:t.slice(0,80)});
+function addAsIs(i){ const t=unknownLines[i]; if(!t) return; state.custom=state.custom||[]; const id='u'+(++state.seq); state.custom.push({id,text:t.slice(0,80)}); admAsIs(id,t.slice(0,80));
   unknownLines.splice(i,1); const ta=$('clientList'); if(ta) ta.value=unknownLines.join('\n'); save(); renderUnknown(); render(); hap('ok'); toast('Добавлено: найти на рынке');
   if(!unknownLines.length) closeModal(); }
 function removeCustom(id){ state.custom=(state.custom||[]).filter(x=>x.id!==id); save(); render(); }
@@ -1556,7 +1585,7 @@ function pcard(k){
 }
 function searchProducts(q){ const n=normName(q); if(!n) return []; const fz=matchScores(n).filter(x=>x.score>=60).slice(0,6).map(x=>x.k);
   const r=Object.keys(PRODUCTS).filter(k=>{ const P=PRODUCTS[k]; return normName(P.n).includes(n)||P.syn.some(s=>s.startsWith(n)||s.includes(' '+n))||CATS[P.cat].t.toLowerCase().startsWith(n); });
-  return [...new Set([...r,...fz])].slice(0,40); }
+  return [...new Set([...r,...fz])].filter(k=>!PRODUCTS[k].hidden&&!PRODUCTS[k].findOnly).slice(0,40); }
 
 /* ================= v5: бизнес — шаблоны, профиль заведения, накладная, «найти на рынке» ================= */
 if(!state.custom) state.custom=[];
@@ -1784,11 +1813,13 @@ function onbValid(){ const R=ROLES[onb.role], D=onb.data; const bad=(k,m)=>{ toa
   return true; }
 // Заглушка: здесь будет отправка на сервер проверки (multipart: role, data, файлы). Сейчас ничего не отправляет.
 function submitVerification(reg){ const payload={role:reg.role,data:{...reg.data},docs:Object.fromEntries(Object.entries(reg.docs).map(([k,d])=>[k,{name:d.name,type:d.type,size:d.size}])),at:reg.submittedAt};
-  reg.outbox=payload; return Promise.resolve({sent:false,reason:'сервер проверки ещё не подключён'}); }
-function onbSubmit(){ if(!onbValid()) return; state.reg={role:onb.role,status:'pending',data:{...onb.data},docs:{...onb.docs},submittedAt:now()};
+  reg.outbox=payload; reg.decision=null; admLog('reg_in',`${ROLES[reg.role].t}: ${reg.data.name||reg.data.fio||''}`,true); return Promise.resolve({sent:false,reason:'сервер проверки ещё не подключён'}); }
+function onbSubmit(){ if(!onbValid()) return; const prev=state.reg&&state.reg.id&&state.reg.role===onb.role?state.reg.id:null;
+  if(state.reg&&state.reg.id&&!prev) archiveReg(state.reg);
+  state.reg={id:prev||('r'+(++state.seq)),role:onb.role,status:'pending',data:{...onb.data},docs:{...onb.docs},submittedAt:now()};
   submitVerification(state.reg); applyReg(); saveSafe(); onb.step=3; hap('ok'); window.scrollTo(0,0); render(); }
-function onbDraft(){ state.reg={role:onb.role,status:'draft',data:{...onb.data},docs:{...onb.docs}}; applyReg(); saveSafe(); onbDone(); toast('Документы можно дозагрузить в профиле'); }
-function onbPerson(skip){ const D=onb.data; if(!skip){ if(D.phone&&!phoneOk(D.phone)){ toast('Телефон: +7 и 10 цифр'); hap('err'); return; } }
+function onbDraft(){ if(state.reg&&state.reg.id&&state.reg.role!==onb.role) archiveReg(state.reg); state.reg={id:state.reg&&state.reg.id&&state.reg.role===onb.role?state.reg.id:('r'+(++state.seq)),role:onb.role,status:'draft',data:{...onb.data},docs:{...onb.docs}}; applyReg(); saveSafe(); onbDone(); toast('Документы можно дозагрузить в профиле'); }
+function onbPerson(skip){ if(state.reg&&state.reg.id&&state.reg.role!=='person') archiveReg(state.reg); const D=onb.data; if(!skip){ if(D.phone&&!phoneOk(D.phone)){ toast('Телефон: +7 и 10 цифр'); hap('err'); return; } }
   state.reg={role:'person',status:'none',data:skip?{}:{...D},docs:{}}; applyReg(); saveSafe(); onbDone(); }
 function applyReg(){ const r=state.reg, D=r.data;
   if(D.addr&&D.addr.trim().length>=5) opts.addr=D.addr.trim(); if(D.phone&&phoneOk(D.phone)) opts.phone=fmtPhone(D.phone);
@@ -1798,22 +1829,24 @@ function onbDone(){ localStorage.setItem(ONB_KEY,'1'); const r=state.reg, role=r
   onb=null; app=role==='collector'||role==='seller'?role:'shop'; tab='home'; catOpen=null; openOrder=null; saveSafe(); window.scrollTo(0,0); render(); }
 function changeRole(){ const r=state.reg; onb={step:1,role:(r&&r.role)||'venue',data:{...(r?r.data:{})},docs:{...(r?r.docs:{})}}; window.scrollTo(0,0); render(); }
 function openDocs(){ const r=state.reg; if(!r){ changeRole(); return; } closeModal(); onb={step:2,role:r.role,data:{...r.data},docs:{...r.docs}}; window.scrollTo(0,0); render(); }
-function approveDemo(){ const r=state.reg; if(!r) return; r.status='verified'; r.verifiedAt=now();
-  if(r.role==='seller'){ const D=r.data; state.sellers.sU={n:D.fio||'Я',m:D.market||'Шапагат',pt:D.pt||'',cats:[],rating:0,done:0,disputes:0,ontime:0,months:0,online:true,emoji:'🏪',verified:true,kaspi:fmtPhone(D.kaspi)}; state.me='sU'; }
-  if(r.role==='collector'||r.role==='seller') unlocked[r.role]=true; saveSafe(); hap('ok'); toast('Демо: документы одобрены'); render(); }
-const RST = r => !r?'':r.status==='verified'?'<span class="status done">Проверено ✓</span>':r.status==='pending'?'<span class="status">На проверке</span>':r.status==='draft'?'<span class="status warn">Нет документов</span>':'';
+const RST = r => !r?'':r.status==='verified'?'<span class="status done">Проверено ✓</span>':r.status==='pending'?'<span class="status">На проверке</span>':r.status==='draft'?'<span class="status warn">Нет документов</span>':r.status==='rejected'?'<span class="status bad">Отклонено</span>':r.status==='need_doc'?'<span class="status warn">Нужен документ</span>':'';
+// причина отказа / запрос документа — видны пользователю
+function regMsg(r){ const d=r&&r.decision; if(!d) return '';
+  if(r.status==='rejected') return `<div class="regmsg bad" data-regmsg="rejected"><b>Отклонено:</b> ${esc(d.reason||'')}${d.text?` — ${esc(d.text)}`:''}<small>Исправьте и отправьте снова</small></div>`;
+  if(r.status==='need_doc') return `<div class="regmsg" data-regmsg="need_doc"><b>Запрошен документ:</b> ${esc(d.doc||'')}${d.text?` — ${esc(d.text)}`:''}</div>`;
+  return ''; }
 function vGate(a){ const r=state.reg, R=ROLES[a];
-  return ptop(a==='collector'?'Сборщик':'Продавец','Магазин','toShop()')+`<div class="empty gate"><div class="ee">🕓</div><b>${r.status==='draft'?'Загрузите документы':'Документы на проверке'}</b>
-   <span>${r.status==='draft'?'Рабочий экран откроется после проверки.':'Заказы и оплаты появятся здесь после проверки.'}</span></div>
+  return ptop(a==='collector'?'Сборщик':'Продавец','Магазин','toShop()')+`<div class="empty gate"><div class="ee">🕓</div><b>${r.status==='draft'?'Загрузите документы':r.status==='rejected'?'Регистрация отклонена':r.status==='need_doc'?'Нужен ещё документ':'Документы на проверке'}</b>
+   <span>${r.status==='pending'?'Заказы и оплаты появятся здесь после проверки.':'Рабочий экран откроется после проверки.'}</span></div>${regMsg(r)}
    <div class="glist">${R.d.map(([k,l])=>`<div class="grow"><span class="gi">${r.docs[k]?'📎':'⏳'}</span><span class="gl">${l}</span><span class="gv">${r.docs[k]?'загружен':'нет'}</span></div>`).join('')}</div>
-   <button class="btn secondary" onclick="openDocs()">${r.status==='draft'?'Загрузить документы':'Изменить данные'}</button>
-   <div class="gate-demo"><button class="link" id="approveDemo" onclick="approveDemo()">Одобрить (демо)</button> · <button class="link" onclick="openPartnerBase('${a}')">Код партнёра</button></div>`; }
+   <button class="btn secondary" onclick="openDocs()">${r.status==='pending'?'Изменить данные':r.status==='draft'?'Загрузить документы':'Исправить и отправить'}</button>
+   <div class="gate-demo"><button class="link" onclick="openPartnerBase('${a}')">Код партнёра</button></div>`; }
 function openPartner(a){ const r=state.reg; if(r&&r.role===a&&r.status==='verified') unlocked[a]=true;
   if(r&&r.role===a&&!unlocked[a]){ app=a; openOrder=null; window.scrollTo(0,0); render(); return; } openPartnerBase(a); }
 function vProfile(){ let h=vProfileBase(); const r=state.reg, R=r&&ROLES[r.role], b=state.biz;
   const reg=r?`<div class="card regc" data-reg="${r.role}"><div class="hero"><span class="he">${R.e}</span><div style="flex:1;min-width:0"><b style="font-size:17px">${esc(r.data.name||r.data.fio||R.t)}</b><div class="meta">${R.t} ${RST(r)}</div></div></div>
      <div class="f2" style="margin-top:12px">${R.d.length?`<button class="btn sm secondary" style="margin:0" onclick="openDocs()">Документы</button>`:`<button class="btn sm secondary" style="margin:0" onclick="openDocs()">Данные</button>`}<button class="btn sm gray" style="margin:0" onclick="changeRole()">Сменить роль</button></div>
-     ${r.status==='pending'||r.status==='draft'?`<div style="text-align:center;margin-top:8px"><button class="link tiny" onclick="approveDemo()">Одобрить (демо)</button></div>`:''}</div>`
+     ${regMsg(r)}</div>`
     :`<button class="rowbtn" onclick="changeRole()"><span class="ri">🪪</span><span class="rt"><b>Регистрация</b><span>Кто вы — заведение, частное лицо, сборщик или продавец</span></span>${IC.chev}</button>`;
   const biz=isHome()?'':`<div class="glist"><button class="grow" id="bizRow" onclick="editBiz()"><span class="gi">🏢</span><span class="gl">${b.name?esc(b.name):'Профиль заведения'}<small>${b.bin?'БИН '+b.bin:'БИН не указан'}${b.accept?' · приёмка '+esc(b.accept):''}</small></span>${IC.chev}</button>
      ${b.cName?`<div class="grow"><span class="gi">👨‍🍳</span><span class="gl">Повар / завхоз</span><span class="gv">${esc(b.cName)} ${esc(b.cPhone)}</span></div>`:''}
@@ -1831,6 +1864,7 @@ function vWelcome(){ return `<div class="welcome"><div class="wl">🧺</div><h1>
   <button class="btn" onclick="setMode('biz')">Начать</button><button class="btn gray" onclick="setMode('home')">Покупаю для дома</button></div>`; }
 function render(){
   const v=$('view'); checkTimers(); gateOn=false;
+  if(app==='admin'){ if(!unlocked.admin) app='shop'; else { v.innerHTML=vAdmin(); chrome(); return; } }
   if(onb){ v.innerHTML=vOnb(); chrome(); return; }
   if(!state.mode){ v.innerHTML=vWelcome(); chrome(); return; }
   const r=state.reg; if(r&&r.status==='verified'&&(r.role==='collector'||r.role==='seller')) unlocked[r.role]=true;
@@ -1840,7 +1874,428 @@ function render(){
   else v.innerHTML=vSeller();
   chrome();
 }
-window.resetDemo=()=>{ localStorage.removeItem(KEY); localStorage.removeItem(ONB_KEY); location.reload(); };
+window.resetDemo=()=>{ localStorage.removeItem(KEY); localStorage.removeItem(ONB_KEY); localStorage.removeItem(ADM_KEY); location.reload(); };
+
+/* ================= v6: админка (демо, данные только на этом устройстве) ================= */
+CONFIG.codes.admin='9999';
+const ADM_KEY='zakupshik_admin_v6';
+const DEF_SET={minHome:4000,minBiz:30000,hintMin:1000,hintMax:1500,bizDeliv:2500,freeFrom:100000,service:3,payMin:20,agreeMin:10,under:5,floor:85,
+  slotsHome:'10-12, 12-14, 15-17, 18-20, 20-22',slotsBiz:'6-8, 8-10, 10-12'};
+const SET_F=[
+  ['Заказ',[['minHome','Мин. заказ · для дома','₸',0,1e6],['minBiz','Мин. заказ · бизнес','₸',0,5e6]]],
+  ['Доставка',[['hintMin','Подсказка доставки · от','₸',0,1e5],['hintMax','Подсказка доставки · до','₸',0,1e5],['bizDeliv','Бизнес-доставка','₸',0,1e5],['freeFrom','Бесплатно от суммы (0 — нет)','₸',0,1e7],
+    ['slotsHome','Слоты · для дома','text'],['slotsBiz','Слоты · бизнес','text']]],
+  ['Деньги и вес',[['service','Сервис для бизнеса','%',0,20],['under','Допуск недовеса','%',0,15],['floor','Антидемпинг: пол цены, % медианы','%',50,100]]],
+  ['Таймеры',[['payMin','Подтверждение оплаты','мин',5,120],['agreeMin','Согласование доставки','мин',3,60]]]];
+const SET_L=Object.fromEntries(SET_F.flatMap(([,f])=>f.map(x=>[x[0],x[1]])));
+let ADM=(()=>{ let a={}; try{ a=JSON.parse(localStorage.getItem(ADM_KEY))||{}; }catch(e){}
+  return {settings:{...DEF_SET,...(a.settings||{})},log:a.log||[],blockedCol:a.blockedCol||{},colNotes:a.colNotes||{},cat:{add:{},edit:{},hidden:{},...(a.cat||{})},asis:a.asis||[],asisDone:a.asisDone||{}}; })();
+function admSave(){ try{ localStorage.setItem(ADM_KEY,JSON.stringify(ADM)); return true; }catch(e){ toast('Память устройства заполнена'); return false; } }
+function admLog(act,detail,sys){ ADM.log.unshift({t:now(),act,detail:String(detail||'').slice(0,240),sys:!!sys}); if(ADM.log.length>500) ADM.log.length=500; admSave(); }
+function admAsIs(id,text){ ADM.asis.unshift({id,text,t:now()}); if(ADM.asis.length>1000) ADM.asis.length=1000; admSave(); }
+const UNP=()=>Math.round(UNDER_FREE*100);
+function parseSlots(s){ const out=[]; for(const p of String(s||'').split(/[,;]/).map(x=>x.trim()).filter(Boolean)){ const m=p.match(/^(\d{1,2})(?::00)?\s*[-–—]\s*(\d{1,2})(?::00)?$/); if(!m) return null;
+    const a=+m[1],b=+m[2]; if(!(a>=0&&b<=24&&b>a)) return null; out.push([a,b]); }
+  out.sort((x,y)=>x[0]-y[0]); for(let i=1;i<out.length;i++) if(out[i][0]<out[i-1][1]) return null; return out.length&&out.length<=8?out:null; }
+function applySettings(){ const s=ADM.settings;
+  MODES.home.minOrder=+s.minHome; MODES.biz.minOrder=+s.minBiz; MODES.biz.delivery=+s.bizDeliv; MODES.biz.freeFrom=+s.freeFrom; MODES.biz.service=s.service/100;
+  CONFIG.deliveryHint.min=+s.hintMin; CONFIG.deliveryHint.max=+s.hintMax; CONFIG.paymentConfirmMinutes=+s.payMin; CONFIG.deliveryAgreeMinutes=+s.agreeMin;
+  UNDER_FREE=s.under/100; ANTI.floor=s.floor/100;
+  const h=parseSlots(s.slotsHome), b=parseSlots(s.slotsBiz); if(h) SLOT_H.home=h; if(b) SLOT_H.biz=b; }
+
+/* ---------- каталог: правки админа поверх встроенного ---------- */
+const U_IN={'кг':'kg','kg':'kg','шт':'pcs','pcs':'pcs','уп':'pcs','упак':'pcs','упаковка':'pcs','пучок':'pcs','десяток':'pcs','банка':'pcs','л':'l','l':'l'};
+const U_OUT={kg:'кг',pcs:'шт',l:'л'};
+const CAT_RX=[[/молоч|сыр|яйц|творог|кисломол/,'dairy'],[/овощ/,'veg'],[/фрукт|ягод/,'fruit'],[/соус|кетчуп|майон/,'sauce'],[/орех|сухофрукт|снек/,'nuts'],[/специ|припра|соль|сахар/,'spice'],
+  [/рыб|морепр/,'fish'],[/консерв/,'canned'],[/птиц/,'bird'],[/мяс|колбас|деликат/,'meat'],[/зелен/,'herbs'],[/хлеб|лепеш/,'bread'],[/напит|сок|вод/,'drinks'],[/хозтов|упаков|одноразов/,'household'],
+  [/круп|мук|макарон|масл|чай|кофе|кондит|сладост|заморож|бакале|выпеч/,'grocery']];
+function catFromName(c){ c=String(c||'').trim(); if(CATS[c]) return c; const l=c.toLowerCase(); const ex=Object.keys(CATS).find(k=>CATS[k].t.toLowerCase()===l); if(ex) return ex;
+  const r=CAT_RX.find(([rx])=>rx.test(l)); return r?r[1]:null; }
+const hsh=s=>[...String(s)].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);
+const cleanSyn=a=>[...new Set((Array.isArray(a)?a:String(a||'').split(',')).map(x=>normName(String(x))).filter(x=>x.length>=2&&x.length<=60))].slice(0,40);
+function genOffers(k){ const P=PRODUCTS[k]; if(!P||!(P.est>0)||state.offers.some(o=>o.p===k)) return;
+  const ss=Object.keys(state.sellers).filter(id=>id!=='sU'&&(state.sellers[id].cats||[]).includes(P.cat)&&!state.sellers[id].blocked).sort((a,b)=>(hsh(a+k)%97)-(hsh(b+k)%97)).slice(0,2);
+  const f=[1,1.06], rnd=v=>v>=1000?Math.round(v/10)*10:Math.max(5,Math.round(v/5)*5);
+  ss.forEach((s,i)=>state.offers.push({s,p:k,price:rnd(P.est*f[i]),stock:P.u==='pcs'?50:100,fresh:'—',on:true})); }
+function applyProd(k,d){ let P=PRODUCTS[k];
+  if(!P){ if(!CATS[d.cat]) return; P=PRODUCTS[k]={n:d.n,e:d.e||CATS[d.cat].e,cat:d.cat,u:d.u||'kg',store:0,step:(d.u||'kg')==='kg'?.5:1,syn:[],estimated:true,est:+d.est||0,added:true}; }
+  else { if(d.n) P.n=d.n; if(d.cat&&CATS[d.cat]) P.cat=d.cat; if(d.e) P.e=d.e; if(P.added&&d.u){ P.u=d.u; P.step=d.u==='kg'?.5:1; } if(+d.est>0&&(P.estimated||P.added)) P.est=+d.est; }
+  if(d.syn) P.syn=[...d.syn];
+  ['ext','brands','varieties','packsInfo'].forEach(f=>{ if(d[f]!=null) P[f]=d[f]; });
+  (d.packs||[]).forEach(([w,sz])=>{ const pk=`${k}_p${String(sz).replace('.','_')}_${hsh(w)%1000}`; if(PRODUCTS[pk]) return;
+    PRODUCTS[pk]={n:`${P.n}, ${w} ${String(sz).replace('.',',')} ${uL(P)}`,e:P.e,cat:P.cat,u:'pcs',store:0,step:1,syn:[normName(`${P.n} ${w} ${sz}`)],estimated:true,est:Math.round((P.est||0)*sz*.95),pack:{w:packW(normName(w))||normName(w).slice(0,5),sz,base:k},added:true};
+    (P.packs=P.packs||[]).push(pk); genOffers(pk); });
+  genOffers(k); P.findOnly=!state.offers.some(o=>o.p===k); }
+function applyCatalog(){ for(const [k,d] of Object.entries(ADM.cat.add)) applyProd(k,d); for(const [k,d] of Object.entries(ADM.cat.edit)) if(PRODUCTS[k]) applyProd(k,d);
+  for(const [k,v] of Object.entries(ADM.cat.hidden)) if(PRODUCTS[k]) PRODUCTS[k].hidden=!!v; SYNIDX=null; }
+
+/* ---------- обёртки над логикой приложения ---------- */
+function available(o,qty){ const P=PRODUCTS[o.p], S=state.sellers[o.s]; if(!P||P.hidden||!S||S.blocked) return false; return availableBase(o,qty); }
+function isRegular(id){ const s=state.sellers[id]; if(!s) return false; if(s.regOv==='on') return true; if(s.regOv==='off') return false; return isRegularBase(id); }
+function curCol(){ const r=state.reg; return r&&r.role==='collector'&&r.status==='verified'&&r.id?r.id:'c0'; }
+function accept(id){ const o=findO(id); if(o&&o.status==='new') o.col=curCol(); acceptBase(id); }
+function submitDispute(id){ const o=findO(id), el=$('dItem'); if(o&&el){ const i=o.items[+el.value]; if(i) o.disputeS=i.s; } submitDisputeBase(id); }
+function sellerRefunds(o){ const r=sellerRefundsBase(o), R=o.resolution;
+  if(R&&R.by==='client'&&R.s&&R.amt>0) r[R.s]=Math.max(0,(r[R.s]||0)-(R.prev||0))+R.amt; return r; }
+function sellerRefundBlock(me){ let h=sellerRefundBlockBase(me); if(!h) return h;
+  state.orders.forEach(o=>{ const R=o.resolution; if(!R||R.by!=='client'||R.s!==me) return; const a=`Заказ №${o.id} · Kaspi ${esc(o.phone||'')}</div>`;
+    h=h.replace(a,a+`<div class="regmsg" data-dres="${o.id}"><b>Решение по спору:</b> вернуть ${fmt(R.amt)}${R.comment?` — ${esc(R.comment)}`:''}</div>`); });
+  return h; }
+function vSeller(){ const S=state.sellers[state.me]; let h=vSellerBase();
+  if(S&&S.blocked) h=h.replace(/(<div class="ptop">[\s\S]*?<\/div>)/,`$1<div class="regmsg bad" id="selBlocked"><b>Точка приостановлена администратором.</b> Клиенты её сейчас не видят.${S.blocked.reason?` Причина: ${esc(S.blocked.reason)}.`:''}<small>Вопросы — в поддержку</small></div>`);
+  return h; }
+function vCollector(){ const b=ADM.blockedCol[curCol()];
+  if(b) return ptop('Сборщик','Магазин','toShop()')+`<div class="empty gate" id="colBlocked"><div class="ee">⛔</div><b>Доступ приостановлен</b><span>Новые заказы сейчас не показываются.${b.reason?` Причина: ${esc(b.reason)}.`:''}</span></div>
+    <button class="btn secondary" onclick="support()">Написать в поддержку</button>`;
+  return vCollectorBase(); }
+function archiveReg(r){ if(!r||!r.id||!['pending','verified','rejected','need_doc'].includes(r.status)) return; state.regs=state.regs||[]; if(!state.regs.some(x=>x.id===r.id)) state.regs.unshift(r); }
+// единый вход по коду партнёра (коды выдаёт администратор; в интерфейсе не показываем)
+function openAnyCode(){ modal(`<h3>Код партнёра</h3><input class="inp" id="codeIn" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Код" maxlength="6" onkeydown="if(event.key==='Enter')checkAnyCode()">
+  <div class="fine" style="margin:-2px 0 14px">Для сборщиков, продавцов и администратора</div><button class="btn" id="codeGo" onclick="checkAnyCode()">Войти</button>`); setTimeout(()=>{const i=$('codeIn'); i&&i.focus();},250); }
+function checkAnyCode(){ const v=(($('codeIn')||{}).value||'').trim(); const a=Object.keys(CONFIG.codes).find(k=>CONFIG.codes[k]===v);
+  if(!a||!v){ toast('Неверный код'); hap('err'); const i=$('codeIn'); if(i){i.value='';i.focus();} return; }
+  unlocked[a]=true; closeModal(); if(a==='admin'){ app='admin'; admTab='sum'; openOrder=null; hap('ok'); window.scrollTo(0,0); render(); return; } openPartner(a); }
+
+/* ---------- adminApi: заглушки поверх localStorage; на сервере — те же функции через fetch ---------- */
+const partyName=s=>s==='deliv'?'Доставка · сборщик':(state.sellers[s]?state.sellers[s].n:s);
+const CARD_L={unpaid:['Не оплачено','warn'],check:['Ждёт подтверждения',''],ok:['Подтверждено','done'],dropped:['Снято','']};
+const cardL=c=>c.st==='fail'?[c.why==='timeout'?'Время вышло':'Не пришло','bad']:(CARD_L[c.st]||[c.st,'']);
+function orderProblems(o){ const P=[], t=now(); if(o.status==='cancelled') return P;
+  if(o.pay) o.pay.cards.forEach(c=>{ if(c.st==='fail') P.push({k:c.why==='timeout'?'late':'no',t:`${c.why==='timeout'?'Подтверждение просрочено':'«Не пришло»'} · ${partyName(c.s)}`});
+    else if(c.st==='check'&&c.deadline&&t>c.deadline) P.push({k:'late',t:`Подтверждение просрочено · ${partyName(c.s)}`}); });
+  const us=new Set(); o.items.forEach(i=>{ const Pr=PRODUCTS[i.k]; if(Pr&&Pr.u==='kg'&&i.fact!=null&&i.fact<i.q*(1-UNDER_FREE)&&!(o.returned||{})[i.s]) us.add(i.s); });
+  us.forEach(s=>P.push({k:'under',t:`Недовес больше ${UNP()}% без возврата · ${partyName(s)}`}));
+  if(o.status==='deliv_fail'||(['deliv_agree','deliv_counter'].includes(o.status)&&o.agreeDeadline&&t>o.agreeDeadline)) P.push({k:'deliv',t:'Доставка не согласована'});
+  if(o.status==='dispute'&&!o.resolution) P.push({k:'dispute',t:'Открытый спор'});
+  return P; }
+function sellerStats(id){ const os=state.orders.filter(o=>o.status!=='cancelled'&&o.items.some(i=>i.s===id));
+  let paid=0,no=0,wi=0,un=0,cmp=0,open=0;
+  os.forEach(o=>{ if(o.pay) paid+=o.pay.cards.filter(c=>c.s===id&&c.paidAt).length; if(o.log.some(l=>l.s==='fail_'+id)) no++;
+    o.items.forEach(i=>{ if(i.s!==id||i.fact==null) return; wi++; const P=PRODUCTS[i.k]; if(P&&P.u==='kg'&&i.fact<i.q*(1-UNDER_FREE)) un++; });
+    if(o.disputeS===id) cmp++; const r=sellerRefunds(o); if(r[id]&&!(o.returned||{})[id]) open+=r[id]; });
+  return {orders:os.length,noPct:paid?Math.round(no/paid*100):0,no,underPct:wi?Math.round(un/wi*100):0,under:un,complaints:cmp,openRefund:open}; }
+function collectorList(){ const L=[{id:'c0',n:'Демо-сборщик',sub:'вход по коду партнёра',kaspi:COLLECTOR.kaspi,demo:true}];
+  adminApi.regs().filter(r=>r.role==='collector'&&r.status==='verified').forEach(r=>L.push({id:r.id,n:r.data.fio||'Сборщик',sub:fmtPhone(r.data.phone)||'',kaspi:fmtPhone(r.data.phone)}));
+  return L.map(c=>{ const os=state.orders.filter(o=>(o.col||'c0')===c.id&&o.col); return {...c,kind:'collector',blocked:ADM.blockedCol[c.id]||null,note:ADM.colNotes[c.id]||'',
+    st:{orders:os.length,done:os.filter(o=>o.status==='delivered').length,complaints:os.filter(o=>o.dispute).length,no:os.filter(o=>o.log.some(l=>l.s==='fail_deliv')).length}}; }); }
+const REJ_R=['Документ нечитаемый','Данные не совпадают с документом','Неверный БИН / ИИН','Документ просрочен','Не тот документ','Подозрение на чужие документы','Другое'];
+const BLK_R=['Жалобы клиентов','Не подтверждает оплаты','Систематический недовес','Проблемы с документами','По просьбе партнёра','Другое'];
+const adminApi={
+  /* Сводка */
+  summary(){ const t=now(), A=almaty(t), td=o=>{ const x=almaty(o.created); return x.y===A.y&&x.m===A.m&&x.d===A.d; }, wk=o=>o.created>=t-7*864e5;
+    const live=state.orders.filter(o=>o.status!=='cancelled'), w=live.filter(wk);
+    return {today:live.filter(td).length,week:w.length,turnover:w.reduce((s,o)=>s+orderTotal(o).total,0),service:w.filter(o=>o.mode==='biz'&&o.pay).reduce((s,o)=>s+(o.pay.service||0),0),
+      pending:this.regs().filter(r=>r.status==='pending').length,
+      problems:state.orders.flatMap(o=>orderProblems(o).map(p=>({...p,id:o.id}))),
+      refunds:this.refundsOpen()}; },
+  refundsOpen(){ const L=[]; state.orders.forEach(o=>{ const r=sellerRefunds(o), d=o.returned||{}; Object.entries(r).forEach(([s,v])=>{ if(v>0&&!d[s]) L.push({id:o.id,s,amt:v,dispute:!!(o.resolution&&o.resolution.s===s)}); }); }); return L; },
+  /* Регистрации */
+  regs(){ const L=[]; if(state.reg&&state.reg.id&&state.reg.role!=='person') L.push(state.reg); (state.regs||[]).forEach(r=>{ if(!L.some(x=>x.id===r.id)) L.push(r); }); return L; },
+  _reg(id){ return this.regs().find(r=>r.id===id); },
+  approve(id){ const r=this._reg(id); if(!r) return {ok:false,err:'Заявка не найдена'}; r.status='verified'; r.verifiedAt=now(); r.decision={act:'approve',t:now()};
+    if(r===state.reg){ if(r.role==='seller'){ const D=r.data, S0=state.sellers.sU||{};
+        state.sellers.sU={...S0,n:D.fio||'Я',m:D.market||'Шапагат',pt:D.pt||'',cats:S0.cats||[],rating:S0.rating||0,done:S0.done||0,disputes:S0.disputes||0,ontime:S0.ontime||0,months:S0.months||0,online:true,emoji:'🏪',verified:true,kaspi:fmtPhone(D.kaspi)}; state.me='sU'; }
+      if(r.role==='collector'||r.role==='seller') unlocked[r.role]=true; }
+    admLog('approve',`${ROLES[r.role].t}: ${r.data.name||r.data.fio||''}`); saveSafe(); return {ok:true}; },
+  reject(id,reason,text){ const r=this._reg(id); text=String(text||'').trim().slice(0,300);
+    if(!r) return {ok:false,err:'Заявка не найдена'}; if(!REJ_R.includes(reason)) return {ok:false,err:'Выберите причину'}; if(reason==='Другое'&&text.length<3) return {ok:false,err:'Опишите причину'};
+    r.status='rejected'; r.decision={act:'reject',reason,text,t:now()}; if(r===state.reg&&(r.role==='collector'||r.role==='seller')){ unlocked[r.role]=false; if(r.role==='seller'&&state.sellers.sU) state.sellers.sU.verified=false; }
+    admLog('reject',`${ROLES[r.role].t}: ${r.data.name||r.data.fio||''} — ${reason}${text?': '+text:''}`); saveSafe(); return {ok:true}; },
+  requestDoc(id,doc,text){ const r=this._reg(id); text=String(text||'').trim().slice(0,300); if(!r) return {ok:false,err:'Заявка не найдена'}; if(!doc) return {ok:false,err:'Выберите документ'};
+    r.status='need_doc'; r.decision={act:'need_doc',doc,text,t:now()}; if(r===state.reg&&(r.role==='collector'||r.role==='seller')) unlocked[r.role]=false;
+    admLog('need_doc',`${ROLES[r.role].t}: ${r.data.name||r.data.fio||''} — ${doc}${text?': '+text:''}`); saveSafe(); return {ok:true}; },
+  /* Партнёры */
+  sellers(){ return Object.entries(state.sellers).map(([id,S])=>({id,kind:'seller',S,st:sellerStats(id)})); },
+  collectors(){ return collectorList(); },
+  setBlocked(kind,id,v,reason){ if(v&&!String(reason||'').trim()) return {ok:false,err:'Укажите причину'}; const rec=v?{t:now(),reason:String(reason).trim().slice(0,200)}:null;
+    if(kind==='seller'){ const S=state.sellers[id]; if(!S) return {ok:false,err:'Нет продавца'}; if(rec) S.blocked=rec; else delete S.blocked; save(); }
+    else { if(rec) ADM.blockedCol[id]=rec; else delete ADM.blockedCol[id]; admSave(); }
+    admLog(v?'block':'unblock',`${kind==='seller'?'Продавец':'Сборщик'} ${kind==='seller'?state.sellers[id].n:id}${v?' — '+rec.reason:''}`); return {ok:true}; },
+  setNote(kind,id,text){ text=String(text||'').trim().slice(0,500); if(kind==='seller'){ state.sellers[id].note=text; save(); } else { ADM.colNotes[id]=text; admSave(); } admLog('note',`${kind==='seller'?state.sellers[id].n:id}: ${text||'удалена'}`); return {ok:true}; },
+  setVerified(id,v){ const S=state.sellers[id]; S.verified=!!v; save(); admLog('verified',`${S.n}: ${v?'выдан':'снят'}`); return {ok:true}; },
+  setRegular(id,mode){ const S=state.sellers[id]; if(!['auto','on','off'].includes(mode)) return {ok:false}; if(mode==='auto') delete S.regOv; else S.regOv=mode; save(); admLog('regular',`${S.n}: ${{auto:'по правилам',on:'выдан',off:'снят'}[mode]}`); return {ok:true}; },
+  /* Заказы */
+  orders(f='all',q=''){ q=String(q||'').trim().replace(/^№|^#/,''); const dq=q.replace(/\D/g,'');
+    const by={active:o=>!['delivered','cancelled'].includes(o.status),pay:o=>['unpaid','pay_check','pay_expired'].includes(o.status),problems:o=>orderProblems(o).length>0,
+      dispute:o=>o.status==='dispute'||!!o.dispute,done:o=>o.status==='delivered',cancelled:o=>o.status==='cancelled'}[f]||(()=>true);
+    return state.orders.filter(by).filter(o=>!q||String(o.id)===q||(dq.length>=3&&phoneDigits(o.phone||'').includes(dq.replace(/^8/,'7')))||(o.client&&o.client.name&&o.client.name.toLowerCase().includes(q.toLowerCase()))); },
+  resolveDispute(id,by,s,amt,comment){ const o=findO(id); comment=String(comment||'').trim().slice(0,300); amt=Math.round(+amt||0);
+    if(!o) return {ok:false,err:'Нет заказа'}; if(o.resolution) return {ok:false,err:'Решение уже записано'}; if(!o.dispute) return {ok:false,err:'По заказу нет спора'};
+    if(!['client','seller'].includes(by)) return {ok:false,err:'Выберите, в чью пользу'}; if(comment.length<3) return {ok:false,err:'Напишите комментарий'};
+    if(by==='client'){ if(!o.items.some(i=>i.s===s)) return {ok:false,err:'Выберите продавца'}; const max=o.items.filter(i=>i.s===s).reduce((a,i)=>a+i.q*i.price,0);
+      if(!(amt>0)) return {ok:false,err:'Сумма возврата больше 0'}; if(amt>Math.round(max)) return {ok:false,err:`Не больше ${fmt(max)} — сумма товаров продавца`}; } else { amt=0; s=s||o.disputeS||null; }
+    const prev=(o.returned||{})[s]?(sellerRefundsBase(o)[s]||0):0; if(by==='client'&&o.returned&&o.returned[s]) delete o.returned[s];
+    o.resolution={by,s,amt,comment,prev,t:now()}; if(o.status==='dispute') o.status='delivered'; o.log.push({s:'dispute_resolved',t:now(),note:by==='client'?`в пользу клиента, возврат ${amt}`:'в пользу продавца'});
+    save(); admLog('dispute',`№${id}: в пользу ${by==='client'?'клиента · '+partyName(s)+' возвращает '+fmt(amt):'продавца'} — ${comment}`); return {ok:true}; },
+  ordersCSV(list){ const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+    const rows=[['№','Создан (Астана)','Режим','Статус','Клиент','БИН','Телефон','Адрес','Слот','Товары','Доставка','Сервис','Итого','Возврат','Спор']];
+    (list||state.orders).forEach(o=>{ const T=orderTotal(o), R=refundInfo(o); rows.push([o.id,tA(o.created),o.mode==='biz'?'бизнес':'дом',ST[o.status]||o.status,(o.client&&o.client.name)||'',(o.client&&o.client.bin)||'',o.phone||'',o.addr||'',oSlot(o),T.g,delivOf(o),T.service,T.total,R.sum,o.dispute||'']); });
+    return '\ufeff'+rows.map(r=>r.map(q).join(';')).join('\r\n'); },
+  /* Каталог */
+  products(f='all',q=''){ const n=normName(q||''); return Object.keys(PRODUCTS).filter(k=>{ const P=PRODUCTS[k];
+      if(f==='hidden'&&!P.hidden) return false; if(f==='added'&&!P.added) return false; if(f==='noprice'&&!P.findOnly) return false;
+      return !n||normName(P.n).includes(n)||P.syn.some(s=>s.includes(n))||k===q; }); },
+  setHidden(k,v){ const P=PRODUCTS[k]; if(!P) return {ok:false}; P.hidden=!!v; if(v){ ADM.cat.hidden[k]=true; delete state.cart[k]; } else delete ADM.cat.hidden[k]; SYNIDX=null; save(); admSave(); admLog(v?'hide':'show',P.n); return {ok:true}; },
+  saveProduct(k,d){ const n=String(d.n||'').trim().replace(/\s+/g,' '); if(n.length<2||n.length>80) return {ok:false,err:'Название: 2–80 символов',f:'n'};
+    if(!CATS[d.cat]) return {ok:false,err:'Выберите категорию',f:'c'}; const u=d.u||'kg'; if(!U_OUT[u]) return {ok:false,err:'Единица: кг, шт или л',f:'u'};
+    const est=d.est===''||d.est==null?0:+d.est; if(!(est>=0)||est>1e7) return {ok:false,err:'Цена: число ₸',f:'p'};
+    const packs=[]; for(const t of String(d.packs||'').split(',').map(x=>x.trim()).filter(Boolean)){ const m=t.match(/^([А-Яа-яЁёA-Za-z ]{2,20}?)\s*([\d.,]+)$/); if(!m) return {ok:false,err:`Упаковка «${t}»: слово и число, напр. «ведро 5»`,f:'k'};
+      const sz=+m[2].replace(',','.'); if(!(sz>0&&sz<=1000)) return {ok:false,err:`Упаковка «${t}»: размер`,f:'k'}; packs.push([m[1].trim().toLowerCase(),sz]); }
+    if(packs.length&&u==='pcs') return {ok:false,err:'Упаковки — только для кг и л',f:'k'};
+    const syn=cleanSyn(d.syn); const nn=normName(n); if(!syn.includes(nn)) syn.unshift(nn);
+    const dup=Object.keys(PRODUCTS).find(x=>x!==k&&!PRODUCTS[x].pack&&normName(PRODUCTS[x].n)===nn); if(dup) return {ok:false,err:`Уже есть: ${PRODUCTS[dup].n}`,f:'n'};
+    const e=String(d.e||'').trim().slice(0,4);
+    if(!k){ k='a'+Date.now().toString(36)+(hsh(n)%100); ADM.cat.add[k]={n,e:e||CATS[d.cat].e,cat:d.cat,u,est,syn,packs}; applyProd(k,ADM.cat.add[k]); admLog('prod_add',n); }
+    else { const P=PRODUCTS[k]; if(!P) return {ok:false,err:'Нет товара'};
+      if(ADM.cat.add[k]){ const a=ADM.cat.add[k]; Object.assign(a,{n,e:e||a.e,cat:d.cat,u:P.added&&!state.orders.some(o=>o.items.some(i=>i.k===k))?u:a.u,est,syn,packs:[...(a.packs||[]),...packs]}); applyProd(k,{...a,packs}); }
+      else { const ed=ADM.cat.edit[k]=ADM.cat.edit[k]||{}; Object.assign(ed,{n,cat:d.cat,syn,...(e?{e}:{}),...(est>0?{est}:{})}); ed.packs=[...(ed.packs||[]),...packs]; applyProd(k,{...ed,packs}); }
+      admLog('prod_edit',n); }
+    SYNIDX=null; save(); admSave(); return {ok:true,k}; },
+  exportCatalog(){ return Object.keys(PRODUCTS).filter(k=>!PRODUCTS[k].pack).map(k=>{ const P=PRODUCTS[k];
+    const packs=[...new Set([...(P.packsInfo||[]),...(P.packs||[]).map(pk=>PRODUCTS[pk].n.replace(P.n+', ',''))])];
+    return {id:P.ext||k,canonical_name:P.n,category:CATS[P.cat].t,subcategory:null,brands:P.brands||[],packs,varieties:P.varieties||[],unit:U_OUT[P.u]||'шт',synonyms:P.syn,
+      market_available:!P.findOnly&&!P.hidden,hidden:!!P.hidden,price_est:priceFor(k)||P.est||null,app_key:k}; }); },
+  importCatalog(cards,apply){ const R={add:[],upd:[],err:[],warn:[]}; if(!Array.isArray(cards)) return {...R,err:['Нужен массив карточек']};
+    if(cards.length>5000) return {...R,err:['Больше 5000 карточек']};
+    const byExt={}; Object.entries(PRODUCTS).forEach(([k,P])=>{ if(P.ext) byExt[P.ext]=k; });
+    const byName={}; Object.entries(PRODUCTS).forEach(([k,P])=>{ if(P.pack) return; byName[normName(P.n)]=byName[normName(P.n)]||k; });
+    const seen=new Set();
+    cards.forEach((c,i)=>{ const at=`#${i+1}${c&&c.id?' ('+String(c.id).slice(0,30)+')':''}`;
+      if(!c||typeof c!=='object'){ R.err.push(`${at}: не объект`); return; }
+      const id=String(c.id||'').trim(), name=String(c.canonical_name||'').trim();
+      if(!/^[\w.\-]{1,64}$/.test(id)){ R.err.push(`${at}: id — латиница/цифры, до 64`); return; } if(seen.has(id)){ R.err.push(`${at}: повтор id`); return; } seen.add(id);
+      if(name.length<2||name.length>80){ R.err.push(`${at}: canonical_name 2–80 символов`); return; }
+      for(const f of ['brands','packs','varieties','synonyms']) if(c[f]!=null&&!(Array.isArray(c[f])&&c[f].every(x=>typeof x==='string'))){ R.err.push(`${at}: ${f} — массив строк`); return; }
+      const u=U_IN[String(c.unit||'').trim().toLowerCase()]; if(!u){ R.err.push(`${at}: unit «${c.unit}» — нужно кг, шт, уп, л`); return; }
+      const cat=catFromName(c.category); if(!cat){ R.err.push(`${at}: категория «${c.category}» не распознана`); return; }
+      const syn=cleanSyn([...(c.synonyms||[])]), extra={ext:id,brands:(c.brands||[]).slice(0,40),varieties:(c.varieties||[]).slice(0,40),packsInfo:(c.packs||[]).slice(0,20)};
+      const k=byExt[id]||(PRODUCTS[id]&&!PRODUCTS[id].pack?id:null)||byName[normName(name)]||Object.keys(PRODUCTS).find(x=>!PRODUCTS[x].pack&&PRODUCTS[x].syn.includes(normName(name)));
+      if(k){ R.upd.push({k,n:PRODUCTS[k].n}); if(apply){ const P=PRODUCTS[k]; const all=[...new Set([...P.syn,...syn])].slice(0,60);
+          if(ADM.cat.add[k]) Object.assign(ADM.cat.add[k],{syn:all,...extra}); else Object.assign(ADM.cat.edit[k]=ADM.cat.edit[k]||{},{syn:all,...extra}); applyProd(k,{syn:all,...extra}); } }
+      else { const est=+c.price_est>0?+c.price_est:0; const nk='x_'+id.replace(/[^\w]/g,'_'); if(PRODUCTS[nk]){ R.err.push(`${at}: ключ занят`); return; }
+        R.add.push({k:nk,n:name,cat}); if(!est) R.warn.push(name);
+        if(apply){ const nn=normName(name); ADM.cat.add[nk]={n:name,e:CATS[cat].e,cat,u,est,syn:syn.includes(nn)?syn:[nn,...syn],packs:[],imported:true,...extra}; applyProd(nk,ADM.cat.add[nk]); byName[nn]=nk; byExt[id]=nk; } } });
+    if(apply){ SYNIDX=null; save(); if(!admSave()) R.err.push('Не хватило памяти устройства'); admLog('import',`добавлено ${R.add.length}, обновлено ${R.upd.length}, ошибок ${R.err.length}`); }
+    return R; },
+  asisQueue(){ const items=new Map(); const put=(id,text,t)=>{ if(!text||items.has(id)) return; items.set(id,{text,t:t||0}); };
+    ADM.asis.forEach(x=>put(x.id,x.text,x.t)); state.orders.forEach(o=>(o.extra||[]).forEach(x=>put(x.id,x.text,o.created))); (state.custom||[]).forEach(x=>put(x.id,x.text,now()));
+    const g={}; items.forEach(({text,t})=>{ const key=normName(text.replace(/[\d.,]+\s*(кг|г|гр|шт|л|уп)?(?=\s|$)/gi,' ')).trim(); if(!key||ADM.asisDone[key]) return;
+      const r=g[key]=g[key]||{key,text,n:0,t:0}; r.n++; if(t>r.t){ r.t=t; r.text=text; } });
+    return Object.values(g).sort((a,b)=>b.n-a.n||b.t-a.t); },
+  asisClose(key,how){ ADM.asisDone[key]=how||'skip'; admSave(); admLog('asis',`${key}: ${how==='skip'?'скрыто':'добавлено в каталог'}`); return {ok:true}; },
+  /* Настройки */
+  settings(){ return {...ADM.settings}; },
+  saveSettings(p){ const s={...ADM.settings,...p}, bad=(f,m)=>({ok:false,f,err:m});
+    for(const [,F] of SET_F) for(const [k,l,u,mn,mx] of F){ if(u==='text'){ if(!parseSlots(s[k])) return bad(k,`${l}: формат «10-12, 12-14», без пересечений`); continue; }
+      const v=+String(s[k]).replace(',','.'); if(String(s[k]).trim()===''||!isFinite(v)) return bad(k,`${l}: введите число`); if(v<mn||v>mx) return bad(k,`${l}: от ${mn} до ${mx}`); s[k]=v; }
+    if(s.hintMin>s.hintMax) return bad('hintMin','Подсказка доставки: «от» больше «до»');
+    const ch=Object.keys(s).filter(k=>String(s[k])!==String(ADM.settings[k])); if(!ch.length) return {ok:true,changed:0};
+    const det=ch.map(k=>`${SET_L[k]||k}: ${ADM.settings[k]} → ${s[k]}`).join('; '); ADM.settings=s; applySettings(); admSave(); admLog('settings',det); return {ok:true,changed:ch.length}; },
+  resetSettings(){ ADM.settings={...DEF_SET}; applySettings(); admSave(); admLog('reset','настройки по умолчанию'); return {ok:true}; },
+  log(){ return ADM.log; }
+};
+
+/* ---------- интерфейс админки ---------- */
+let admTab='sum', admRegF='pending', admParK='seller', admParF='all', admParSort='orders', admPQ='', admOrdF='all', admOQ='', admCatF='all', admCQ='', admImp=null, admRejCtx=null;
+const pad2=n=>String(n).padStart(2,'0');
+function tA(t){ if(!t) return '—'; const d=new Date(t+5*3600e3); return `${pad2(d.getUTCDate())}.${pad2(d.getUTCMonth()+1)} ${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}`; }
+const ADM_TABS=[['sum','Сводка'],['reg','Проверка'],['par','Партнёры'],['ord','Заказы'],['cat','Каталог'],['set','Настройки']];
+function admGo(t){ admTab=t; hap(); window.scrollTo(0,0); render(); }
+function admExit(){ unlocked.admin=false; toShop(); }
+function admRedraw(){ if(app==='admin') render(); }
+function vAdmin(){ const nReg=adminApi.regs().filter(r=>r.status==='pending').length, nPr=adminApi.summary().problems.length;
+  const body={sum:admSum,reg:admReg,par:admPar,ord:admOrd,cat:admCat,set:admSet}[admTab]||admSum;
+  return ptop('Админка','Выйти','admExit()',`<button class="link" id="admLogBtn" onclick="openAdmLog()">Журнал</button>`)+
+   `<div class="admbanner" id="admBanner">🧪 Демо: данные только на этом устройстве; настоящая админка потребует сервера</div>
+   <div class="chips hs admtabs">${ADM_TABS.map(([k,t])=>`<button class="chip ${admTab===k?'active':''}" data-at="${k}" onclick="admGo('${k}')">${t}${k==='reg'&&nReg?` <span class="cnt">${nReg}</span>`:k==='sum'&&nPr?` <span class="cnt o">${nPr}</span>`:''}</button>`).join('')}</div>
+   <div id="admBody" data-tab="${admTab}">${body()}</div>`; }
+const kpi=(v,l,id)=>`<div class="kpi" ${id?`id="${id}"`:''}><b>${v}</b><span>${l}</span></div>`;
+function admSum(){ const S=adminApi.summary();
+  const PK={no:'🚫',late:'⏰',under:'⚖️',deliv:'🛵',dispute:'⚠️'};
+  return `<div class="kpis">${kpi(S.today,'заказов сегодня','kToday')}${kpi(S.week,'за 7 дней','kWeek')}${kpi(fmt(S.turnover),'оборот за 7 дней','kTurn')}${kpi(fmt(S.service),`сервис ${Math.round(MODES.biz.service*100)}% · бизнес`,'kServ')}</div>
+   <button class="rowbtn" onclick="admRegF='pending';admGo('reg')"><span class="ri">🪪</span><span class="rt"><b>Регистрации на проверке</b><span>${S.pending?S.pending+' ждут решения':'очередь пуста'}</span></span>${S.pending?`<span class="badge">${S.pending}</span>`:''}${IC.chev}</button>
+   <h2 class="sec">Открытые проблемы</h2>
+   ${S.problems.length?`<div class="glist" id="admProblems">${S.problems.map(p=>`<button class="grow" data-pk="${p.k}" onclick="openAdmOrder(${p.id})"><span class="gi">${PK[p.k]||'•'}</span><span class="gl">${esc(p.t)}<small>Заказ №${p.id}</small></span>${IC.chev}</button>`).join('')}</div>`
+     :`<div class="card admempty" id="admProblems">Проблем нет ✓</div>`}
+   <h2 class="sec">Возвраты, которые должны продавцы</h2>
+   ${S.refunds.length?`<div class="glist" id="admRefunds">${S.refunds.map(r=>`<button class="grow" onclick="openAdmOrder(${r.id})"><span class="gi">↩️</span><span class="gl">${esc(partyName(r.s))}<small>Заказ №${r.id}${r.dispute?' · по решению спора':''}</small></span><span class="gv">${fmt(r.amt)}</span>${IC.chev}</button>`).join('')}</div>`
+     :`<div class="card admempty" id="admRefunds">Все возвраты отмечены</div>`}
+   <div class="fine" style="margin-top:10px">Цифры — только из заказов, созданных в этом приложении на этом устройстве (демо-заказы). Деньги идут напрямую продавцам на Kaspi: админка их не двигает.</div>`; }
+/* Проверка регистраций */
+function admReg(){ const all=adminApi.regs(); const F=[['pending','На проверке'],['need_doc','Нужен документ'],['rejected','Отклонены'],['verified','Одобрены'],['all','Все']];
+  const L=all.filter(r=>admRegF==='all'||r.status===admRegF);
+  return `<div class="chips hs">${F.map(([k,t])=>`<button class="chip ${admRegF===k?'active':''}" onclick="admRegF='${k}';render()">${t} ${all.filter(r=>k==='all'||r.status===k).length||''}</button>`).join('')}</div>
+   ${L.length?L.map(regCard).join(''):`<div class="empty" style="padding-top:20px"><div class="ee">🗂️</div><b>Пусто</b><span>Заявки появятся, когда заведение, сборщик или продавец отправят документы</span></div>`}
+   <div class="fine" style="margin-top:6px">Демо: видны заявки, отправленные с этого устройства</div>`; }
+function regCard(r){ const R=ROLES[r.role], D=r.data||{};
+  const fv=R.f.map(([k,l,t])=>{ const v=D[k]; let ok='';
+    if(t==='bin') ok=binOk(v)?' <span class="tagg">формат ✓</span>':' <span class="tago">ошибка в номере</span>'; if(t==='phone') ok=phoneOk(v)?'':' <span class="tago">телефон?</span>';
+    return `<div class="kv"><span>${l}</span><b>${t==='check'?(v?'да':'нет'):esc(t==='phone'?fmtPhone(v):v||'—')}${ok}</b></div>`; }).join('');
+  const docs=R.d.map(([k,l,req])=>{ const d=(r.docs||{})[k]; return `<button class="adoc" ${d?`onclick="admDoc('${r.id}','${k}')"`:'disabled'}><span class="athumb">${d&&d.thumb?`<img src="${d.thumb}" alt="">`:d?'📄':'—'}</span><small>${l}${req?'':' (необяз.)'}</small><i>${d?esc(d.name||'файл'):'нет'}</i></button>`; }).join('');
+  const dec=r.decision&&r.status!=='pending'?regMsg(r):'';
+  return `<div class="card areg" data-reg="${r.id}"><div class="hero"><span class="he">${R.e}</span><div style="flex:1;min-width:0"><b>${esc(D.name||D.fio||R.t)}</b><div class="meta">${R.t} · ${r.submittedAt?tA(r.submittedAt)+' (Астана)':'черновик'} ${RST(r)}</div></div></div>
+   <div class="kvs">${fv}</div>${docs?`<div class="adocs">${docs}</div>`:''}${dec}
+   ${r.status==='draft'?'':`<div class="f3">${r.status!=='verified'?`<button class="btn sm ok" data-act="approve" onclick="admApprove('${r.id}')">Одобрить</button>`:''}<button class="btn sm gray" data-act="reject" onclick="admRejectSheet('${r.id}')">Отклонить</button><button class="btn sm secondary" data-act="needdoc" onclick="admDocSheet('${r.id}')">Запросить документ</button></div>`}</div>`; }
+function admDoc(id,k){ const r=adminApi._reg(id), d=r&&r.docs[k]; if(!d) return; const l=(ROLES[r.role].d.find(x=>x[0]===k)||[])[1]||k;
+  modal(`<h3>${esc(l)}</h3>${d.thumb?`<img class="docbig" id="docBig" src="${d.thumb}" alt="">`:`<div class="card admempty">📄 ${esc(d.name||'файл')}<br><small>Превью нет — файл придёт на сервер проверки</small></div>`}
+   <div class="fine">${esc(d.name||'')} · ${d.size?Math.round(d.size/1024)+' КБ':''}</div><div class="fine">Демо: на устройстве хранится только уменьшенная копия</div><button class="btn gray" onclick="closeModal()">Закрыть</button>`); }
+function admApprove(id){ const r=adminApi.approve(id); if(!r.ok){ toast(r.err); hap('err'); return; } hap('ok'); toast('Одобрено'); render(); }
+function admRejectSheet(id){ const r=adminApi._reg(id); modal(`<h3>Отклонить заявку</h3><div class="fine" style="margin:-6px 0 10px">${esc(r.data.name||r.data.fio||'')} увидит причину в профиле</div>
+  <select class="inp" id="rjR">${REJ_R.map(x=>`<option>${x}</option>`).join('')}</select><textarea class="inp" id="rjT" rows="3" maxlength="300" placeholder="Комментарий (для «Другое» — обязательно)"></textarea>
+  <button class="btn danger" id="rjGo" onclick="admRejectGo('${id}')">Отклонить</button><button class="btn gray" onclick="closeModal()">Отмена</button>`); }
+function admRejectGo(id){ const reason=$('rjR').value, text=$('rjT').value; if(reason==='Другое'&&text.trim().length<3){ toast('Опишите причину'); hap('err'); $('rjT').classList.add('err'); return; }
+  confirmBox(`Отклонить заявку? Причина: ${reason}`,()=>{ const r=adminApi.reject(id,reason,text); if(!r.ok){ toast(r.err); hap('err'); return; } closeModal(); hap('ok'); toast('Заявка отклонена'); render(); }); }
+function admDocSheet(id){ const r=adminApi._reg(id), R=ROLES[r.role]; modal(`<h3>Запросить документ</h3>
+  <select class="inp" id="ndD">${[...R.d.map(x=>x[1]),'Другой документ'].map(x=>`<option>${esc(x)}</option>`).join('')}</select><textarea class="inp" id="ndT" rows="3" maxlength="300" placeholder="Что именно нужно (например: фото без бликов)"></textarea>
+  <button class="btn" id="ndGo" onclick="admDocGo('${id}')">Запросить</button><button class="btn gray" onclick="closeModal()">Отмена</button>`); }
+function admDocGo(id){ const doc=$('ndD').value, text=$('ndT').value; if(doc==='Другой документ'&&text.trim().length<3){ toast('Напишите, какой документ'); hap('err'); return; }
+  const r=adminApi.requestDoc(id,doc,text); if(!r.ok){ toast(r.err); return; } closeModal(); hap('ok'); toast('Запрос отправлен'); render(); }
+/* Партнёры */
+function admPar(){ const F=[['all','Все'],['problem','Проблемные'],['blocked','Заблокированы'],['verified','Проверенные']];
+  return `<div class="seg2" style="margin-bottom:10px"><button class="${admParK==='seller'?'on':''}" onclick="admParK='seller';render()">Продавцы</button><button class="${admParK==='collector'?'on':''}" onclick="admParK='collector';render()">Сборщики</button></div>
+   <label class="search">${IC.search}<input id="admPQ" type="search" placeholder="Имя, рынок, телефон" value="${esc(admPQ)}" oninput="admPQ=this.value;$('admList').innerHTML=admParList()"></label>
+   <div class="chips hs">${F.map(([k,t])=>`<button class="chip ${admParF===k?'active':''}" onclick="admParF='${k}';render()">${t}</button>`).join('')}
+   ${admParK==='seller'?`<select class="gsel" id="admSort" onchange="admParSort=this.value;$('admList').innerHTML=admParList()">${[['orders','по заказам'],['rating','по рейтингу'],['problems','по проблемам']].map(([k,t])=>`<option value="${k}" ${admParSort===k?'selected':''}>${t}</option>`).join('')}</select>`:''}</div>
+   <div class="glist" id="admList">${admParList()}</div>
+   <div class="fine" style="margin-top:6px">Заказы, «Не пришло», недовес и жалобы — по заказам этого устройства. Рейтинг и «выполнено» — демо-профиль.</div>`; }
+function admParList(){ const q=admPQ.trim().toLowerCase(), dq=q.replace(/\D/g,'');
+  if(admParK==='collector'){ let L=adminApi.collectors().filter(c=>!q||c.n.toLowerCase().includes(q)||(dq.length>=3&&phoneDigits(c.kaspi).includes(dq)));
+    if(admParF==='blocked') L=L.filter(c=>c.blocked); if(admParF==='problem') L=L.filter(c=>c.st.complaints||c.st.no); if(admParF==='verified') L=L.filter(c=>!c.demo);
+    return L.map(c=>`<button class="grow" data-par="${c.id}" onclick="admPartner('collector','${c.id}')"><span class="gi">🛵</span><span class="gl">${esc(c.n)} ${c.blocked?'<span class="tagr">заблокирован</span>':''}${c.demo?' <span class="tago">демо</span>':' <span class="tagg">проверен ✓</span>'}<small>${esc(c.sub)} · заказов ${c.st.orders} · доставлено ${c.st.done} · жалобы ${c.st.complaints}</small></span>${IC.chev}</button>`).join('')||'<div class="grow"><span class="gl">Никого</span></div>'; }
+  let L=adminApi.sellers().filter(({id,S})=>!q||S.n.toLowerCase().includes(q)||(S.m||'').toLowerCase().includes(q)||(S.pt||'').toLowerCase().includes(q)||(dq.length>=3&&phoneDigits(kaspiOf(id)).includes(dq)));
+  const pr=x=>x.st.noPct+x.st.underPct+x.st.complaints*10;
+  if(admParF==='blocked') L=L.filter(x=>x.S.blocked); if(admParF==='problem') L=L.filter(x=>pr(x)>0||x.st.openRefund>0); if(admParF==='verified') L=L.filter(x=>x.S.verified);
+  L.sort(admParSort==='rating'?(a,b)=>(b.S.rating||0)-(a.S.rating||0):admParSort==='problems'?(a,b)=>pr(b)-pr(a):(a,b)=>b.st.orders-a.st.orders||(b.S.done||0)-(a.S.done||0));
+  return L.map(({id,S,st})=>`<button class="grow" data-par="${id}" onclick="admPartner('seller','${id}')"><span class="gi">${S.emoji||'🏪'}</span><span class="gl">${esc(S.n)} ${S.blocked?'<span class="tagr">заблокирован</span>':''}${S.verified?' <span class="tagg">✓</span>':''}${isRegular(id)?' <span class="tago">постоянный</span>':''}
+    <small>${esc(S.m||'')} · ★${S.rating||'—'} · заказов ${st.orders} · не пришло ${st.noPct}% · недовес ${st.underPct}% · жалобы ${st.complaints}</small></span>${IC.chev}</button>`).join('')||'<div class="grow"><span class="gl">Никого</span></div>'; }
+function admPartner(kind,id){ let h;
+  if(kind==='seller'){ const S=state.sellers[id], st=sellerStats(id), reg=S.regOv||'auto';
+    h=`<h3>${S.emoji||'🏪'} ${esc(S.n)}</h3><div class="fine" style="margin:-6px 0 10px">${esc(S.m||'')} · ${esc(S.pt||'')} · Kaspi ${esc(kaspiOf(id))}</div>
+     ${S.blocked?`<div class="regmsg bad"><b>Заблокирован</b> ${tA(S.blocked.t)} — ${esc(S.blocked.reason)}</div>`:''}
+     <div class="kpis">${kpi(st.orders,'заказов здесь')}${kpi(st.noPct+'%','«Не пришло»')}${kpi(st.underPct+'%',`недовес >${UNP()}%`)}${kpi(st.complaints,'жалобы')}</div>
+     ${st.openRefund?`<div class="pillmsg o">Должен вернуть клиентам: ${fmt(st.openRefund)}</div>`:''}
+     <div class="fine" style="margin:8px 0">Демо-профиль: ★${S.rating||'—'} · выполнено ${S.done||0} · споры ${S.disputes||0} · вовремя ${S.ontime||0}% · на рынке ${S.months||0} мес</div>
+     <div class="glist"><label class="grow"><span class="gi">✓</span><span class="gl">Проверен ✓</span><input type="checkbox" id="pVer" ${S.verified?'checked':''} onchange="adminApi.setVerified('${id}',this.checked);hap();toast('Сохранено');admRedraw()"></label>
+      <div class="grow"><span class="gi">⭐</span><span class="gl">Постоянный<small>по правилам сейчас: ${isRegularBase(id)?'да':'нет'}</small></span><select class="gsel" id="pReg" onchange="adminApi.setRegular('${id}',this.value);hap();toast('Сохранено');admRedraw()">${[['auto','авто'],['on','дать'],['off','снять']].map(([k,t])=>`<option value="${k}" ${reg===k?'selected':''}>${t}</option>`).join('')}</select></div></div>`;
+  } else { const c=adminApi.collectors().find(x=>x.id===id);
+    h=`<h3>🛵 ${esc(c.n)}</h3><div class="fine" style="margin:-6px 0 10px">${esc(c.sub)} · Kaspi ${esc(c.kaspi||'')}</div>
+     ${c.blocked?`<div class="regmsg bad"><b>Заблокирован</b> ${tA(c.blocked.t)} — ${esc(c.blocked.reason)}</div>`:''}
+     <div class="kpis">${kpi(c.st.orders,'взял заказов')}${kpi(c.st.done,'доставлено')}${kpi(c.st.no,'«Не пришло» доставка')}${kpi(c.st.complaints,'споры')}</div>`; }
+  const note=kind==='seller'?(state.sellers[id].note||''):(ADM.colNotes[id]||''), blocked=kind==='seller'?!!state.sellers[id].blocked:!!ADM.blockedCol[id];
+  h+=`<textarea class="inp" id="pNote" rows="2" maxlength="500" placeholder="Заметка (видна только в админке)">${esc(note)}</textarea>
+   <button class="btn secondary" id="pNoteSave" onclick="adminApi.setNote('${kind}','${id}',$('pNote').value);hap('ok');toast('Заметка сохранена')">Сохранить заметку</button>
+   ${blocked?`<button class="btn ok" id="pUnblock" onclick="admUnblock('${kind}','${id}')">Разблокировать</button>`
+     :`<select class="inp" id="pBlkR">${BLK_R.map(x=>`<option>${x}</option>`).join('')}</select><button class="btn danger" id="pBlock" onclick="admBlock('${kind}','${id}')">Заблокировать</button>
+       <div class="fine">${kind==='seller'?'Клиентам перестанут предлагать товары этого продавца':'Сборщик перестанет видеть заказы'}</div>`}`;
+  modal(h); }
+function admBlock(kind,id){ const why=$('pBlkR').value, nm=kind==='seller'?state.sellers[id].n:(adminApi.collectors().find(x=>x.id===id)||{}).n;
+  confirmBox(`Заблокировать ${nm}?`,()=>{ const r=adminApi.setBlocked(kind,id,true,why); if(!r.ok){ toast(r.err); return; } closeModal(); hap('ok'); toast('Заблокирован'); render(); }); }
+function admUnblock(kind,id){ adminApi.setBlocked(kind,id,false); closeModal(); hap('ok'); toast('Разблокирован'); render(); }
+/* Заказы */
+const ORD_F=[['all','Все'],['active','Активные'],['pay','Оплата'],['problems','Проблемы'],['dispute','Споры'],['done','Доставлены'],['cancelled','Отменены']];
+function admOrd(){ return `<label class="search">${IC.search}<input id="admOQ" type="search" inputmode="search" placeholder="№ заказа, телефон или заведение" value="${esc(admOQ)}" oninput="admOQ=this.value;$('admOList').innerHTML=admOrdList()"></label>
+  <div class="chips hs">${ORD_F.map(([k,t])=>`<button class="chip ${admOrdF===k?'active':''}" data-of="${k}" onclick="admOrdF='${k}';render()">${t}</button>`).join('')}</div>
+  <div class="glist" id="admOList">${admOrdList()}</div>
+  <button class="btn secondary" id="admCSV" onclick="admCSV()">Выгрузить CSV</button><div class="fine">Демо-заказы этого устройства · время — Астана</div>`; }
+function admOrdList(){ const L=adminApi.orders(admOrdF,admOQ); if(!L.length) return '<div class="grow"><span class="gl">Заказов нет</span></div>';
+  return L.slice(0,100).map(o=>{ const pr=orderProblems(o), T=orderTotal(o); return `<button class="grow" data-oid="${o.id}" onclick="openAdmOrder(${o.id})"><span class="gi">${o.mode==='biz'?'🏢':'🏠'}</span><span class="gl">№${o.id} · ${ST[o.status]||o.status}${pr.length?` <span class="tagr">${pr.length} ⚠</span>`:''}${o.resolution?' <span class="tagg">спор решён</span>':''}
+    <small>${tA(o.created)} · ${esc((o.client&&o.client.name)||o.phone||'')}</small></span><span class="gv">${fmt(T.total)}</span>${IC.chev}</button>`; }).join(''); }
+function admDownload(name,text,type){ try{ const b=new Blob([text],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); return true; }catch(e){ toast('Не удалось сохранить файл'); return false; } }
+function admCSV(){ const L=adminApi.orders(admOrdF,admOQ); if(!L.length){ toast('Нет заказов для выгрузки'); return; } admDownload(`zakazy-${tA(now()).replace(/[ .:]/g,'')}.csv`,adminApi.ordersCSV(L),'text/csv;charset=utf-8'); admLog('csv',`заказов: ${L.length}`); toast(`Выгружено: ${L.length}`); }
+const LOG_L=s=>ST[s]||(s==='dispute_resolved'?'Решение по спору':s.startsWith('paid_')?'Клиент оплатил · '+partyName(s.slice(5)):s.startsWith('ok_')?'Оплата подтверждена · '+partyName(s.slice(3)):s.startsWith('fail_')?'Оплата не подтверждена · '+partyName(s.slice(5)):s.startsWith('refund_')?'Отметил возврат · '+partyName(s.slice(7)):s.startsWith('drop_')?'Снято · '+partyName(s.slice(5)):s==='replace'||s==='replace_seller'?'Замена продавца':s==='extra_offer'?'«Найти на рынке»: предложение':s);
+function openAdmOrder(id){ const o=findO(id); if(!o) return; const T=orderTotal(o), RI=refundInfo(o), c=o.client||{};
+  const cards=o.pay?o.pay.cards.map(x=>{ const [l,cl]=cardL(x); return `<div class="kv"><span>${esc(partyName(x.s))}${x.paidAt?`<small> оплачено ${tA(x.paidAt)}</small>`:''}</span><b>${fmt(x.amt)} <span class="status ${cl}">${l}</span>${x.refund?` <small>возврат ${fmt(x.refund)}</small>`:''}</b></div>`; }).join(''):'<div class="fine">Оплата ещё не начата (согласуют доставку)</div>';
+  const items=o.items.map(i=>{ const P=PRODUCTS[i.k]||{n:i.k,u:'pcs'}, rf=itemRefund(i); return `<div class="kv"><span>${esc(P.n)}<small> · ${esc(partyName(i.s))}</small></span><b>${fq(i.q,P.u)}${i.fact!=null?` → ${fq(i.fact,P.u)}`:''} × ${fmt(i.price)}${rf>0?` <span class="tago">−${fmt(rf)}</span>`:''}${i.state==='removed'||i.state==='missing'?' <span class="tagr">нет</span>':''}</b></div>`; }).join('');
+  const ref=Object.entries(RI.r).map(([s,v])=>`<div class="kv"><span>${esc(partyName(s))}</span><b>${fmt(v)} ${(o.returned||{})[s]?'<span class="status done">Вернул ✓</span>':'<span class="status warn">Ждём возврат</span>'}</b></div>`).join('');
+  const R=o.resolution; const ds=o.dispute?`<h2 class="sec">Спор</h2><div class="regmsg"><b>Претензия:</b> ${esc(o.dispute)}${o.disputeS?` · ${esc(partyName(o.disputeS))}`:''}</div>`+(R?`<div class="regmsg ${R.by==='client'?'':'ok'}" id="admRes"><b>Решение ${tA(R.t)}:</b> в пользу ${R.by==='client'?`клиента — ${esc(partyName(R.s))} возвращает ${fmt(R.amt)}`:'продавца'} · ${esc(R.comment)}</div>`
+    :`<div class="card" id="admDisp"><div class="seg2" style="margin-bottom:8px"><button id="dpC" class="on" onclick="admDispBy('client')">В пользу клиента</button><button id="dpS" onclick="admDispBy('seller')">В пользу продавца</button></div>
+      <div id="dpMoney"><select class="inp" id="dpSel">${[...new Set(o.items.map(i=>i.s))].map(s=>`<option value="${s}" ${s===o.disputeS?'selected':''}>${esc(partyName(s))}</option>`).join('')}</select>
+      <input class="inp" id="dpAmt" type="number" inputmode="numeric" min="1" placeholder="Сумма возврата, ₸"></div>
+      <textarea class="inp" id="dpCom" rows="2" maxlength="300" placeholder="Комментарий к решению (увидят стороны)"></textarea>
+      <button class="btn" id="dpGo" onclick="admDispGo(${o.id})">Записать решение</button>
+      <div class="fine">Админка деньги не переводит: решение фиксируется, продавец сам возвращает клиенту на Kaspi и отмечает «✓ Вернул».</div></div>`):'';
+  modal(`<h3>Заказ №${o.id} <span class="status">${ST[o.status]||o.status}</span></h3><div class="fine" style="margin:-6px 0 10px">${o.mode==='biz'?'Бизнес':'Для дома'} · создан ${tA(o.created)} (Астана)</div>
+   <div class="kvs card">${c.name?`<div class="kv"><span>Клиент</span><b>${esc(c.name)}${c.bin?' · БИН '+esc(c.bin):''}${c.verified?' <span class="tagg">✓</span>':''}</b></div>`:''}<div class="kv"><span>Телефон</span><b>${esc(o.phone||'—')}</b></div><div class="kv"><span>Адрес</span><b>${esc(o.addr||'—')}</b></div><div class="kv"><span>Слот</span><b>${esc(oSlot(o))}</b></div></div>
+   <h2 class="sec">Оплаты по продавцам</h2><div class="kvs card" id="admCards">${cards}</div>
+   <h2 class="sec">Доставка</h2><div class="kvs card"><div class="kv"><span>${o.mode==='biz'?'Тариф':'Предложил клиент'}</span><b>${o.mode==='biz'?fmt(o.delivery||0):fmt(o.delivOffer||0)}</b></div>${o.counter?`<div class="kv"><span>Встречная сборщика</span><b>${fmt(o.counter)}</b></div>`:''}<div class="kv"><span>Итог</span><b>${o.delivery!=null?fmt(o.delivery):'не согласована'}</b></div></div>
+   <h2 class="sec">Вес и позиции</h2><div class="kvs card">${items}${(o.extra||[]).map(x=>`<div class="kv"><span>🔎 ${esc(x.text)}</span><b>${esc(x.st)}${x.price?' · '+fmt(x.price):''}</b></div>`).join('')}<div class="kv"><span>Итого</span><b>${fmt(T.total)}</b></div></div>
+   ${ref?`<h2 class="sec">Возвраты</h2><div class="kvs card" id="admRef">${ref}</div>`:''}${ds}
+   <h2 class="sec">История (Астана)</h2><div class="kvs card" id="admHist">${o.log.map(l=>`<div class="kv"><span>${tA(l.t)}</span><b>${esc(LOG_L(l.s))}${l.note?`<small> · ${esc(l.note)}</small>`:''}</b></div>`).join('')}</div>
+   <button class="btn gray" onclick="closeModal()">Закрыть</button>`); }
+let admDisp='client';
+function admDispBy(b){ admDisp=b; $('dpC').classList.toggle('on',b==='client'); $('dpS').classList.toggle('on',b==='seller'); $('dpMoney').style.display=b==='client'?'':'none'; }
+function admDispGo(id){ const by=admDisp, s=by==='client'?$('dpSel').value:null, amt=by==='client'?$('dpAmt').value:0, com=$('dpCom').value;
+  const r0=adminApi.resolveDispute.bind(adminApi); const pre=by==='client'&&!(+amt>0)?'Сумма возврата больше 0':com.trim().length<3?'Напишите комментарий':'';
+  if(pre){ toast(pre); hap('err'); return; }
+  confirmBox(by==='client'?`Записать: ${partyName(s)} возвращает ${fmt(+amt)}?`:'Записать решение в пользу продавца?',()=>{ const r=r0(id,by,s,amt,com); if(!r.ok){ toast(r.err); hap('err'); openAdmOrder(id); return; } admDisp='client'; hap('ok'); toast('Решение записано'); render(); openAdmOrder(id); }); }
+/* Каталог */
+function admCat(){ const F=[['all','Все'],['hidden','Скрытые'],['added','Добавленные'],['noprice','Без цены']], q=adminApi.asisQueue();
+  return `<div class="f3" style="margin-bottom:10px"><button class="btn sm" style="margin:0" id="admAddP" onclick="admEditProd(null)">+ Товар</button><label class="btn sm secondary" style="margin:0" id="admImpL">Импорт JSON<input type="file" id="admImp" accept=".json,application/json" hidden onchange="admImportFile(this)"></label><button class="btn sm secondary" style="margin:0" id="admExp" onclick="admExport()">Экспорт JSON</button></div>
+   <button class="rowbtn" id="admAsis" onclick="openAsis()"><span class="ri">🔎</span><span class="rt"><b>«Добавить как есть»</b><span>${q.length?`${q.length} ${pl(q.length,['запрос','запроса','запросов'])} — чаще всего: ${esc(q[0].text)}`:'Очередь пуста'}</span></span>${IC.chev}</button>
+   <div class="card admfloor"><b>Антидемпинг: пол цены</b><div class="fine" style="margin:4px 0 10px">Цена ниже ${Math.round(ANTI.floor*100)}% от медианы рынка не поднимает товар в выдаче, а слишком низкую цену продавец не сохранит.</div><div class="afrow"><input class="inp sm" id="aFloor" type="number" min="50" max="100" value="${Math.round(ANTI.floor*100)}"><span>% медианы</span><button class="btn sm secondary" id="aFloorSave" onclick="admFloor()">Сохранить</button></div></div>
+   <label class="search">${IC.search}<input id="admCQ" type="search" placeholder="Найти товар" value="${esc(admCQ)}" oninput="admCQ=this.value;$('admCList').innerHTML=admCatList()"></label>
+   <div class="chips hs">${F.map(([k,t])=>`<button class="chip ${admCatF===k?'active':''}" onclick="admCatF='${k}';render()">${t}</button>`).join('')}</div>
+   <div class="glist" id="admCList">${admCatList()}</div>`; }
+function admCatList(){ const L=adminApi.products(admCatF,admCQ); if(!L.length) return '<div class="grow"><span class="gl">Ничего не нашли</span></div>';
+  return L.slice(0,60).map(k=>{ const P=PRODUCTS[k], of=state.offers.filter(o=>o.p===k), md=median(of.map(o=>o.price));
+    return `<button class="grow" data-pk="${k}" onclick="admProd('${k}')"><span class="gi">${P.e}</span><span class="gl">${esc(P.n)}${P.hidden?' <span class="tagr">скрыт</span>':''}${P.findOnly?' <span class="tago">без цены</span>':''}${P.added?' <span class="tagg">новый</span>':''}
+     <small>${CATS[P.cat].t} · ${uL(P)} · продавцов ${of.length}${md?' · медиана '+fmt(md):''}</small></span>${IC.chev}</button>`; }).join('')+(L.length>60?`<div class="grow"><span class="gl"><small>Показано 60 из ${L.length} — уточните поиск</small></span></div>`:''); }
+function admProd(k){ const P=PRODUCTS[k], of=state.offers.filter(o=>o.p===k).sort((a,b)=>a.price-b.price);
+  modal(`<h3>${P.e} ${esc(P.n)}</h3><div class="fine" style="margin:-6px 0 10px">${CATS[P.cat].t} · за 1 ${uL(P)}${P.ext?' · id '+esc(P.ext):''}</div>
+   <div class="kvs card">${of.length?of.map(o=>{ const S=state.sellers[o.s], fl=floorPrice(k,o.s); return `<div class="kv"><span>${esc(S.n)}${S.blocked?' <span class="tagr">заблок.</span>':''}${!o.on?' <small>выкл.</small>':''}</span><b>${fmt(o.price)}${fl&&o.price<fl?' <span class="tago">ниже пола</span>':''} <small>· ${o.stock}</small></b></div>`; }).join('')
+     :'<div class="fine">Продавцов нет — клиенту уйдёт в «найти на рынке»</div>'}</div>
+   ${P.syn.length?`<div class="fine">Синонимы: ${esc(P.syn.slice(0,12).join(', '))}</div>`:''}${P.packs&&P.packs.length?`<div class="fine">Упаковки: ${esc(P.packs.map(x=>PRODUCTS[x].n.replace(P.n+', ','')).join(', '))}</div>`:''}
+   <button class="btn secondary" id="aEdit" onclick="admEditProd('${k}')">Редактировать</button>
+   <button class="btn ${P.hidden?'ok':'gray'}" id="aHide" onclick="admHide('${k}',${!P.hidden})">${P.hidden?'Показать клиентам':'Скрыть от клиентов'}</button>`); }
+function admHide(k,v){ const go=()=>{ adminApi.setHidden(k,v); closeModal(); hap('ok'); toast(v?'Скрыт':'Показан'); render(); }; if(v) confirmBox(`Скрыть «${PRODUCTS[k].n}»? Клиенты его не найдут`,go); else go(); }
+function admEditProd(k,pre){ const P=k?PRODUCTS[k]:null, d=P?{n:P.n,e:P.e,cat:P.cat,u:P.u,est:P.est||'',syn:P.syn.join(', ')}:{n:'',e:'',cat:'veg',u:'kg',est:'',syn:'',...(pre||{})};
+  const lock=P&&!P.added;
+  modal(`<h3>${P?'Товар':'Новый товар'}</h3>
+   <div class="f2" style="grid-template-columns:1fr 64px"><input class="inp" id="pe_n" placeholder="Название" maxlength="80" value="${esc(d.n)}"><input class="inp" id="pe_e" placeholder="🥕" maxlength="4" value="${esc(d.e)}" style="text-align:center"></div>
+   <div class="f2"><select class="inp" id="pe_c">${Object.entries(CATS).map(([c,x])=>`<option value="${c}" ${d.cat===c?'selected':''}>${x.t}</option>`).join('')}</select>
+    <select class="inp" id="pe_u" ${lock?'disabled':''}>${Object.entries(U_OUT).map(([u,t])=>`<option value="${u}" ${d.u===u?'selected':''}>${t}</option>`).join('')}</select></div>
+   <input class="inp" id="pe_p" type="number" inputmode="numeric" min="0" placeholder="Оценка цены за единицу, ₸ (0 — без цены)" value="${esc(d.est)}">
+   <input class="inp" id="pe_k" placeholder="Добавить упаковки: ведро 5, мешок 25" value="">
+   <textarea class="inp" id="pe_s" rows="2" placeholder="Синонимы через запятую">${esc(d.syn)}</textarea>
+   <div class="fine" style="margin:-2px 0 12px">Цены ставят продавцы. Оценка нужна, чтобы новый товар сразу появился у продавцов подходящих рядов${lock?'. Единицу встроенного товара менять нельзя':''}.</div>
+   <button class="btn" id="pe_go" onclick="admSaveProd(${k?`'${k}'`:'null'})">Сохранить</button><button class="btn gray" onclick="closeModal()">Отмена</button>`); }
+function admSaveProd(k){ const r=adminApi.saveProduct(k,{n:$('pe_n').value,e:$('pe_e').value,cat:$('pe_c').value,u:$('pe_u').value,est:$('pe_p').value,syn:$('pe_s').value,packs:$('pe_k').value});
+  if(!r.ok){ toast(r.err); hap('err'); const i=$('pe_'+(r.f||'n')); i&&i.classList.add('err'); return; }
+  if(admAsisKey){ adminApi.asisClose(admAsisKey,r.k); admAsisKey=null; } closeModal(); hap('ok'); toast('Сохранено'); render(); }
+function admFloor(){ const r=adminApi.saveSettings({floor:$('aFloor').value}); if(!r.ok){ toast(r.err); hap('err'); $('aFloor').classList.add('err'); return; } hap('ok'); toast('Антидемпинг обновлён'); render(); }
+function admExport(){ const L=adminApi.exportCatalog(); admDownload('catalog-export.json',JSON.stringify(L,null,1),'application/json'); admLog('export',`карточек: ${L.length}`); toast(`Экспорт: ${L.length} карточек`); }
+function admImportFile(inp){ const f=inp.files&&inp.files[0]; inp.value=''; if(!f) return; if(f.size>5*1024*1024){ toast('Файл больше 5 МБ'); hap('err'); return; }
+  const rd=new FileReader(); rd.onload=()=>{ let j; try{ j=JSON.parse(rd.result); }catch(e){ toast('Это не JSON'); hap('err'); return; } admImportPreview(j); }; rd.onerror=()=>toast('Не удалось прочитать файл'); rd.readAsText(f); }
+function admImportPreview(j){ const cards=Array.isArray(j)?j:(j&&(j.items||j.cards||j.products)); admImp=cards; const R=adminApi.importCatalog(cards,false);
+  modal(`<h3>Импорт каталога</h3><div class="kpis">${kpi(R.add.length,'новых')}${kpi(R.upd.length,'обновить синонимы')}${kpi(R.err.length,'ошибок')}${kpi(R.warn.length,'без цены')}</div>
+   ${R.err.length?`<div class="card impErr" id="impErr">${R.err.slice(0,8).map(e=>`<div class="fine">⚠ ${esc(e)}</div>`).join('')}${R.err.length>8?`<div class="fine">…и ещё ${R.err.length-8}</div>`:''}</div>`:''}
+   <div class="fine">Карточки с ошибками пропускаются. Товары без цены попадут в каталог распознавания: клиенту — «найти на рынке», пока продавец не поставит цену.</div>
+   ${R.add.length||R.upd.length?`<button class="btn" id="impApply" onclick="admImportApply()">Применить</button>`:''}<button class="btn gray" onclick="admImp=null;closeModal()">Отмена</button>`); }
+function admImportApply(){ if(!admImp) return; const R=adminApi.importCatalog(admImp,true); admImp=null; closeModal(); hap('ok'); toast(`Добавлено ${R.add.length}, обновлено ${R.upd.length}`); render(); }
+let admAsisKey=null;
+function openAsis(){ const q=adminApi.asisQueue();
+  modal(`<h3>«Добавить как есть»</h3><div class="fine" style="margin:-6px 0 10px">Что клиенты пишут, а каталог не узнаёт · чаще всего сверху</div>
+   ${q.length?`<div class="glist" id="asisList">${q.slice(0,50).map((x,i)=>`<div class="grow" data-asis="${esc(x.key)}"><span class="gi">${x.n}×</span><span class="gl">${esc(x.text)}<small>${tA(x.t)}</small></span>
+     <button class="btn sm" style="margin:0;width:auto" onclick="admAsisAdd(${i})">В каталог</button><button class="link tiny" onclick="adminApi.asisClose(${JSON.stringify(x.key).replace(/"/g,'&quot;')},'skip');openAsis()">✕</button></div>`).join('')}</div>`:'<div class="card admempty">Очередь пуста</div>'}
+   <button class="btn gray" onclick="closeModal();render()">Готово</button>`); }
+function admAsisAdd(i){ const x=adminApi.asisQueue()[i]; if(!x) return; admAsisKey=x.key; const n=x.key.charAt(0).toUpperCase()+x.key.slice(1); admEditProd(null,{n,syn:x.key}); }
+/* Настройки */
+function admSet(){ const s=adminApi.settings();
+  return SET_F.map(([g,F])=>`<h2 class="sec">${g}</h2><div class="card kvs">${F.map(([k,l,u])=>`<label class="kv"><span>${l}</span><b>${u==='text'?`<input class="inp sm" id="st_${k}" value="${esc(s[k])}" style="width:170px">`:`<input class="inp sm" id="st_${k}" type="number" inputmode="decimal" value="${s[k]}" style="width:96px"> <small>${u}</small>`}</b></label>`).join('')}</div>`).join('')+
+   `<button class="btn" id="admSetSave" onclick="admSaveSet()">Сохранить</button><button class="btn gray" id="admSetReset" onclick="confirmBox('Вернуть все настройки по умолчанию?',()=>{adminApi.resetSettings();hap('ok');toast('Сброшено');render();})">Сбросить по умолчанию</button>
+   <div class="fine">Изменения сразу действуют в приложении на этом устройстве (новые заказы) и пишутся в журнал.</div>`; }
+function admSaveSet(){ const p={}; SET_F.forEach(([,F])=>F.forEach(([k])=>{ const i=$('st_'+k); if(i){ i.classList.remove('err'); p[k]=i.value; } }));
+  const r=adminApi.saveSettings(p); if(!r.ok){ toast(r.err); hap('err'); const i=$('st_'+r.f); if(i){ i.classList.add('err'); i.focus(); } return; }
+  hap('ok'); toast(r.changed?`Сохранено: ${r.changed} ${pl(r.changed,['изменение','изменения','изменений'])}`:'Без изменений'); render(); }
+const ACT_L={approve:'Одобрена регистрация',reject:'Отклонена регистрация',need_doc:'Запрошен документ',reg_in:'Новая заявка',block:'Блокировка',unblock:'Разблокировка',note:'Заметка',verified:'«Проверен ✓»',regular:'«Постоянный»',
+  dispute:'Решение по спору',hide:'Скрыт товар',show:'Показан товар',prod_add:'Добавлен товар',prod_edit:'Изменён товар',import:'Импорт каталога',export:'Экспорт каталога',settings:'Настройки',reset:'Сброс настроек',csv:'Выгрузка заказов',asis:'«Как есть»'};
+function openAdmLog(){ const L=adminApi.log(); modal(`<h3>Журнал действий</h3><div class="fine" style="margin:-6px 0 10px">Время — Астана · хранится на этом устройстве</div>
+  ${L.length?`<div class="kvs card" id="admLogList">${L.slice(0,100).map(x=>`<div class="kv"><span>${tA(x.t)}</span><b>${ACT_L[x.act]||x.act}${x.sys?' <small>(система)</small>':''}<small> · ${esc(x.detail)}</small></b></div>`).join('')}</div>`:'<div class="card admempty">Пока пусто</div>'}
+  <button class="btn gray" onclick="closeModal()">Закрыть</button>`); }
+applySettings(); applyCatalog();
+function resNote(o){ const R=o&&o.resolution; if(!R) return ''; const done=(o.returned||{})[R.s];
+  return R.by==='client'?`<div class="regmsg ${done?'ok':''}" data-resnote><b>Решение по претензии:</b> продавец вернёт ${fmt(R.amt)} на Kaspi${done?' · ✓ вернул':''}${R.comment?`<br>${esc(R.comment)}`:''}</div>`
+   :`<div class="regmsg ok" data-resnote><b>Решение по претензии:</b> в пользу продавца${R.comment?`<br>${esc(R.comment)}`:''}</div>`; }
 
 render();
 </script></body></html>
